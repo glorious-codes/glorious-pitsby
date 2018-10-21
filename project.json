@@ -34,20 +34,26 @@
   },
   "images": {
     "source": {
+      "root": "src/webapp/images/",
       "files": "src/webapp/images/**/*.*"
     },
     "dist": {
       "root": "images/[name].[ext]"
     }
   },
-  "tests": {
-    "source": {
-      "files": "src/**/*.js"
-    }
-  },
   "fonts": {
     "dist": {
       "root": "fonts/[name].[ext]"
+    }
+  },
+  "tests": {
+    "source": {
+      "files": ["src/webapp/scripts/**/*.js", "src/cli/**/*.js"]
+    }
+  },
+  "mocks": {
+    "source": {
+      "root": "src/webapp/mocks/"
     }
   },
   "environments": {
