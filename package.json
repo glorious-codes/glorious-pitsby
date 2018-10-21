@@ -1,0 +1,47 @@
+{
+  "name": "pitsby",
+  "version": "0.1.0",
+  "description": "Docs generator for AngularJS 1.x components",
+  "author": "Rafael Camargo <contato@rafaelcamargo.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafaelcamargo/pitsby"
+  },
+  "license": "MIT",
+  "bin": "./src/cli/index.js",
+  "scripts": {
+    "build": "./node_modules/webpack/bin/webpack.js",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "format": "./node_modules/eslint/bin/eslint.js './src/**/*.js'"
+  },
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.20",
+    "angular": "^1.7.5",
+    "axios": "^0.18.0",
+    "glob": "^7.1.3",
+    "writefile": "^0.2.8"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^4.5.4",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.7.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^2.0.0",
+    "html-loader": "^0.5.5",
+    "html-loader-jest": "^0.2.1",
+    "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.6.0",
+    "lodash": "^4.17.11",
+    "style-loader": "^0.23.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "webpack": "^3.10.0",
+    "webpack-dashboard": "^2.0.0",
+    "webpack-dev-server": "^2.11.1",
+    "yargs": "8.0.2"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "index": {
+    "source": {
+      "file": "src/webapp/index.html"
+    },
+    "dist": {
+      "root": "dist"
+    }
+  },
+  "scripts": {
+    "source": {
+      "root": "src/webapp/scripts/",
+      "files": "src/webapp/scripts/**/*.js",
+      "entry": "src/webapp/scripts/index.js"
+    },
+    "dist": {
+      "root": "dist",
+      "filename": {
+        "prod": "[name]-[hash].js",
+        "dev": "[name].js"
+      }
+    }
+  },
+  "styles": {
+    "source": {
+      "root": "src/webapp/styles/"
+    },
+    "dist": {
+      "filename": {
+        "prod": "[name]-[hash].css",
+        "dev": "[name].css"
+      }
+    }
+  },
+  "images": {
+    "source": {
+      "files": "src/webapp/images/**/*.*"
+    },
+    "dist": {
+      "root": "images/[name].[ext]"
+    }
+  },
+  "tests": {
+    "source": {
+      "files": "src/**/*.js"
+    }
+  },
+  "fonts": {
+    "dist": {
+      "root": "fonts/[name].[ext]"
+    }
+  },
+  "environments": {
+    "source": {
+      "root": "environments"
+    }
+  }
+}
