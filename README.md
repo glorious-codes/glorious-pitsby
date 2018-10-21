@@ -30,7 +30,7 @@ npm run build
 npm run start
 ```
 
-The app will be running on `http://localhost:4000` and the browser will automatically reload with the changes you make in any source file.
+The app will be running on `http://localhost:7000` and the browser will automatically reload with the changes you make in any source file.
 
 ## Tests
 
