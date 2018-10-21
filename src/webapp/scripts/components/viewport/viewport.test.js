@@ -2,7 +2,7 @@ describe('Viewport', () => {
   let compile, element;
 
   beforeEach(() => {
-    angular.mock.module('app');
+    angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
       const scope = $rootScope.$new(true);
       compile = (content = '') => {

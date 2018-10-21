@@ -11,7 +11,7 @@ const dependencies = [
 ];
 
 _public.init = () => {
-  const app = angular.module('app', dependencies);
+  const app = angular.module('pitsby-app', dependencies);
   app.config(router);
 };
 

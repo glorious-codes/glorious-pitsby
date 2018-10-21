@@ -10,9 +10,9 @@ describe('App Index', () => {
 
   it('should instantiate application module', () => {
     appIndex.init();
-    expect(angular.module).toHaveBeenCalledWith('app', [
+    expect(angular.module).toHaveBeenCalledWith('pitsby-app', [
       'ui.router',
-      'components'
+      'pitsby-components'
     ]);
   });
 
