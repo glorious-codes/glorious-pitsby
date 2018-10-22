@@ -1,0 +1,28 @@
+@require '_variables'
+@require '_mixins'
+
+.p-alert
+  position relative
+  padding-top 6px
+  padding-right 18px
+  padding-bottom 6px
+  padding-left 18px
+  background-color $color-grey-light
+  border-width 1px
+  border-style solid
+  border-color $color-grey-semi-light
+  border-radius(18px)
+  .p-alert-retry-btn
+    position absolute
+    top 50%
+    right 2px
+    transform('translateY(-50%)')
+  &.p-alert-danger
+    padding-right 72px
+    background-color $color-red-light
+    border-color $color-red-semi-light
+    .p-alert-message
+      color $color-red
+
+.p-alert-message
+  font-size $font-size-xs
