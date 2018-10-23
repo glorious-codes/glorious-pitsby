@@ -32,7 +32,9 @@
       "files": [ "src/**/*.test.js" ],
       "rules": {
         "max-lines": ["error", { "max": 200 }],
-        "max-statements": ["error", { "max": 10 }]
+        "max-statements": ["error", { "max": 10 },
+          { "ignoreTopLevelFunctions": true }
+        ]
       }
     }
   ]

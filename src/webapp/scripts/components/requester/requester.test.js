@@ -1,6 +1,5 @@
 import { PromiseMock } from '@mocks/promise';
 
-/* eslint-disable max-statements */
 describe('Requester', () => {
   let compile, compileElement;
 
