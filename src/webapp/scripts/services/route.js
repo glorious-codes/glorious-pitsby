@@ -4,6 +4,6 @@ const _public = {};
 
 _public.getAllRoutes = () => {
   return routes;
-}
+};
 
 export default _public;

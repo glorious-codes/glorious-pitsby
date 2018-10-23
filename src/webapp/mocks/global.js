@@ -1,5 +1,5 @@
 import angular from 'angular';
-import angularMocks from 'angular-mocks';
-import app from '@scripts/index';
+import 'angular-mocks';
+import '@scripts/index';
 
 global.angular = angular;

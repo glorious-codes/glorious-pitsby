@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es6": true,
-    "jest": true
+    "jest": true,
+    "node": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
@@ -10,7 +11,10 @@
     "sourceType": "module"
   },
   "globals": {
-    "module": true
+    "module": true,
+    "spyOn": true,
+    "angular": true,
+    "inject": true
   },
   "rules": {
     "indent": ["error", 2],
@@ -19,17 +23,16 @@
     "semi": ["error", "always"],
     "complexity": ["error", { "max": 3 }],
     "max-lines": ["error", { "max": 100 }],
-    "max-statements": ["error", { "max": 5 }]
+    "max-statements": ["error", { "max": 5 },
+      { "ignoreTopLevelFunctions": true }
+    ]
   },
   "overrides": [
     {
       "files": [ "src/**/*.test.js" ],
       "rules": {
         "max-lines": ["error", { "max": 200 }],
-        "max-statements": [
-          "error", { "max": 10 },
-          { "ignoreTopLevelFunctions": true }
-        ]
+        "max-statements": ["error", { "max": 10 }]
       }
     }
   ]

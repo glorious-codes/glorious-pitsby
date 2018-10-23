@@ -6,7 +6,7 @@ describe('Viewport', () => {
     inject(($rootScope, $compile) => {
       const scope = $rootScope.$new(true);
       compile = () => {
-        const template = `<p-loader></p-loader>`;
+        const template = '<p-loader></p-loader>';
         element = $compile(template)(scope);
         scope.$digest();
       };

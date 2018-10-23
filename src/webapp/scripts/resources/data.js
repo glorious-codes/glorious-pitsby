@@ -1,5 +1,5 @@
 import dateService from '@scripts/services/date';
-import baseResource from '@scripts/resources/base'
+import baseResource from '@scripts/resources/base';
 
 const _public = {};
 const BASE_DATA_URI = '/data';
