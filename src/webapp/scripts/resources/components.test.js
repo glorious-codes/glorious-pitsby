@@ -5,17 +5,17 @@ import componentsResource from './components';
 
 describe('Components Resource', () => {
   beforeEach(() => {
-    const promise = new PromiseMock('success', componentsMock);
+    const promise = new PromiseMock('success', componentsMock.data);
     dataResource.get = jest.fn(() => promise);
   });
 
   it('should be able to get components', () => {
     const components = componentsResource.get();
     expect(dataResource.get).toHaveBeenCalledWith('/components');
-    expect(components).toEqual(componentsMock);
+    expect(components).toEqual(componentsMock.data);
   });
 
   it('should be able to get a single component', () => {
-    expect(componentsResource.get('button')).toEqual(componentsMock[0]);
+    expect(componentsResource.get('button')).toEqual(componentsMock.data[0]);
   });
 });

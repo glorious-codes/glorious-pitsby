@@ -1,12 +1,14 @@
-const componentsMock = [
-  {
-    name: 'button',
-    id: 'button'
-  },
-  {
-    name: 'input',
-    id: 'input'
-  }
-];
+const componentsMock = {
+  data: [
+    {
+      name: 'button',
+      id: 'button'
+    },
+    {
+      name: 'input',
+      id: 'input'
+    }
+  ]
+};
 
 export default componentsMock;

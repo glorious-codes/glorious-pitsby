@@ -41,6 +41,15 @@
       "root": "images/[name].[ext]"
     }
   },
+  "data": {
+    "source": {
+      "root": "src/webapp/data/",
+      "files": "src/webapp/data/**/*.*"
+    },
+    "dist": {
+      "root": "data/[name].[ext]"
+    }
+  },
   "fonts": {
     "dist": {
       "root": "fonts/[name].[ext]"
