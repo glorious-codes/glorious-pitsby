@@ -1,0 +1,13 @@
+@require '_mixins'
+@require 'row-item'
+
+p-row
+  display block
+  margin 0 $row-item-padding * -1
+  clearfix()
+  & + p-row
+    margin-top 15px
+
+for $size in (1..5)
+  .p-row-vertical-offset-{$size}
+    margin-top $size * 10px
