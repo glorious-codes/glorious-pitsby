@@ -1,4 +1,4 @@
-describe('Viewport', () => {
+describe('Loader', () => {
   let compile, element;
 
   beforeEach(() => {
