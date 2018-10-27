@@ -1,0 +1,15 @@
+<div class="p-row-item {{ $ctrl.sizeCssClass }}">
+  <div
+    class="p-row-item-label"
+    ng-if="$ctrl.label"
+    ng-bind="$ctrl.label"
+    data-row-item-label>
+  </div>
+  <div
+    class="p-row-item-value"
+    ng-if="$ctrl.value"
+    ng-bind="$ctrl.value"
+    data-row-item-value>
+  </div>
+  <ng-transclude></ng-transclude>
+</div>
