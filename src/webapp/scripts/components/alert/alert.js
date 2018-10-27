@@ -8,18 +8,22 @@ function controller(){
     setThemeCssClass(buildThemeCssClass($ctrl.alert));
   };
 
+  $ctrl.$onChanges = () => {
+    setThemeCssClass(buildThemeCssClass($ctrl.alert));
+  };
+
   $ctrl.retry = () => {
     const retryAction = getRetryAction();
     if(retryAction)
       retryAction();
   };
 
-  function buildThemeCssClass(alert = {}){
-    return isValidTheme(alert.theme) ? `p-alert-${alert.theme}` : '';
+  function buildThemeCssClass(alert){
+    return isValidTheme(alert) ? `p-alert-${alert.theme}` : '';
   }
 
-  function isValidTheme(theme){
-    return ['danger', 'warn', 'success'].includes(theme);
+  function isValidTheme(alert){
+    return alert && ['danger', 'warn', 'success'].includes(alert.theme);
   }
 
   function setThemeCssClass(cssClass){
@@ -33,7 +37,7 @@ function controller(){
 
 export default {
   bindings: {
-    theme: '@'
+    alert: '<'
   },
   controller,
   template

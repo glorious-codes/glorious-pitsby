@@ -1,12 +1,15 @@
-<div v-if="$ctrl.alert" class="p-alert {{ $ctrl.themeCssClass }}">
+<div ng-if="$ctrl.alert" class="p-alert {{ $ctrl.themeCssClass }}">
   <span
     class="p-alert-message"
-    ng-bind="alert.message">
+    ng-bind="$ctrl.alert.message">
   </span>
-  <button
-    ng-if="$ctrl.alert.retryAction"
-    ng-click="$ctrl.retry()"
-    class="p-btn-small p-btn-danger p-alert-retry-btn">
-    Retry
-  </button>
+  <span class="p-alert-retry-btn-container">
+    <p-btn
+      ng-if="$ctrl.alert.retryAction"
+      data-size="small"
+      data-theme="danger"
+      data-on-click="$ctrl.alert.retryAction">
+      Retry
+    </p-btn>
+  </span>
 </div>
