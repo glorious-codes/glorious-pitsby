@@ -7,6 +7,7 @@ import loader from '@scripts/components/loader/loader';
 import requester from '@scripts/components/requester/requester';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
+import topbar from '@scripts/components/topbar/topbar';
 import viewport from '@scripts/components/viewport/viewport';
 
 export default angular.module('pitsby-components', [])
@@ -18,5 +19,6 @@ export default angular.module('pitsby-components', [])
   .component('pRequester', requester)
   .component('pRow', row)
   .component('pRowItem', rowItem)
+  .component('pTopbar', topbar)
   .component('pViewport', viewport)
   .name;
