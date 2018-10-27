@@ -1,0 +1,9 @@
+<div class="p-list">
+  <p-requester
+    data-fetch="$ctrl.fetch"
+    data-fetch-success="$ctrl.fetchSuccess"
+    data-should-hide-content-on-request="$ctrl.shouldHideContentOnRequest"
+    data-alert-error-message="{{ $ctrl.alertErrorMessage }}">
+    <ng-transclude></ng-transclude>
+  </p-requester>
+</div>
