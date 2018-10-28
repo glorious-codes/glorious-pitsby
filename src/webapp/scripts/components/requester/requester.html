@@ -1,6 +1,10 @@
 <div class="p-requester">
-  <p-alert data-alert="$ctrl.alert"></p-alert>
-  <p-loader ng-if="$ctrl.shouldShowLoader"></p-loader>
+  <p-alert
+    data-alert="$ctrl.alert">
+  </p-alert>
+  <p-loader
+    ng-if="$ctrl.shouldShowLoader">
+  </p-loader>
   <div ng-show="$ctrl.shouldShowContent">
     <ng-transclude></ng-transclude>
   </div>

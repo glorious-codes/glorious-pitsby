@@ -1,27 +1,23 @@
-import { PromiseMock } from '@mocks/promise';
+import { DigestionServiceMock } from '@mocks/digestion-service';
 
 describe('Requester', () => {
-  let compile, compileElement;
+  let compile, compileElement, digestionService;
 
-  function mockFetchBindings(responseType, options = {}){
-    const fetch = jest.fn(() => {
-      return new PromiseMock(
-        responseType,
-        options.response,
-        options.shouldAbortRequest
-      );
-    });
-    return {
-      fetch,
-      fetchSuccess: jest.fn()
-    };
+  function stubDigestionServiceRequest(reponseType, reponse){
+    digestionService = new DigestionServiceMock(reponseType, reponse);
   }
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
-    inject(($rootScope, $compile, $componentController) => {
+    inject($injector => {
+      const $rootScope = $injector.get('$rootScope');
+      const $compile = $injector.get('$compile');
+      const $componentController = $injector.get('$componentController');
+      digestionService = $injector.get('digestionService');
       compile = bindings => {
-        return $componentController('pRequester', {}, bindings);
+        return $componentController('pRequester', {
+          digestionService
+        }, bindings);
       };
       compileElement = (content = '') => {
         const scope = $rootScope.$new(true);
@@ -30,6 +26,7 @@ describe('Requester', () => {
         scope.$digest();
         return element;
       };
+      stubDigestionServiceRequest();
     });
   });
 
@@ -40,82 +37,91 @@ describe('Requester', () => {
   });
 
   it('should optionally hide content on request', () => {
-    const bindings = mockFetchBindings('success', {
-      shouldAbortRequest: true
+    const component = compile({
+      fetch: jest.fn(),
+      shouldHideContentOnRequest: true
     });
-    bindings.shouldHideContentOnRequest = true;
-    const component = compile(bindings);
     component.$onInit();
     expect(component.shouldShowContent).toEqual(false);
   });
 
   it('should optionally hide content on request error', () => {
-    const bindings = mockFetchBindings('error');
-    bindings.shouldHideContentOnRequest = true;
-    const component = compile(bindings);
+    const component = compile({
+      fetch: jest.fn(),
+      shouldHideContentOnRequest: true
+    });
     component.$onInit();
     expect(component.shouldShowContent).toEqual(false);
   });
 
   it('should fetch data on initialize if fetch action has been passed', () => {
-    const bindings = mockFetchBindings('success');
-    const component = compile(bindings);
+    const fetch = jest.fn();
+    const component = compile({fetch});
     component.$onInit();
-    expect(bindings.fetch).toHaveBeenCalled();
+    expect(digestionService.request.mock.calls[0][0]).toEqual(fetch);
   });
 
   it('should call fetch success action on fetch data success', () => {
     const response = {some: 'response'};
-    const bindings = mockFetchBindings('success', { response });
-    const component = compile(bindings);
+    stubDigestionServiceRequest('success', response);
+    const fetch = jest.fn();
+    const fetchSuccess = jest.fn();
+    const component = compile({fetch, fetchSuccess});
     component.$onInit();
-    expect(bindings.fetchSuccess).toHaveBeenCalledWith(response);
+    expect(fetchSuccess).toHaveBeenCalledWith(response);
   });
 
   it('should show loader on request', () => {
-    const bindings = mockFetchBindings('success', {
-      shouldAbortRequest: true
-    });
-    const component = compile(bindings);
+    const fetch = jest.fn();
+    const component = compile({fetch});
     component.$onInit();
     expect(component.shouldShowLoader).toEqual(true);
   });
 
   it('should hide loader on request complete', () => {
-    const bindings = mockFetchBindings('success');
-    const component = compile(bindings);
+    stubDigestionServiceRequest('success');
+    const fetch = jest.fn();
+    const fetchSuccess = jest.fn();
+    const component = compile({fetch, fetchSuccess});
     component.$onInit();
     expect(component.shouldShowLoader).toEqual(false);
   });
 
   it('should show content on request success', () => {
-    const bindings = mockFetchBindings('success');
-    const component = compile(bindings);
+    stubDigestionServiceRequest('success');
+    const fetch = jest.fn();
+    const fetchSuccess = jest.fn();
+    const component = compile({fetch, fetchSuccess});
     component.$onInit();
     expect(component.shouldShowContent).toEqual(true);
   });
 
   it('should show alert error message on request error', () => {
-    const bindings = mockFetchBindings('error');
-    const component = compile(bindings);
+    stubDigestionServiceRequest('error');
+    const fetch = jest.fn();
+    const fetchSuccess = jest.fn();
+    const component = compile({fetch, fetchSuccess});
     component.$onInit();
-    expect(component.alert.theme).toEqual('error');
-    expect(component.alert.message).toEqual('Failed on processing request. Please, try again.');
+    expect(component.alert.theme).toEqual('danger');
+    expect(component.alert.message).toEqual('Failed to process request. Please, try again.');
     expect(typeof component.alert.retryAction).toEqual('function');
   });
 
   it('should show custom alert error message on request error', () => {
-    const customErrorMessage = 'Custom error message';
-    const bindings = mockFetchBindings('error');
-    bindings.alertErrorMessage = customErrorMessage;
-    const component = compile(bindings);
+    stubDigestionServiceRequest('error');
+    const fetch = jest.fn();
+    const fetchSuccess = jest.fn();
+    const alertErrorMessage = 'Custom error message';
+    const component = compile({fetch, fetchSuccess, alertErrorMessage});
     component.$onInit();
-    expect(component.alert.message).toEqual(customErrorMessage);
+    expect(component.alert.message).toEqual(alertErrorMessage);
   });
 
   it('should clear alert on fetch data', () => {
-    const bindings = mockFetchBindings('success');
-    const component = compile(bindings);
+    stubDigestionServiceRequest();
+    const fetch = jest.fn();
+    const fetchSuccess = jest.fn();
+    const component = compile({fetch, fetchSuccess});
     component.alert = {some: 'alert'};
     component.$onInit();
     expect(component.alert).toEqual(null);

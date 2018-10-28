@@ -1,6 +1,6 @@
 import template from './requester.html';
 
-function controller (){
+function controller(digestionService){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
@@ -23,9 +23,12 @@ function controller (){
     setAlert(null);
     setLoaderVisibility(true);
     setContentVisibility(isContentVisible());
-    action().then(response => {
-      onRequestSuccess(response, onActionSucess);
-    }, onRequestDataError);
+    digestionService.request(action, {
+      success(response){
+        onRequestSuccess(response, onActionSucess);
+      },
+      error: onRequestDataError
+    });
   }
 
   function onRequestSuccess(response, onActionSucess){
@@ -44,19 +47,21 @@ function controller (){
   }
 
   function isContentVisible(){
-    return !$ctrl.shouldHideContentOnRequest || (!$ctrl.shouldShowLoader && !$ctrl.alert);
+    if(!$ctrl.shouldHideContentOnRequest)
+      return true;
+    return !$ctrl.alert && !$ctrl.shouldShowLoader;
   }
 
   function buildErrorAlert(){
     return {
-      theme: 'error',
+      theme: 'danger',
       message: getAlertErrorMessage(),
       retryAction: fetchData
     };
   }
 
   function getAlertErrorMessage(){
-    return $ctrl.alertErrorMessage || 'Failed on processing request. Please, try again.';
+    return $ctrl.alertErrorMessage || 'Failed to process request. Please, try again.';
   }
 
   function setAlert(alert){
@@ -72,13 +77,16 @@ function controller (){
   }
 }
 
+controller.$inject = ['digestionService'];
+
 export default {
   transclude: true,
   bindings: {
+    alert: '<',
     alertErrorMessage: '@',
     fetch: '=',
     fetchSuccess: '=',
-    shouldHideContentOnRequest: '='
+    shouldHideContentOnRequest: '<'
   },
   controller,
   template
