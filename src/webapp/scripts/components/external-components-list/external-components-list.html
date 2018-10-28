@@ -1,0 +1,10 @@
+<div class="p-external-components-list">
+  <p-list
+    data-fetch="$ctrl.fetch"
+    data-fetch-success="$ctrl.fetchSuccess"
+    data-alert-error-message="Failed to get components.">
+    <p-list-item ng-repeat="component in $ctrl.components">
+      <div ng-bind="component.name"></div>
+    </p-list-item>
+  </p-list>
+</div>
