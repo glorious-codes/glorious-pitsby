@@ -12,7 +12,8 @@ describe('App Index', () => {
     appIndex.init();
     expect(angular.module).toHaveBeenCalledWith('pitsby-app', [
       'ui.router',
-      'pitsby-components'
+      'pitsby-components',
+      'pitsby-services'
     ]);
   });
 
