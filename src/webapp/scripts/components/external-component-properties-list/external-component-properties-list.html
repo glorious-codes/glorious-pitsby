@@ -1,0 +1,27 @@
+<div class="p-external-component-properties-list">
+  <p-heading
+    data-text="Properties"
+    data-size="3">
+  </p-heading>
+  <p-list>
+    <p-list-item ng-repeat="property in $ctrl.properties">
+      <p-row>
+        <p-row-item
+          data-size="5"
+          data-label="Name"
+          data-value="property.name">
+        </p-row-item>
+        <p-row-item
+          data-size="2"
+          data-label="Type"
+          data-value="property.type">
+        </p-row-item>
+        <p-row-item
+          data-size="5"
+          data-label="Valid Values"
+          data-value="property.values">
+        </p-row-item>
+      </p-row>
+    </p-list-item>
+  </p-list>
+</div>
