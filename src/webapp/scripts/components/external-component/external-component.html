@@ -1,12 +1,16 @@
 <div class="p-external-component">
   <p-requester
     data-fetch="$ctrl.fetch"
-    data-fetch-success="$ctrl.fetchSuccess">
+    data-fetch-success="$ctrl.fetchSuccess"
+    data-should-hide-content-on-request="true">
     <p-heading
       ng-if="$ctrl.component.name"
       data-text="{{ $ctrl.component.name }}"
       data-size="2">
     </p-heading>
     <p ng-bind="$ctrl.component.description"></p>
+    <p-external-component-properties-list
+      data-properties="$ctrl.component.properties">
+    </p-external-component-properties-list>
   </p-requester>
 </div>
