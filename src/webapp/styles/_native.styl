@@ -1,3 +1,17 @@
+@require '_variables'
+@require '_mixins'
+
+html,
+body
+  background-color $color-grey-light
+  color $color-darkest
+
 body
   margin 0
   font-family Helvetica, Arial, sans-serif
+
+p
+  margin 0
+  line-height 1.35
+  & + p
+    margin-top 20px
