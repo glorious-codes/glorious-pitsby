@@ -1,0 +1,33 @@
+@require '_variables'
+@require '_mixins'
+
+.p-heading
+  h1, h2, h3, h4, h5, h6
+    position relative
+    margin 0
+    padding-left 15px
+    box-sizing(border-box)
+    &:before
+      position absolute
+      content ''
+      top 50%
+      left 0
+      width 4px
+      height 5px
+      background-color $color-blue
+      transform('translate(0, 130%)')
+  h2
+    &:before
+      transform('translate(0, 65%)')
+  h3
+    &:before
+      transform('translate(0, 20%)')
+  h4
+    &:before
+      transform('translate(0, 10%)')
+  h5
+    &:before
+      transform('translate(0, -25%)')
+  h6
+    &:before
+      transform('translate(0, -25%)')

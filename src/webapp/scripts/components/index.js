@@ -4,6 +4,7 @@ import btn from '@scripts/components/btn/btn';
 import container from '@scripts/components/container/container';
 import externalComponentsList from '@scripts/components/external-components-list/external-components-list';
 import externalComponentsViewport from '@scripts/components/external-components-viewport/external-components-viewport';
+import heading from '@scripts/components/heading/heading';
 import listItem from '@scripts/components/list-item/list-item';
 import list from '@scripts/components/list/list';
 import loader from '@scripts/components/loader/loader';
@@ -19,6 +20,7 @@ export default angular.module('pitsby-components', [])
   .component('pContainer', container)
   .component('pExternalComponentsList', externalComponentsList)
   .component('pExternalComponentsViewport', externalComponentsViewport)
+  .component('pHeading', heading)
   .component('pList', list)
   .component('pListItem', listItem)
   .component('pLoader', loader)
