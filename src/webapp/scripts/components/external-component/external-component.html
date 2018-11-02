@@ -1,0 +1,12 @@
+<div class="p-external-component">
+  <p-requester
+    data-fetch="$ctrl.fetch"
+    data-fetch-success="$ctrl.fetchSuccess">
+    <p-heading
+      ng-if="$ctrl.component.name"
+      data-text="{{ $ctrl.component.name }}"
+      data-size="2">
+    </p-heading>
+    <p ng-bind="$ctrl.component.description"></p>
+  </p-requester>
+</div>
