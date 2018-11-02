@@ -1,19 +1,15 @@
 import stateProviderMock from '@mocks/state-provider';
 import urlRouterProviderMock from '@mocks/url-router-provider';
-import routesMock from '@mocks/routes';
-import routeService from '@scripts/services/route';
+import routes from '@scripts/constants/routes';
 import router from '@scripts/router';
 
 describe('Router', () => {
-  beforeEach(() => {
-    routeService.getAllRoutes = jest.fn(() => routesMock);
-  });
-
   it('should register all routes', () => {
     router(stateProviderMock, urlRouterProviderMock);
-    expect(stateProviderMock.state.mock.calls.length).toEqual(2);
-    expect(stateProviderMock.state).toHaveBeenCalledWith(routesMock[0]);
-    expect(stateProviderMock.state).toHaveBeenCalledWith(routesMock[1]);
+    expect(stateProviderMock.state.mock.calls.length).toEqual(3);
+    expect(stateProviderMock.state).toHaveBeenCalledWith(routes[0]);
+    expect(stateProviderMock.state).toHaveBeenCalledWith(routes[1]);
+    expect(stateProviderMock.state).toHaveBeenCalledWith(routes[2]);
   });
 
   it('should redirect any unknown route to home', () => {

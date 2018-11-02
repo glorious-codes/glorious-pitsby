@@ -1,7 +1,7 @@
-import routeService from '@scripts/services/route';
+import routes from '@scripts/constants/routes';
 
 function router($stateProvider, $urlRouterProvider) {
-  routeService.getAllRoutes().forEach(route => {
+  routes.forEach(route => {
     $stateProvider.state(route);
   });
   $urlRouterProvider.otherwise('/');

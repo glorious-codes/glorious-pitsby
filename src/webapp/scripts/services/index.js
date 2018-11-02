@@ -1,6 +1,8 @@
 import angular from 'angular';
-import digestionService from './digestion';
+import digestion from './digestion';
+import route from './route';
 
 export default angular.module('pitsby-services', [])
-  .service('digestionService', digestionService)
+  .service('digestionService', digestion)
+  .service('routeService', route)
   .name;

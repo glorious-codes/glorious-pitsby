@@ -1,9 +1,19 @@
-import routes from '@scripts/constants/routes';
+function routeService($state, $stateParams){
+  const _public = {};
 
-const _public = {};
+  _public.getAllRoutes = () => {
+    return $state.get();
+  };
 
-_public.getAllRoutes = () => {
-  return routes;
-};
+  _public.getParams = param => {
+    if (param)
+      return $stateParams[param];
+    return $stateParams;
+  };
 
-export default _public;
+  return _public;
+}
+
+routeService.$inject = ['$state', '$stateParams'];
+
+export default routeService;
