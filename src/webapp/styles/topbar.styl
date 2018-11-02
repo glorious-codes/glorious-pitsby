@@ -2,10 +2,11 @@
 @require '_mixins'
 
 .p-topbar
-  position absolute
+  position fixed
   top 0
   left 0
   right 0
   padding 15px 0
-  background-color alpha($color-lightest, .75)
+  background-color alpha($color-lightest, .9)
   border-bottom 1px solid $color-grey-semi-light
+  z-index $layer-low
