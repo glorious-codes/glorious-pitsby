@@ -1,15 +1,15 @@
 import angular from 'angular';
 import { angularModuleMock } from '@mocks/angular';
 import router from '@scripts/router';
-import appIndex from '@scripts/index';
+import appIndexTemplate from '@scripts/index-template';
 
-describe('App Index', () => {
+describe('App Index Template', () => {
   beforeEach(() => {
     angular.module = jest.fn(() => angularModuleMock);
   });
 
   it('should instantiate application module', () => {
-    appIndex.init();
+    appIndexTemplate.init();
     expect(angular.module).toHaveBeenCalledWith('pitsby-app', [
       'ui.router',
       'pitsby-components',
@@ -18,7 +18,7 @@ describe('App Index', () => {
   });
 
   it('should configure application router', () => {
-    appIndex.init();
+    appIndexTemplate.init();
     expect(angularModuleMock.config).toHaveBeenCalledWith(router);
   });
 });
