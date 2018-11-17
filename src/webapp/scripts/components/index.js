@@ -3,6 +3,7 @@ import alert from '@scripts/components/alert/alert';
 import btn from '@scripts/components/btn/btn';
 import container from '@scripts/components/container/container';
 import externalComponent from '@scripts/components/external-component/external-component';
+import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
 import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
 import externalComponentsList from '@scripts/components/external-components-list/external-components-list';
 import externalComponentsViewport from '@scripts/components/external-components-viewport/external-components-viewport';
@@ -21,6 +22,7 @@ export default angular.module('pitsby-components', [])
   .component('pBtn', btn)
   .component('pContainer', container)
   .component('pExternalComponent', externalComponent)
+  .component('pExternalComponentExample', externalComponentExample)
   .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
   .component('pExternalComponentsList', externalComponentsList)
   .component('pExternalComponentsViewport', externalComponentsViewport)
