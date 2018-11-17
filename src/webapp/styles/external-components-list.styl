@@ -1,0 +1,24 @@
+@require '_variables'
+@require '_mixins'
+
+active()
+  padding-left 15px
+  background-color $color-lightest
+  border-left-width 1px
+
+.p-external-components-list
+  p-list-item
+    cursor pointer
+    border-left-color $color-primary
+    border-left-style solid
+    border-left-width 0
+    border-radius(0 3px 3px 0)
+    box-sizing(border-box)
+    transition(all, 300ms)
+    unselectable()
+    +highlight()
+      active()
+    &.p-external-components-list-item-active
+      active()
+      cursor default
+      pointer-events none

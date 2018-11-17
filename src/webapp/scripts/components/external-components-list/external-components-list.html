@@ -3,7 +3,10 @@
     data-fetch="$ctrl.fetch"
     data-fetch-success="$ctrl.fetchSuccess"
     data-alert-error-message="Failed to get components.">
-    <p-list-item ng-repeat="component in $ctrl.components">
+    <p-list-item
+      ng-repeat="component in $ctrl.components"
+      ng-click="$ctrl.onExternalComponentsListItemClick(component)"
+      ng-class="{'p-external-components-list-item-active': $ctrl.isActiveListItem(component)}">
       <div ng-bind="component.name"></div>
     </p-list-item>
   </p-list>
