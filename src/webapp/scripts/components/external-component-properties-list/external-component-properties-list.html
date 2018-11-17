@@ -7,9 +7,14 @@
     <p-list-item ng-repeat="property in $ctrl.properties">
       <p-row>
         <p-row-item
-          data-size="5"
+          data-size="4"
           data-label="Name"
           data-value="property.name">
+        </p-row-item>
+        <p-row-item
+          data-size="2"
+          data-label="Required"
+          data-value="property.required">
         </p-row-item>
         <p-row-item
           data-size="2"
@@ -17,7 +22,7 @@
           data-value="property.type">
         </p-row-item>
         <p-row-item
-          data-size="5"
+          data-size="4"
           data-label="Valid Values"
           data-value="property.values">
         </p-row-item>
