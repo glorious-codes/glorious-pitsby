@@ -6,15 +6,16 @@ export default [
   {
     name: 'home',
     url: '/',
-    template: home
+    template: home,
+    redirectTo: 'externalComponents'
   },
   {
-    name: 'external-components',
+    name: 'externalComponents',
     url: '/components',
     template: externalComponents
   },
   {
-    name: 'external-components.component',
+    name: 'externalComponents.component',
     url: '/:componentId',
     template: externalComponent
   }
