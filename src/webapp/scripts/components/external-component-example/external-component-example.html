@@ -1,1 +1,10 @@
-<div class="p-external-component-example"></div>
+<div class="p-external-component-example">
+  <p-heading
+    ng-if="$ctrl.example.title"
+    data-text="{{ $ctrl.example.title }}"
+    data-size="4">
+  </p-heading>
+  <p-external-component-preview
+    data-example="$ctrl.example">
+  <p-external-component-preview>
+</div>
