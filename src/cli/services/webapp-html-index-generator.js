@@ -24,7 +24,7 @@ function buildLinkTag(path){
 }
 
 function buildScriptTag(path){
-  return `<script src="${buildExternalAssetPath(path)}"></script>`
+  return `<script src="${buildExternalAssetPath(path)}"></script>`;
 }
 
 function buildAngularScriptTag(){

@@ -4,11 +4,11 @@ const writefile = require('writefile');
 
 class FileService {
   constructor(dependencies = {}){
-    this.fs = dependencies.fs || fs;
-    this.glob = dependencies.glob || glob;
-    this.writefile = dependencies.writefile || writefile;
-    this.console = dependencies.console || console;
-    this.req = dependencies.require || require;
+    this.fs = getDependency(dependencies, 'fs', fs);
+    this.glob = getDependency(dependencies, 'glob', glob);
+    this.writefile = getDependency(dependencies, 'writefile', writefile);
+    this.console = getDependency(dependencies, 'console', console);
+    this.req = getDependency(dependencies, 'req', require);
   }
 
   require(filepath){
@@ -30,7 +30,7 @@ class FileService {
 
   readJSONSync(filepath){
     return JSON.parse(this.readSync(filepath));
-  };
+  }
 
   collect(pattern, onSuccess){
     this.glob(pattern, (err, files) => {
@@ -43,7 +43,11 @@ class FileService {
 
   write(filepath, data){
     this.writefile(filepath, data);
-  };
+  }
+}
+
+function getDependency(dependencies, dependencyName, rawDependency){
+  return dependencies[dependencyName] || rawDependency;
 }
 
 let fileService = new FileService();

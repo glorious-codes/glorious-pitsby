@@ -11,11 +11,14 @@ const _public = {};
 _public.init = () => {
   const clientDirectory = process.cwd();
   const config = getPitsbyConfig(clientDirectory);
-  const assets = getExternalAssets(config);
-  generateExternalComponentsData(clientDirectory, config.collectFrom);
-  generateExternalAssets(clientDirectory, assets);
-  generateWebappHtmlIndex(clientDirectory, assets);
+  generateExternalFiles(clientDirectory, config);
+  generateWebappHtmlIndex(clientDirectory, config);
   generateWebappIndex(clientDirectory, config.moduleName);
+};
+
+function generateExternalFiles(clientDirectory, config){
+  generateExternalComponentsData(clientDirectory, config.collectFrom);
+  generateExternalAssets(clientDirectory, getExternalAssets(config));
 }
 
 function getPitsbyConfig(clientDirectory){
@@ -30,19 +33,19 @@ function generateExternalAssets(clientDirectory, externalAssets){
   externalAssetsGenerator.init(clientDirectory, externalAssets);
 }
 
+function generateWebappHtmlIndex(clientDirectory, config){
+  webappHtmlIndexGenerator.init(clientDirectory, getExternalAssets(config));
+}
+
+function generateWebappIndex(clientDirectory, moduleName){
+  webappIndexGenerator.init(clientDirectory, moduleName);
+}
+
 function getExternalAssets(config){
   return {
     styles: config.styles,
     scripts: config.scripts
   };
-}
-
-function generateWebappHtmlIndex(clientDirectory, externalAssets){
-  webappHtmlIndexGenerator.init(clientDirectory, externalAssets);
-}
-
-function generateWebappIndex(clientDirectory, moduleName){
-  webappIndexGenerator.init(clientDirectory, moduleName);
 }
 
 _public.init();

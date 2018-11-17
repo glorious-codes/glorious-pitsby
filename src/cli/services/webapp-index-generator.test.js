@@ -14,7 +14,7 @@ describe('Webapp Index Generator', () => {
     webappIndexGenerator.init('/client', 'external-module-name');
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/scripts/index.js'),
-`import '@styles/_native.styl';
+      `import '@styles/_native.styl';
 import angular from 'angular';
 import uirouter from '@uirouter/angularjs/release/angular-ui-router';
 import router from '@scripts/router';
@@ -45,7 +45,7 @@ export default _public;
     webappIndexGenerator.init('/client');
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/scripts/index.js'),
-`import '@styles/_native.styl';
+      `import '@styles/_native.styl';
 import angular from 'angular';
 import uirouter from '@uirouter/angularjs/release/angular-ui-router';
 import router from '@scripts/router';
@@ -70,5 +70,5 @@ _public.init();
 
 export default _public;
 `);
-  })
+  });
 });

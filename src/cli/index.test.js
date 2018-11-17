@@ -37,18 +37,18 @@ describe('CLI Index', () => {
     cliIndex.init();
     expect(externalAssetsGenerator.init).toHaveBeenCalledWith(
       process.cwd(), {
-      styles: ['./dist/styles.css'],
-      scripts: ['./dist/bundle.js']
-    });
+        styles: ['./dist/styles.css'],
+        scripts: ['./dist/bundle.js']
+      });
   });
 
   it('should generate webapp html index', () => {
     cliIndex.init();
     expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith(
       process.cwd(), {
-      styles: ['./dist/styles.css'],
-      scripts: ['./dist/bundle.js']
-    });
+        styles: ['./dist/styles.css'],
+        scripts: ['./dist/bundle.js']
+      });
   });
 
   it('should generate webapp javascript index', () => {

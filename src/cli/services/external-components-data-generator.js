@@ -5,9 +5,7 @@ const _public = {};
 
 _public.init = (clientDirectory, collectFrom) => {
   const pattern = buildCollectFromGlob(clientDirectory, collectFrom);
-  const components = collectComponents(pattern, components => {
-    writeComponentsFile(components);
-  });
+  collectComponents(pattern, components => writeComponentsFile(components));
 };
 
 function buildCollectFromGlob(clientDirectory, collectFrom){

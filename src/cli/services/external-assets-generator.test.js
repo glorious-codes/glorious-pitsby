@@ -40,4 +40,4 @@ describe('External Assets Generator', () => {
       `${webappExternalDirectory}/scripts/components.js`, 'some content'
     );
   });
-})
+});

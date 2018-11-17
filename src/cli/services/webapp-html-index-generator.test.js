@@ -41,7 +41,7 @@ describe('Webapp HTML Index Generator', () => {
 <script src="external/dist/scripts/main.js"></script>
   </body>
 </html>
-`)
+`);
   });
 
   it('should not include any external assets if no assets have been given', () => {
@@ -66,6 +66,6 @@ describe('Webapp HTML Index Generator', () => {
 
   </body>
 </html>
-`)
-  })
+`);
+  });
 });

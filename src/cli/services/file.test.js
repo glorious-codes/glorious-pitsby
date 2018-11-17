@@ -33,9 +33,9 @@ describe('File Service', () => {
     const requireMock = jest.fn();
     const filepath = './test.json';
     const fileService = new FileService({
-      require: requireMock
+      req: requireMock
     });
-    const file = fileService.require(filepath);
+    fileService.require(filepath);
     expect(requireMock).toHaveBeenCalledWith(filepath);
   });
 
