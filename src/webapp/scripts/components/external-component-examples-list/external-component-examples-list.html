@@ -1,6 +1,13 @@
 <div class="p-external-component-examples-list">
-  <p-external-component-example
-    ng-repeat="example in $ctrl.examples"
-    data-example="example">
-  </p-external-component-example>
+  <p-heading
+    data-text="Examples"
+    data-size="3">
+  </p-heading>
+  <p-list>
+    <p-list-item ng-repeat="example in $ctrl.examples">
+      <p-external-component-example
+        data-example="example">
+      </p-external-component-example>
+    </p-list-item>
+  </p-list>
 </div>

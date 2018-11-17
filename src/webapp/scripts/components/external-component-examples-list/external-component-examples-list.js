@@ -1,3 +1,4 @@
+import '@styles/external-component-examples-list.styl';
 import template from './external-component-examples-list.html';
 
 export default {
