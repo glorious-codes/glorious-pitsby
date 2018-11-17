@@ -152,17 +152,20 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
-#Built files
+# Built files
 .sass-cache/
 assets/css/
 assets/js/
 
-#Tests generated files
+# Tests generated files
 ./coverage/
 ./screenshots/
 spec/visual/results/
 
-#Other
+# Other
 ./install/
 angular-route.min.js.map
 src/webapp/data
+src/webapp/external
+src/webapp/index.html
+src/webapp/scripts/index.js
