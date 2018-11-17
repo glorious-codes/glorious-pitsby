@@ -7,4 +7,6 @@ function router($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 }
 
+router.$inject = ['$stateProvider', '$urlRouterProvider'];
+
 export default router;
