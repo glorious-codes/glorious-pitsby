@@ -4,7 +4,14 @@
     data-text="{{ $ctrl.example.title }}"
     data-size="4">
   </p-heading>
-  <p-external-component-preview
-    data-example="$ctrl.example">
-  <p-external-component-preview>
+  <p-tabs>
+    <p-tab data-name="Preview">
+      <p-external-component-preview
+        data-example="$ctrl.example">
+      <p-external-component-preview>
+    </p-tab>
+    <p-tab data-name="Markup">
+      Markup
+    </p-tab>
+  </p-tabs>
 </div>
