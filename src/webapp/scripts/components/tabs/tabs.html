@@ -1,0 +1,14 @@
+<div class="p-tabs">
+  <div class="p-tabs-bar">
+    <div
+      ng-repeat="tab in $ctrl.tabs"
+      ng-class="{'p-tabs-bar-item-active': tab.isActive}"
+      ng-click="$ctrl.selectTab(tab)"
+      ng-bind="tab.name"
+      class="p-tabs-bar-item">
+    </div>
+  </div>
+  <div class="p-tabs-content-container">
+    <ng-transclude></ng-transclude>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+@require '_variables'
+@require '_mixins'
+
+.p-tabs-bar
+  border-bottom 1px solid $color-grey
+  clearfix()
+
+.p-tabs-bar-item
+  float left
+  font-size $font-size-xxxs
+  text-transform uppercase
+  cursor pointer
+  & + .p-tabs-bar-item
+    margin-left 10px
+
+.p-tabs-content-container
+  margin-top 30px
