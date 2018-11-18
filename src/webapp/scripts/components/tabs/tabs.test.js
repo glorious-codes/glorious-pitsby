@@ -28,9 +28,8 @@ describe('Tabs', () => {
   });
 
   it('should transclude some content', () => {
-    const element = compile(mockTabsContent());
-    const tabs = element[0].querySelectorAll('p-tab');
-    expect(tabs[0].innerHTML).toEqual('First');
+    const element = compile('<p-tab name="hello"><p>Hello</p></p-tab>');
+    expect(element.find('p').text()).toEqual('Hello');
   });
 
   it('should build tabs based on transcluded content', () => {

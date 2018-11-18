@@ -6,7 +6,7 @@ function controller($timeout, $element){
 
   $ctrl.$onInit = () => {
     $timeout(() => {
-      setTabs(buildTabs($element));
+      setTabs(buildTabs());
       $ctrl.selectTab($ctrl.tabs[0]);
     });
   };
@@ -16,7 +16,7 @@ function controller($timeout, $element){
     toggleActiveTab(tab);
   };
 
-  function buildTabs(element){
+  function buildTabs(){
     return getTabElements().map(tab => {
       return {
         name: tab.getAttribute('data-name')
@@ -60,7 +60,7 @@ function controller($timeout, $element){
   }
 }
 
-controller.$inject = ['$timeout', '$element']
+controller.$inject = ['$timeout', '$element'];
 
 export default {
   transclude: true,
