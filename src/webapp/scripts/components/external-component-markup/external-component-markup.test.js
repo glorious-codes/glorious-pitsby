@@ -1,7 +1,12 @@
+import Prism from 'prismjs';
 import textService from '@scripts/services/text';
 
 describe('External Component Markup', () => {
   let compile;
+
+  function stubPrism(markup){
+    Prism.highlight = jest.fn(() => markup);
+  }
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
@@ -26,7 +31,10 @@ describe('External Component Markup', () => {
   });
 
   it('should render component template into pre element', () => {
-    const element = compile({template: '<p>Hello</p>'});
-    expect(element.find('pre')[0].innerHTML).toEqual('&lt;p&gt;Hello&lt;/p&gt;');
+    const markup = '<p>Hello</p>';
+    stubPrism(markup);
+    const element = compile({template: markup});
+    expect(Prism.highlight).toHaveBeenCalledWith(markup, Prism.languages.html, 'html');
+    expect(element.find('pre')[0].innerHTML).toEqual(markup);
   });
 });

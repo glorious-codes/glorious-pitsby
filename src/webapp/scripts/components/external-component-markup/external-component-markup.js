@@ -1,3 +1,5 @@
+import 'prismjs/themes/prism.css';
+import Prism from 'prismjs';
 import textService from '@scripts/services/text';
 import template from './external-component-markup.html';
 
@@ -10,11 +12,15 @@ function controller($element){
 
   function injectMarkupIntoPreElement(markup){
     const preElement = $element.find('pre')[0];
-    preElement.innerHTML = escapeMarkup(markup);
+    preElement.innerHTML = highlightMarkup(markup);
   }
 
-  function escapeMarkup(markup){
-    return textService.normalizeIndentation(markup).replace(/</gm, '&lt;');
+  function highlightMarkup(markup){
+    return Prism.highlight(
+      textService.normalizeIndentation(markup),
+      Prism.languages.html,
+      'html'
+    );
   }
 }
 
