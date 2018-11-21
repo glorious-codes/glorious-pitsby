@@ -11,7 +11,7 @@ describe('Webapp Index Generator', () => {
   });
 
   it('should include external module name on template', () => {
-    webappIndexGenerator.init('/client', 'external-module-name');
+    webappIndexGenerator.init('external-module-name');
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/scripts/index.js'),
       `import '@styles/_native.styl';
@@ -42,7 +42,7 @@ export default _public;
   });
 
   it('should not include external module name on template if no name has been given', () => {
-    webappIndexGenerator.init('/client');
+    webappIndexGenerator.init();
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/scripts/index.js'),
       `import '@styles/_native.styl';
