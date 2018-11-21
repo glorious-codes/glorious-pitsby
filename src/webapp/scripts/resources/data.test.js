@@ -7,7 +7,9 @@ describe('Data Resource', () => {
   const responseMock = [{some: 'response'}];
 
   beforeEach(() => {
-    dateService.getNow = jest.fn(() => new Date(2018, 9, 21));
+    dateService.getNow = jest.fn(() => {
+      return {getTime: function(){ return 123; }};
+    });
     baseResource.get = jest.fn(() => new PromiseMock('success', {
       data: responseMock
     }));
@@ -22,7 +24,9 @@ describe('Data Resource', () => {
   it('should always pass a timestamp query param on get data', () => {
     const uri = '/components';
     dataResource.get(uri);
-    expect(baseResource.get).toHaveBeenCalledWith('/data/components.json', {t: 1540090800000});
+    expect(baseResource.get).toHaveBeenCalledWith(
+      '/data/components.json', {t: 123}
+    );
   });
 
   it('should be able to pass custom query params on get data', () => {
@@ -30,7 +34,7 @@ describe('Data Resource', () => {
     const query = {custom: 'param'};
     dataResource.get(uri, query);
     expect(baseResource.get).toHaveBeenCalledWith('/data/components.json', {
-      t: 1540090800000,
+      t: 123,
       custom: 'param'
     });
   });
