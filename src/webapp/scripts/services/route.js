@@ -11,6 +11,10 @@ function routeService($state, $stateParams){
     return $stateParams;
   };
 
+  _public.setParams = params => {
+    return _public.go('.', params, {location: 'replace'});
+  };
+
   _public.go = (state, params, options) => {
     return $state.go(state, params, options);
   };

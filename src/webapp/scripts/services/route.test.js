@@ -25,6 +25,14 @@ describe('Route Service', () => {
     expect($state.go).toHaveBeenCalledWith(route, params, options);
   });
 
+  it('should set search params', () => {
+    const params = {name: 'rafael', email: 'some@email.com'};
+    service.setParams(params);
+    expect($state.go).toHaveBeenCalledWith('.', params, {
+      location: 'replace'
+    });
+  });
+
   it('should get all route params', () => {
     $stateParams.name = 'rafael';
     $stateParams.email = 'some@email.com';
