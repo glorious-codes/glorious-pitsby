@@ -1,8 +1,86 @@
 # Pitsby
-> Docs generator for AngularJS
+> Docs generator for AngularJS components
 
 [![CircleCI](https://circleci.com/gh/glorious-codes/pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/pitsby/tree/master)
 [![codecov](https://codecov.io/gh/glorious-codes/pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/pitsby)
+
+## Basic Usage
+
+Pitsby is based on two types of files:
+
+### `pitsby.json`
+
+This is pitsby's configuration file. This file should be create in the root directory of the project which you want the documentation will be created for:
+
+``` javascript
+{
+  "collectFrom": "./src", // Directory where pitsby should look for .doc.js files
+  "moduleName": "my-angular-components", // Name of the Angular module that contains the components to be documented
+  "styles": [
+    "./dist/my-angular-components.min.css" // All stylesheets that should be included in the documentation
+  ],
+  "scripts": [
+    "./dist/my-angular-components.min.js" // All scripts that should be included in the documentation
+  ]
+}
+```
+
+### `*.doc.js`
+
+You should create one `.doc.js` file per component. The following is an example for some button component:
+
+``` javascript
+module.exports = {
+  name: 'Button',
+  description: 'Trigger for actions in forms, dialogs, and more.',
+  properties: [
+    {
+      name: 'theme', type: 'String', values: 'primary, secondary', required: 'No',
+    },
+    {
+      name: 'size', type: 'String', values: 'small, large', required: 'No',
+    }
+  ],
+  examples: [
+    {
+      title: 'Default Button',
+      template: `
+      <my-button>
+        Save
+      </my-button>`
+    },
+    {
+      title: 'Primary Button',
+      template: `
+      <my-button data-theme="primary">
+        Save
+      </my-button>`
+    },
+    {
+      title: 'Secondary Button',
+      template: `
+      <my-button data-theme="secondary">
+        Save
+      </my-button>`
+    },
+    {
+      title: 'Small Button',
+      template: `
+      <my-button data-size="small">
+        Save
+      </my-button>`
+    },
+    {
+      title: 'Large Button',
+      template: `
+      <my-button data-size="large">
+        Save
+      </my-button>`
+    },
+  ],
+};
+
+```
 
 ## Contributing
 
@@ -10,7 +88,7 @@
 
 2. Clone the repo:
 ``` bash
-git clone git@github.com:rafaelcamargo/pitsby.git
+git clone git@github.com:glorious-codes/pitsby.git
 ```
 
 3. Go to the project directory
@@ -23,12 +101,19 @@ cd pitsby
 npm install
 ```
 
-5. If you want just build the project, run:
+5. Create `pitsby.json` and, at least, one `*.doc.js` in a third party project.
+
+6. Install and run pitsby on the root directory of the third party project cited on item 5.
+``` bash
+pitsby
+```
+
+7. If you want just build the project, run:
 ``` bash
 npm run build
 ```
 
-6. Otherwise, run:
+8. Otherwise, run:
 ``` bash
 npm run start
 ```
@@ -39,5 +124,5 @@ The app will be running on `http://localhost:7000` and the browser will automati
 
 1. Ensure that all code that you have added is covered with unit tests:
 ``` bash
-npm run test
+npm run test -- --coverage
 ```
