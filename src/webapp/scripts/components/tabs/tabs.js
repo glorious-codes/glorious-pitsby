@@ -1,19 +1,19 @@
 import '@styles/tabs.styl';
 import template from './tabs.html';
 
-function controller($timeout, $element){
+function controller($timeout, $element, tabsRouteParamsService){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
     $timeout(() => {
       setTabs(buildTabs());
-      $ctrl.selectTab($ctrl.tabs[0]);
+      activateTab(getTab(getTabIndexQueryParam()));
     });
   };
 
-  $ctrl.selectTab = tab => {
-    showTabContent(tab);
-    toggleActiveTab(tab);
+  $ctrl.selectTab = (tab, tabIndex) => {
+    activateTab(tab);
+    setTabIndexQueryParam(tabIndex);
   };
 
   function buildTabs(){
@@ -24,12 +24,37 @@ function controller($timeout, $element){
     });
   }
 
+  function activateTab(tab){
+    showTabContent(tab);
+    toggleActiveTab(tab);
+  }
+
   function getTabElements(){
     return Array.from($element[0].querySelectorAll('p-tab'));
   }
 
   function setTabs(tabs){
     $ctrl.tabs = tabs;
+  }
+
+  function getTabIndexQueryParam(){
+    const key = getQueryParamKey();
+    if(key)
+      return tabsRouteParamsService.get(key);
+  }
+
+  function setTabIndexQueryParam(tabIndex){
+    const key = getQueryParamKey();
+    if(key)
+      tabsRouteParamsService.set({[key]: tabIndex});
+  }
+
+  function getQueryParamKey(){
+    return $ctrl.queryParamKey;
+  }
+
+  function getTab(tabIndex = 0){
+    return $ctrl.tabs[tabIndex];
   }
 
   function showTabContent(tab){
@@ -60,10 +85,13 @@ function controller($timeout, $element){
   }
 }
 
-controller.$inject = ['$timeout', '$element'];
+controller.$inject = ['$timeout', '$element', 'tabsRouteParamsService'];
 
 export default {
   transclude: true,
+  bindings: {
+    queryParamKey: '@'
+  },
   controller,
   template
 };

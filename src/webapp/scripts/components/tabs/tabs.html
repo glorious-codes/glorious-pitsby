@@ -3,7 +3,7 @@
     <div
       ng-repeat="tab in $ctrl.tabs"
       ng-class="{'p-tabs-bar-item-active': tab.isActive}"
-      ng-click="$ctrl.selectTab(tab)"
+      ng-click="$ctrl.selectTab(tab, $index)"
       ng-bind="tab.name"
       class="p-tabs-bar-item">
     </div>
