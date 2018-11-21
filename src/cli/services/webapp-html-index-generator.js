@@ -4,7 +4,7 @@ const assetsFilepathFilter = require('./assets-filepath-filter');
 
 const _public = {};
 
-_public.init = (clientDirectory, options = {}) => {
+_public.init = (options = {}) => {
   const linkTags = buildAssetTags(options.styles, buildLinkTag);
   const scriptTags = buildAssetTags(options.scripts, buildScriptTag);
   const indexHtml = buildIndexHtml(linkTags, scriptTags, buildAngularScriptTag());

@@ -18,7 +18,7 @@ describe('Webapp HTML Index Generator', () => {
   });
 
   it('should include external assets on template', () => {
-    webappHtmlIndexGenerator.init('/client', mockOptions());
+    webappHtmlIndexGenerator.init(mockOptions());
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
 <html>
@@ -45,7 +45,7 @@ describe('Webapp HTML Index Generator', () => {
   });
 
   it('should not include any external assets if no assets have been given', () => {
-    webappHtmlIndexGenerator.init('/client');
+    webappHtmlIndexGenerator.init();
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
 <html>
