@@ -16,7 +16,8 @@ export default [
   },
   {
     name: 'externalComponents.component',
-    url: '/:componentId',
-    template: externalComponent
+    url: '/:componentId?tabs',
+    template: externalComponent,
+    reloadOnSearch: false
   }
 ];

@@ -7,9 +7,11 @@ describe('External Component Example', () => {
       const scope = $rootScope.$new(true);
       compile = (bindings = {}) => {
         const template = `<p-external-component-example
-                            data-example="example">
+                            data-example="example"
+                            data-example-index="exampleIndex">
                           </p-external-component-example>`;
         scope.example = bindings.example || {};
+        scope.exampleIndex = bindings.exampleIndex || 0;
         const element = $compile(template)(scope);
         scope.$digest();
         return element;
@@ -20,6 +22,13 @@ describe('External Component Example', () => {
   it('should have appropriate css class', () => {
     const element = compile();
     expect(element.find('div').attr('class')).toEqual('p-external-component-example');
+  });
+
+  it('should build tabs query param key on initialize', () => {
+    const element = compile({exampleIndex: 2});
+    expect(element.find('p-tabs').attr('data-query-param-key')).toEqual(
+      'externalComponentExample2Tab'
+    );
   });
 
   it('should render a title if example title has been given', () => {
