@@ -1,0 +1,10 @@
+Usage: pitsby <args>
+
+  { description }
+
+Commands:
+  build                 Process documentation and generates its site
+
+Options:
+  -v  --version         Display current software version
+  -h  --help            Display software help and usage details
