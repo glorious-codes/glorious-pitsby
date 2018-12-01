@@ -23,6 +23,20 @@ describe('External Components Data Generator', () => {
     fileService.write = jest.fn();
   });
 
+  it('should return a promise', () => {
+    const promise = externalComponentsDataGenerator.init('/client', './src');
+    expect(promise.then).toBeDefined();
+  });
+
+  it('should resolve its promise', done => {
+    let count = 0;
+    externalComponentsDataGenerator.init('/client', './src').then(() => {
+      count++;
+      expect(count).toEqual(1);
+      done();
+    });
+  });
+
   it('should collect all *.doc.js in the specified collect from directory', () => {
     externalComponentsDataGenerator.init('/client', './src');
     expect(fileService.collect.mock.calls[0][0]).toEqual('/client/src/**/*.doc.js');

@@ -19,6 +19,20 @@ describe('External Assets Generator', () => {
     fileService.write = jest.fn();
   });
 
+  it('should return a promise', () => {
+    const promise = externalAssetsGenerator.init('/client', mockExternalAssets());
+    expect(promise.then).toBeDefined();
+  });
+
+  it('should resolve its promise', done => {
+    let count = 0;
+    externalAssetsGenerator.init('/client', mockExternalAssets()).then(() => {
+      count++;
+      expect(count).toEqual(1);
+      done();
+    });
+  });
+
   it('should write external styles in webapp external directory', () => {
     externalAssetsGenerator.init('/client', mockExternalAssets());
     const webappExternalDirectory = getWebappExternalDirectory();

@@ -5,14 +5,19 @@ const { fileService } = require('./file');
 const _public = {};
 
 _public.init = (clientDirectory, assets) => {
-  collectAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.styles));
-  collectAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.scripts));
+  return Promise.all([
+    collectAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.styles)),
+    collectAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.scripts))
+  ]);
 };
 
 function collectAssets(clientDirectory, filepaths){
-  filepaths.forEach(filepath => {
-    fileService.read(path.join(clientDirectory, filepath), data => {
-      onCollectAssetsSuccess(filepath, data);
+  return new Promise(resolve => {
+    filepaths.forEach(filepath => {
+      fileService.read(path.join(clientDirectory, filepath), data => {
+        onCollectAssetsSuccess(filepath, data);
+        resolve();
+      });
     });
   });
 }
