@@ -1,0 +1,9 @@
+Usage: pitsby build <args>
+
+  Process documentation and generates documentation site.
+
+Example:
+  $ pitsby build
+
+Options:
+  -h   --help            Display software help and usage details
