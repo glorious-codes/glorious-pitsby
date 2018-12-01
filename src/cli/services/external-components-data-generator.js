@@ -4,8 +4,13 @@ const { fileService } = require('./file');
 const _public = {};
 
 _public.init = (clientDirectory, collectFrom) => {
-  const pattern = buildCollectFromGlob(clientDirectory, collectFrom);
-  collectComponents(pattern, components => writeComponentsFile(components));
+  return new Promise(resolve => {
+    const pattern = buildCollectFromGlob(clientDirectory, collectFrom);
+    collectComponents(pattern, components => {
+      writeComponentsFile(components);
+      resolve();
+    });
+  });
 };
 
 function buildCollectFromGlob(clientDirectory, collectFrom){

@@ -11,10 +11,11 @@ _public.init = externalModuleName => {
 };
 
 function buildIndex(externalModuleName = ''){
-  const template = getIndexTemplate();
-  return template.replace(
+  let template = getIndexTemplate();
+  template = template.replace(
     '// inject:external-module-name', `'${externalModuleName}'`
   );
+  return template;
 }
 
 function getIndexTemplate(){

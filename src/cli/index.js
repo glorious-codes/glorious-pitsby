@@ -1,51 +1,41 @@
 #!/usr/bin/env node
+const argsService = require('./services/args');
+const commands = require('./commands');
 
-const externalAssetsGenerator = require('./services/external-assets-generator');
-const externalComponentsDataGenerator = require('./services/external-components-data-generator');
-const webappHtmlIndexGenerator = require('./services/webapp-html-index-generator');
-const webappIndexGenerator = require('./services/webapp-index-generator');
-const { fileService } = require('./services/file');
+const HELPER_TEXT = 'Try "pitsby --help" to see available commands.';
 
 const _public = {};
 
 _public.init = () => {
-  const clientDirectory = process.cwd();
-  const config = getPitsbyConfig(clientDirectory);
-  generateExternalFiles(clientDirectory, config);
-  generateWebappHtmlIndex(clientDirectory, config);
-  generateWebappIndex(clientDirectory, config.moduleName);
+  const args = getArgs();
+  const commandName = getCommandName(args[0]);
+  if(commandName)
+    return handleCommand(commandName, args);
+  return console.log(`No command given. ${HELPER_TEXT}`);
 };
 
-function generateExternalFiles(clientDirectory, config){
-  generateExternalComponentsData(clientDirectory, config.collectFrom);
-  generateExternalAssets(clientDirectory, getExternalAssets(config));
+function getArgs(){
+  return argsService.getCliArgs();
 }
 
-function getPitsbyConfig(clientDirectory){
-  return fileService.readJSONSync(`${clientDirectory}/pitsby.json`);
+function getCommandName(arg){
+  if(isFlagArg(arg, 'help'))
+    return 'help';
+  if(isFlagArg(arg, 'version'))
+    return 'version';
+  return arg;
 }
 
-function generateExternalComponentsData(clientDirectory, collectFrom){
-  externalComponentsDataGenerator.init(clientDirectory, collectFrom);
+function isFlagArg(arg, flag){
+  const letter = flag[0];
+  return arg == `-${letter}` || arg == `--${flag}`;
 }
 
-function generateExternalAssets(clientDirectory, externalAssets){
-  externalAssetsGenerator.init(clientDirectory, externalAssets);
-}
-
-function generateWebappHtmlIndex(clientDirectory, config){
-  webappHtmlIndexGenerator.init(clientDirectory, getExternalAssets(config));
-}
-
-function generateWebappIndex(clientDirectory, moduleName){
-  webappIndexGenerator.init(clientDirectory, moduleName);
-}
-
-function getExternalAssets(config){
-  return {
-    styles: config.styles,
-    scripts: config.scripts
-  };
+function handleCommand(commandName, args){
+  const command = commands[commandName];
+  if(command)
+    return command.exec(args.slice(1));
+  return console.log(`Unknown command "${commandName}". ${HELPER_TEXT}`);
 }
 
 _public.init();

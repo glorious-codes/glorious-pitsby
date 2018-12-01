@@ -1,17 +1,15 @@
 const fs = require('fs'),
+  path = require('path'),
   argv = require('yargs').argv,
   webpack = require('webpack'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   CopyWebpackPlugin = require('copy-webpack-plugin'),
   ExtractTextPlugin = require('extract-text-webpack-plugin'),
-  project = require('./project.json');
+  project = require('./project.json'),
   env = argv.env ? argv.env : 'development';
 
 module.exports = {
   entry: `${__dirname}/${project.scripts.source.index}`,
-  output: {
-    path: `${__dirname}/${project.scripts.dist.root}`
-  },
   externals: {
     angular: 'angular'
   },
@@ -68,12 +66,12 @@ module.exports = {
       from: project.external.source.root,
       to: `${project.external.dist.root}[1]/[2]`,
       test: new RegExp(`${project.external.source.root}(.*)\/(.*)`)
-    }
-  ]),
+    }]),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(env)
       }
     })
-  ]
+  ],
+  context: path.resolve(__dirname)
 }

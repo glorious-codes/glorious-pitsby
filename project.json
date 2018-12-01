@@ -15,7 +15,6 @@
       "indexTemplate": "src/webapp/scripts/index-template.js"
     },
     "dist": {
-      "root": "dist",
       "filename": {
         "prod": "[name]-[hash].js",
         "dev": "[name].js"

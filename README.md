@@ -14,16 +14,32 @@ This is pitsby's configuration file. This file should be create in the root dire
 
 ``` javascript
 {
-  "collectFrom": "./src", // Directory where pitsby should look for .doc.js files
-  "moduleName": "my-angular-components", // Name of the Angular module that contains the components to be documented
+  "collectFrom": "./src",
+  "moduleName": "my-angular-components",
   "styles": [
-    "./dist/my-angular-components.min.css" // All stylesheets that should be included in the documentation
+    "./dist/my-angular-components.min.css"
   ],
   "scripts": [
-    "./dist/my-angular-components.min.js" // All scripts that should be included in the documentation
-  ]
+    "./dist/my-angular-components.min.js"
+  ],
+  "outputDirectory": "./docs"
 }
 ```
+
+#### `collectFrom`
+Directory where Pitsby should look for .doc.js files.
+
+#### `moduleName`
+Angular module name that contains the components to be documented.
+
+#### `styles`
+List of stylesheets that should be included in the documentation
+
+#### `scripts`
+List of scripts that should be included in the documentation.
+
+#### `outputDirectory`
+Directory where docs should be outputted to.
 
 ### `*.doc.js`
 
@@ -35,10 +51,16 @@ module.exports = {
   description: 'Trigger for actions in forms, dialogs, and more.',
   properties: [
     {
-      name: 'theme', type: 'String', values: 'primary, secondary', required: 'No',
+      name: 'theme',
+      type: 'String',
+      values: 'primary, secondary',
+      required: 'No'
     },
     {
-      name: 'size', type: 'String', values: 'small, large', required: 'No',
+      name: 'size',
+      type: 'String',
+      values: 'small, large',
+      required: 'No'
     }
   ],
   examples: [
@@ -101,9 +123,9 @@ cd pitsby
 npm install
 ```
 
-5. Create `pitsby.json` and, at least, one `*.doc.js` in a third party project.
+5. Create the `pitsby.json` and, at least, one `*.doc.js` in a third party project.
 
-6. Install and run pitsby on the root directory of the third party project cited on item 5.
+6. Install and run pitsby on the root directory of the project previously cited.
 ``` bash
 pitsby
 ```
