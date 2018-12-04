@@ -1,7 +1,7 @@
 # Pitsby
 > Docs generator for AngularJS components
 
-[![CircleCI](https://circleci.com/gh/glorious-codes/pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/pitsby/tree/master)
+[![CircleCI](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master)
 [![codecov](https://codecov.io/gh/glorious-codes/pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/pitsby)
 
 ## Basic Usage
