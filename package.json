@@ -2,10 +2,10 @@
   "name": "@glorious/pitsby",
   "version": "0.1.0",
   "description": "Docs generator for AngularJS 1.x components",
-  "author": "Rafael Camargo <contato@rafaelcamargo.com>",
+  "author": "Rafael Camargo <hello@rafaelcamargo.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/glorious-codes/pitsby"
+    "url": "https://github.com/glorious-codes/glorious-pitsby"
   },
   "license": "MIT",
   "bin": "./src/cli/index.js",
