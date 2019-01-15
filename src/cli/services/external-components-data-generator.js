@@ -26,8 +26,24 @@ function collectComponents(collectFromPattern, onCollectSuccess){
 function buildComponentsData(files){
   return files.map(file => {
     const component = fileService.require(file);
+    component.examples = stringifyExamplesFunctions(component.examples);
     return appendComponentId(component);
   });
+}
+
+function stringifyExamplesFunctions(examples = []){
+  return examples.map(example => {
+    example.data = stringifyFunctionsInExampleData(example.data);
+    return example;
+  });
+}
+
+function stringifyFunctionsInExampleData(data = {}){
+  Object.keys(data).forEach(key => {
+    if(typeof data[key] == 'function')
+      data[key] = data[key].toString();
+  });
+  return data;
 }
 
 function appendComponentId(component){
