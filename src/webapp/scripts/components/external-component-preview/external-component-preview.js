@@ -18,10 +18,22 @@ function controller($scope, $compile, $element){
     return angular.element(template);
   }
 
-  function buildExternalScope(data){
+  function buildExternalScope(data = {}){
     const scope = $scope.$new(true);
-    scope.$ctrl = data;
+    scope.$ctrl = parseExampleDataFunctions(data);
     return scope;
+  }
+
+  function parseExampleDataFunctions(data){
+    Object.keys(data).forEach(key => {
+      if(isStringifiedFunction(data[key]))
+        data[key] = eval(`(${data[key]})`);
+    });
+    return data;
+  }
+
+  function isStringifiedFunction(string){
+    return string.indexOf('function ') === 0;
   }
 }
 

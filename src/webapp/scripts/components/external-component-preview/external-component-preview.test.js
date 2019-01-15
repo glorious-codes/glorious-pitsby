@@ -35,6 +35,23 @@ describe('External Component Preview', () => {
     expect(element.find('p').text()).toEqual('Hello!');
   });
 
+  it('should parse stringified functions in example data', () => {
+    console.log = jest.fn();
+    const example = {
+      data: {
+        greet: `function (name) { console.log(name); }`
+      },
+      template: `
+        <button ng-click="$ctrl.greet('Rafael')">
+          Greet
+        </button>
+      `
+    };
+    const element = compile({example});
+    expect(element.find('button').triggerHandler('click'));
+    expect(console.log).toHaveBeenCalledWith('Rafael');
+  });
+
   it('should not render an example if no example has been given', () => {
     const element = compile();
     const children = element.find('div')[0].children;

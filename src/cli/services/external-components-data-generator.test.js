@@ -6,7 +6,14 @@ describe('External Components Data Generator', () => {
   function mockFilesData(){
     return {
       'button.doc.js': {
-        name: 'Button'
+        name: 'Button',
+        examples: [{
+          data: {
+            greet: function(name){
+              console.log(name);
+            }
+          }
+        }]
       },
       'card.doc.js': {
         name: 'Card'
@@ -47,9 +54,15 @@ describe('External Components Data Generator', () => {
     externalComponentsDataGenerator.init('/client', './src');
     const filepath = path.join(__dirname, '../../webapp/data/components.json');
     const data = [
-      {name: 'Button', id: 'button'},
-      {name: 'Card', id: 'card'},
-      {name: 'Email Input', id: 'email-input'}
+      {name: 'Button', examples: [{
+        data: {
+          greet: `function greet(name) {
+              console.log(name);
+            }`
+        }
+      }], id: 'button', },
+      {name: 'Card', examples: [], id: 'card'},
+      {name: 'Email Input', examples: [], id: 'email-input'}
     ];
     expect(fileService.write).toHaveBeenCalledWith(filepath, JSON.stringify(data));
   });
