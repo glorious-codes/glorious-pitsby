@@ -1,9 +1,12 @@
+import routePathService from '@scripts/services/route-path';
+
 describe('Route Service', () => {
-  let service, $state, $stateParams;
+  let service, $window, $state, $stateParams;
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject($injector => {
+      $window = $injector.get('$window');
       $state = $injector.get('$state');
       $stateParams = $injector.get('$stateParams');
       service = $injector.get('routeService');
@@ -23,6 +26,17 @@ describe('Route Service', () => {
     const options = {some: 'options'};
     service.go(route, params, options);
     expect($state.go).toHaveBeenCalledWith(route, params, options);
+  });
+
+  it('should optionally reset url path when going to some route', () => {
+    const routesMock = [{name: 'x', url: 'y'}];
+    const routeName = 'rotueName';
+    const routeParams = {id: '123'};
+    $state.get = jest.fn(() => routesMock);
+    routePathService.build = jest.fn(() => '/some/path');
+    service.go(routeName, routeParams, { resetUrlPath: true });
+    expect(routePathService.build).toHaveBeenCalledWith(routesMock, routeName, routeParams);
+    expect($window.location.hash).toEqual('#!/some/path');
   });
 
   it('should set search params', () => {

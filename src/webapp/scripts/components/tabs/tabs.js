@@ -38,23 +38,21 @@ function controller($timeout, $element, tabsRouteParamsService){
   }
 
   function getTabIndexQueryParam(){
-    const key = getQueryParamKey();
-    if(key)
-      return tabsRouteParamsService.get(key);
+    if($ctrl.queryParamKey)
+      return tabsRouteParamsService.get($ctrl.queryParamKey, {
+        tabGroupKey: $ctrl.queryParamGroupKey
+      });
   }
 
   function setTabIndexQueryParam(tabIndex){
-    const key = getQueryParamKey();
-    if(key)
-      tabsRouteParamsService.set({[key]: tabIndex});
+    if($ctrl.queryParamKey)
+      tabsRouteParamsService.set($ctrl.queryParamKey, tabIndex, {
+        tabGroupKey: $ctrl.queryParamGroupKey
+      });
   }
 
-  function getQueryParamKey(){
-    return $ctrl.queryParamKey;
-  }
-
-  function getTab(tabIndex = 0){
-    return $ctrl.tabs[tabIndex];
+  function getTab(tabIndex){
+    return $ctrl.tabs[tabIndex || 0];
   }
 
   function showTabContent(tab){
@@ -90,6 +88,7 @@ controller.$inject = ['$timeout', '$element', 'tabsRouteParamsService'];
 export default {
   transclude: true,
   bindings: {
+    queryParamGroupKey: '@',
     queryParamKey: '@'
   },
   controller,

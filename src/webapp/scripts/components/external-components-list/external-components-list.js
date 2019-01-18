@@ -16,6 +16,8 @@ function controller (routeService){
   $ctrl.onExternalComponentsListItemClick = component => {
     routeService.go('externalComponents.component', {
       componentId: component.id
+    }, {
+      resetUrlPath: true
     });
   };
 
