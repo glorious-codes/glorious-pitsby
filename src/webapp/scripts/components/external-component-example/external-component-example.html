@@ -4,7 +4,9 @@
     data-text="{{ $ctrl.example.title }}"
     data-size="4">
   </p-heading>
-  <p-tabs data-query-param-key="{{ $ctrl.tabsQueryParamKey }}">
+  <p-tabs
+    data-query-param-group-key="{{ $ctrl.tabQueryParamGroupKey }}"
+    data-query-param-key="{{ $ctrl.tabQueryParamKey }}">
     <p-tab data-name="Preview">
       <p-external-component-preview
         data-example="$ctrl.example">

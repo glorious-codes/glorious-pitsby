@@ -1,8 +1,12 @@
 describe('Route Service', () => {
   let service, routeService;
 
-  function stubGetParams(params){
-    routeService.getParams = jest.fn(() => JSON.stringify(params));
+  function stubGetParams(params = {}){
+    routeService.getParams = jest.fn((key) => {
+      if(typeof params[key] == 'string')
+        return params[key];
+      return JSON.stringify(params[key]);
+    });
   }
 
   beforeEach(() => {
@@ -14,28 +18,79 @@ describe('Route Service', () => {
     routeService.setParams = jest.fn();
   });
 
-  it('should get tabs params', () => {
-    const params = {someTabParam: 1, otherTabParam: 2};
+  it('should get tab param value', () => {
+    const params = {
+      someTab: 'someValue'
+    };
     stubGetParams(params);
-    expect(service.get()).toEqual(params);
+    const tabValue = service.get('someTab');
+    expect(tabValue).toEqual('someValue');
   });
 
-  it('should set tabs params', () => {
-    const params = {someTabParam: 1, otherTabParam: 2};
-    stubGetParams();
-    service.set(params);
-    expect(routeService.setParams).toHaveBeenCalledWith(
-      {tabs: JSON.stringify(params)}
-    );
+  it('should get tab param value from some tab group', () => {
+    const params = {
+      tabGroup: {someTab: 1, otherTab: 2}
+    };
+    stubGetParams(params);
+    const tabValue = service.get('someTab', {tabGroupKey: 'tabGroup'});
+    expect(tabValue).toEqual(1);
   });
 
-  it('should add new params keeping the existing ones', () => {
-    const existingParams = {existing: 1};
-    const params = {any: 2};
-    stubGetParams(existingParams);
-    service.set(params);
-    expect(routeService.setParams).toHaveBeenCalledWith(
-      {tabs: JSON.stringify({existing: 1, any: 2})}
-    );
+  it('should return undefined when tab value has not been found in tab group', () => {
+    const params = {
+      tabGroup: {someTab: 1, otherTab: 2}
+    };
+    stubGetParams(params);
+    const tabValue = service.get('evenOtherTab', {tabGroupKey: 'tabGroup'});
+    expect(tabValue).toEqual(undefined);
+  });
+
+  it('should return undefined when tab group has not been found in params', () => {
+    const params = {
+      tabGroup: {someTab: 1, otherTab: 2}
+    };
+    stubGetParams(params);
+    const tabValue = service.get('evenOtherTab', {tabGroupKey: 'otherGroup'});
+    expect(tabValue).toEqual(undefined);
+  });
+
+  it('should set tab param value', () => {
+    stubGetParams({});
+    service.set('someTab', 'someValue');
+    expect(routeService.setParams).toHaveBeenCalledWith({
+      someTab: 'someValue'
+    });
+  });
+
+  it('should set tab value in a tab group param', () => {
+    const params = {
+      tabGroup: {}
+    };
+    stubGetParams(params);
+    service.set('someTab', 'someValue', {tabGroupKey: 'tabGroup'});
+    expect(routeService.setParams).toHaveBeenCalledWith({
+      tabGroup: JSON.stringify({someTab: 'someValue'})
+    });
+  });
+
+  it('should keep existing values when setting tab value in a tab group param', () => {
+    const params = {
+      tabGroup: {otherTab: 'otherValue'}
+    };
+    stubGetParams(params);
+    service.set('someTab', 'someValue', {tabGroupKey: 'tabGroup'});
+    expect(routeService.setParams).toHaveBeenCalledWith({
+      tabGroup: JSON.stringify({otherTab: 'otherValue', someTab: 'someValue'})
+    });
+  });
+
+  it('should clear tab param value', () => {
+    service.clearTabValue('someTab');
+    expect(routeService.setParams).toHaveBeenCalledWith({someTab: ''});
+  });
+
+  it('should clear tab group param value', () => {
+    service.clearTabGroupValue('tabGroup');
+    expect(routeService.setParams).toHaveBeenCalledWith({tabGroup: JSON.stringify({})});
   });
 });

@@ -1,4 +1,6 @@
-function routeService($state, $stateParams){
+import routePathService from '@scripts/services/route-path';
+
+function routeService($window, $state, $stateParams){
   const _public = {};
 
   _public.getAllRoutes = () => {
@@ -6,22 +8,28 @@ function routeService($state, $stateParams){
   };
 
   _public.getParams = param => {
-    if (param)
-      return $stateParams[param];
-    return $stateParams;
+    return param ? $stateParams[param] : $stateParams;
   };
 
   _public.setParams = params => {
     return _public.go('.', params, {location: 'replace'});
   };
 
-  _public.go = (state, params, options) => {
-    return $state.go(state, params, options);
+  _public.go = (routeName, params, options) => {
+    if(options && options.resetUrlPath) {
+      const routes = _public.getAllRoutes();
+      return setUrlPath(routePathService.build(routes, routeName, params));
+    }
+    return $state.go(routeName, params, options);
   };
+
+  function setUrlPath(path){
+    $window.location.hash = `#!${path}`;
+  }
 
   return _public;
 }
 
-routeService.$inject = ['$state', '$stateParams'];
+routeService.$inject = ['$window', '$state', '$stateParams'];
 
 export default routeService;

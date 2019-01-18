@@ -19,10 +19,11 @@ describe('Tabs', () => {
       compile = (content = '', bindings = {}) => {
         const scope = $rootScope.$new(true);
         const template = `<p-tabs
-                            data-query-param-key="{{ queryParamKey }}">
+                            data-query-param-group-key="{{ $ctrl.queryParamGroupKey }}"
+                            data-query-param-key="{{ $ctrl.queryParamKey }}">
                             ${content}
                           </p-tabs>`;
-        scope.queryParamKey = bindings.queryParamKey;
+        scope.$ctrl = bindings;
         const element = $compile(template)(scope);
         scope.$digest();
         $timeout.flush();
@@ -67,7 +68,17 @@ describe('Tabs', () => {
     stubGetRouteParams();
     const queryParamKey = 'customKey';
     compile(mockTabsContent(), {queryParamKey});
-    expect(tabsRouteParamsService.get).toHaveBeenCalledWith(queryParamKey);
+    expect(tabsRouteParamsService.get.mock.calls[0][0]).toEqual(queryParamKey);
+  });
+
+  it('should look for tab index in tab group query param on initialize if tab group query param key has been given', () => {
+    stubGetRouteParams();
+    const queryParamKey = 'customKey';
+    const queryParamGroupKey = 'examplesTab';
+    compile(mockTabsContent(), {queryParamKey, queryParamGroupKey});
+    expect(tabsRouteParamsService.get).toHaveBeenCalledWith(queryParamKey, {
+      tabGroupKey: queryParamGroupKey
+    });
   });
 
   it('should select custom tab on initialize if tab index query param is found', () => {
@@ -89,7 +100,8 @@ describe('Tabs', () => {
     const element = compile(mockTabsContent(), {queryParamKey});
     const controller = element.find('div').scope().$ctrl;
     controller.selectTab(controller.tabs[1], 1);
-    expect(tabsRouteParamsService.set).toHaveBeenCalledWith({customKey: 1});
+    expect(tabsRouteParamsService.set.mock.calls[0][0]).toEqual('customKey');
+    expect(tabsRouteParamsService.set.mock.calls[0][1]).toEqual(1);
   });
 
   it('should not keep selected tab index on url if no query param key has been given', () => {
@@ -97,5 +109,16 @@ describe('Tabs', () => {
     const controller = element.find('div').scope().$ctrl;
     controller.selectTab(controller.tabs[1], 1);
     expect(tabsRouteParamsService.set).not.toHaveBeenCalled();
+  });
+
+  it('should keep selected tab index in tab group on url if query param group key has been given', () => {
+    const queryParamKey = 'customKey';
+    const queryParamGroupKey = 'groupKey';
+    const element = compile(mockTabsContent(), {queryParamKey, queryParamGroupKey});
+    const controller = element.find('div').scope().$ctrl;
+    controller.selectTab(controller.tabs[1], 1);
+    expect(tabsRouteParamsService.set).toHaveBeenCalledWith('customKey', 1, {
+      tabGroupKey: queryParamGroupKey
+    });
   });
 });

@@ -46,6 +46,8 @@ describe('External Components List', () => {
     controller.onExternalComponentsListItemClick({id: 'button'});
     expect(routeService.go).toHaveBeenCalledWith('externalComponents.component', {
       componentId: 'button'
+    }, {
+      resetUrlPath: true
     });
   });
 
