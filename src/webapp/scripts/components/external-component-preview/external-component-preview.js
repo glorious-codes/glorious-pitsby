@@ -1,3 +1,4 @@
+import jsonService from '../../../../cli/services/json';
 import template from './external-component-preview.html';
 
 function controller($scope, $compile, $element){
@@ -20,20 +21,8 @@ function controller($scope, $compile, $element){
 
   function buildExternalScope(data = {}){
     const scope = $scope.$new(true);
-    scope.$ctrl = parseExampleDataFunctions(data);
+    scope.$ctrl = jsonService.parseFunctions(data);
     return scope;
-  }
-
-  function parseExampleDataFunctions(data){
-    Object.keys(data).forEach(key => {
-      if(isStringifiedFunction(data[key]))
-        data[key] = eval(`(${data[key]})`);
-    });
-    return data;
-  }
-
-  function isStringifiedFunction(string){
-    return string.indexOf('function ') === 0;
   }
 }
 
