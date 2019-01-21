@@ -1,6 +1,6 @@
 {
   "name": "@glorious/pitsby",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Docs generator for AngularJS 1.x components",
   "author": "Rafael Camargo <contato@rafaelcamargo.com>",
   "repository": {
