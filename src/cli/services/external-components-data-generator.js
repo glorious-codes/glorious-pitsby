@@ -1,4 +1,5 @@
 const path = require('path');
+const jsonService = require('./json');
 const { fileService } = require('./file');
 
 const _public = {};
@@ -33,17 +34,9 @@ function buildComponentsData(files){
 
 function stringifyExamplesFunctions(examples = []){
   return examples.map(example => {
-    example.data = stringifyFunctionsInExampleData(example.data);
+    example.data = jsonService.stringifyFunctions(example.data);
     return example;
   });
-}
-
-function stringifyFunctionsInExampleData(data = {}){
-  Object.keys(data).forEach(key => {
-    if(typeof data[key] == 'function')
-      data[key] = data[key].toString();
-  });
-  return data;
 }
 
 function appendComponentId(component){

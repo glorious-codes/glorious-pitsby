@@ -66,7 +66,7 @@ describe('External Components Data Generator', () => {
           type: 'success'
         }
       }], id: 'button', },
-      {name: 'Card', examples: [{ template: '<card></card>', data: {} }], id: 'card'},
+      {name: 'Card', examples: [{ template: '<card></card>'}], id: 'card'},
       {name: 'Email Input', examples: [], id: 'email-input'}
     ];
     expect(fileService.write).toHaveBeenCalledWith(filepath, JSON.stringify(data));
