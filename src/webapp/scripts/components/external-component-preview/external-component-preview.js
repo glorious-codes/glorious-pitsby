@@ -11,7 +11,7 @@ function controller($scope, $compile, $element){
 
   function buildExternalComponent(example = {}){
     const element = buildExternalElement(example.template);
-    const scope = buildExternalScope(example.data);
+    const scope = buildExternalScope(example);
     return $compile(element)(scope);
   }
 
@@ -19,9 +19,10 @@ function controller($scope, $compile, $element){
     return angular.element(template);
   }
 
-  function buildExternalScope(data = {}){
+  function buildExternalScope(example){
     const scope = $scope.$new(true);
-    scope.$ctrl = jsonService.parseFunctions(data);
+    example = jsonService.parseFunctions(example);
+    scope.$ctrl = example.controller ? new example.controller() : {};
     return scope;
   }
 }

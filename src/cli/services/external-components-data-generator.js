@@ -26,16 +26,8 @@ function collectComponents(collectFromPattern, onCollectSuccess){
 
 function buildComponentsData(files){
   return files.map(file => {
-    const component = fileService.require(file);
-    component.examples = stringifyExamplesFunctions(component.examples);
+    const component = jsonService.stringifyFunctions(fileService.require(file));
     return appendComponentId(component);
-  });
-}
-
-function stringifyExamplesFunctions(examples = []){
-  return examples.map(example => {
-    example.data = jsonService.stringifyFunctions(example.data);
-    return example;
   });
 }
 
