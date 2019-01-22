@@ -8,11 +8,10 @@ describe('External Components Data Generator', () => {
       'button.doc.js': {
         name: 'Button',
         examples: [{
-          data: {
-            greet: function(name){
-              console.log(name);
-            },
-            type: 'success'
+          controller: function() {
+            const $ctrl = this;
+            $ctrl.type = 'success';
+            $ctrl.greet = function(name){ console.log(name); };
           }
         }]
       },
@@ -59,15 +58,16 @@ describe('External Components Data Generator', () => {
     const filepath = path.join(__dirname, '../../webapp/data/components.json');
     const data = [
       {name: 'Button', examples: [{
-        data: {
-          greet: `function greet(name) {
+        controller: `function controller() {
+            var $ctrl = this;
+            $ctrl.type = 'success';
+            $ctrl.greet = function (name) {
               console.log(name);
-            }`,
-          type: 'success'
-        }
+            };
+          }`
       }], id: 'button', },
       {name: 'Card', examples: [{ template: '<card></card>'}], id: 'card'},
-      {name: 'Email Input', examples: [], id: 'email-input'}
+      {name: 'Email Input', id: 'email-input'}
     ];
     expect(fileService.write).toHaveBeenCalledWith(filepath, JSON.stringify(data));
   });

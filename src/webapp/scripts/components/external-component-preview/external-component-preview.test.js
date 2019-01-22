@@ -24,9 +24,10 @@ describe('External Component Preview', () => {
 
   it('should render an example if example has been given', () => {
     const example = {
-      data: {
-        text: 'Hello!'
-      },
+      controller: `function() {
+        const $ctrl = this;
+        $ctrl.text = 'Hello!';
+      }`,
       template: `
         <p ng-bind="$ctrl.text"></p>
       `
@@ -38,9 +39,10 @@ describe('External Component Preview', () => {
   it('should parse stringified functions in example data', () => {
     console.log = jest.fn();
     const example = {
-      data: {
-        greet: 'function (name) { console.log(name); }'
-      },
+      controller: `function() {
+        const $ctrl = this;
+        $ctrl.greet = name => console.log(name);
+      }`,
       template: `
         <button ng-click="$ctrl.greet('Rafael')">
           Greet
