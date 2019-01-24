@@ -15,8 +15,7 @@ describe('External Assets Generator', () => {
   }
 
   beforeEach(() => {
-    fileService.read = jest.fn((filepath, onSuccess) => onSuccess('some content'));
-    fileService.write = jest.fn();
+    fileService.copy = jest.fn((source, dest, onSuccess) => onSuccess());
   });
 
   it('should return a promise', () => {
@@ -33,25 +32,39 @@ describe('External Assets Generator', () => {
     });
   });
 
-  it('should write external styles in webapp external directory', () => {
-    externalAssetsGenerator.init('/client', mockExternalAssets());
+  it('should copy external styles to webapp external directory if external styles has been given', () => {
+    const externalAssets = { styles: ['./css/vendors.css', 'css/main.css'] };
+    externalAssetsGenerator.init('/client', externalAssets);
     const webappExternalDirectory = getWebappExternalDirectory();
-    expect(fileService.write).toHaveBeenCalledWith(
-      `${webappExternalDirectory}/css/vendors.css`, 'some content'
-    );
-    expect(fileService.write).toHaveBeenCalledWith(
-      `${webappExternalDirectory}/css/main.css`, 'some content'
-    );
+    expect(fileService.copy.mock.calls[0][0]).toEqual('/client/css/vendors.css');
+    expect(fileService.copy.mock.calls[0][1]).toEqual(`${webappExternalDirectory}/css/vendors.css`);
+    expect(typeof fileService.copy.mock.calls[0][2]).toEqual('function');
+    expect(fileService.copy.mock.calls[1][0]).toEqual('/client/css/main.css');
+    expect(fileService.copy.mock.calls[1][1]).toEqual(`${webappExternalDirectory}/css/main.css`);
+    expect(typeof fileService.copy.mock.calls[1][2]).toEqual('function');
   });
 
-  it('should write external scripts in webapp external directory', () => {
-    externalAssetsGenerator.init('/client', mockExternalAssets());
+  it('should copy external scripts to webapp external directory if external scripts has been given', () => {
+    const externalAssets = { scripts: ['./scripts/base.js', './scripts/components.js'] };
+    externalAssetsGenerator.init('/client', externalAssets);
     const webappExternalDirectory = getWebappExternalDirectory();
-    expect(fileService.write).toHaveBeenCalledWith(
-      `${webappExternalDirectory}/scripts/base.js`, 'some content'
-    );
-    expect(fileService.write).toHaveBeenCalledWith(
-      `${webappExternalDirectory}/scripts/components.js`, 'some content'
-    );
+    expect(fileService.copy.mock.calls[0][0]).toEqual('/client/scripts/base.js');
+    expect(fileService.copy.mock.calls[0][1]).toEqual(`${webappExternalDirectory}/scripts/base.js`);
+    expect(typeof fileService.copy.mock.calls[0][2]).toEqual('function');
+    expect(fileService.copy.mock.calls[1][0]).toEqual('/client/scripts/components.js');
+    expect(fileService.copy.mock.calls[1][1]).toEqual(`${webappExternalDirectory}/scripts/components.js`);
+    expect(typeof fileService.copy.mock.calls[1][2]).toEqual('function');
+  });
+
+  it('should copy other external resources to webapp external directory if other external resources have been given', () => {
+    const externalAssets = { other: ['./images/', './other/specific.png'] };
+    externalAssetsGenerator.init('/client', externalAssets);
+    const webappExternalDirectory = getWebappExternalDirectory();
+    expect(fileService.copy.mock.calls[0][0]).toEqual('/client/images/');
+    expect(fileService.copy.mock.calls[0][1]).toEqual(`${webappExternalDirectory}/images/`);
+    expect(typeof fileService.copy.mock.calls[0][2]).toEqual('function');
+    expect(fileService.copy.mock.calls[1][0]).toEqual('/client/other/specific.png');
+    expect(fileService.copy.mock.calls[1][1]).toEqual(`${webappExternalDirectory}/other/specific.png`);
+    expect(typeof fileService.copy.mock.calls[1][2]).toEqual('function');
   });
 });

@@ -13,15 +13,18 @@ describe('Build Service', () => {
       moduleName: 'external',
       styles: ['./dist/styles.css'],
       scripts: ['./dist/bundle.js'],
+      other: ['./images/'],
       outputDirectory: './docs'
     };
   }
 
-  function mockPromiseAll(){
+  function mockPromiseAll(responseType, { err } = {}){
     Promise.all = jest.fn(() => {
       return {
-        then: function(onSuccess){
-          onSuccess();
+        then: function(onSuccess, onError){
+          if(responseType == 'success')
+            return onSuccess();
+          return onError(err);
         }
       };
     });
@@ -37,6 +40,7 @@ describe('Build Service', () => {
   });
 
   it('should generate data for external components', () => {
+    mockPromiseAll('success');
     buildService.init();
     expect(externalComponentsDataGenerator.init).toHaveBeenCalledWith(
       process.cwd(),
@@ -45,29 +49,41 @@ describe('Build Service', () => {
   });
 
   it('should generate external assets', () => {
+    mockPromiseAll('success');
     buildService.init();
     expect(externalAssetsGenerator.init).toHaveBeenCalledWith(
       process.cwd(), {
         styles: ['./dist/styles.css'],
-        scripts: ['./dist/bundle.js']
+        scripts: ['./dist/bundle.js'],
+        other: ['./images/']
       });
   });
 
   it('should generate webapp html index', () => {
-    mockPromiseAll();
+    mockPromiseAll('success');
     buildService.init();
     expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith({
       styles: ['./dist/styles.css'],
-      scripts: ['./dist/bundle.js']
+      scripts: ['./dist/bundle.js'],
+      other: ['./images/']
     });
   });
 
+  it('should log error if external files generation fails', () => {
+    console.log = jest.fn();
+    mockPromiseAll('error', {err: 'err'});
+    buildService.init();
+    expect(console.log).toHaveBeenCalledWith('err');
+  });
+
   it('should generate webapp javascript index', () => {
+    mockPromiseAll('success');
     buildService.init();
     expect(webappIndexGenerator.init).toHaveBeenCalledWith('external');
   });
 
   it('should generate docs', () => {
+    mockPromiseAll('success');
     buildService.init();
     expect(docsGenerator.init).toHaveBeenCalledWith(
       process.cwd(),
