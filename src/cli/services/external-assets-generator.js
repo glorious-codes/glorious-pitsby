@@ -6,24 +6,28 @@ const _public = {};
 
 _public.init = (clientDirectory, assets) => {
   return Promise.all([
-    collectAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.styles)),
-    collectAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.scripts))
+    copyAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.styles)),
+    copyAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.scripts)),
+    copyAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.other))
   ]);
 };
 
-function collectAssets(clientDirectory, filepaths){
+function copyAssets(clientDirectory, filepaths){
+  return filepaths && filepaths.length ?
+    copyClientFilepathsContents(clientDirectory, filepaths) :
+    Promise.resolve();
+}
+
+function copyClientFilepathsContents(clientDirectory, filepaths){
   return new Promise(resolve => {
-    filepaths.forEach(filepath => {
-      fileService.read(path.join(clientDirectory, filepath), data => {
-        onCollectAssetsSuccess(filepath, data);
-        resolve();
+    filepaths.forEach((filepath, index) => {
+      const target = path.join(getExternalAssetsDirectory(), filepath);
+      fileService.copy(path.join(clientDirectory, filepath), target, () => {
+        if(index === filepaths.length - 1)
+          resolve();
       });
     });
   });
-}
-
-function onCollectAssetsSuccess(filepath, data){
-  fileService.write(path.join(getExternalAssetsDirectory(), filepath), data);
 }
 
 function getExternalAssetsDirectory(){

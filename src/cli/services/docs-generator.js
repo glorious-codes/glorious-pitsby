@@ -7,7 +7,7 @@ const _public = {};
 _public.init = (clientDirectory, outputDirectory) => {
   const directory = buildOutputDirectoryPath(clientDirectory, outputDirectory);
   generateDocs(directory, onDocsGenerationComplete);
-  fileService.console.log('Generating docs...');
+  console.log('Generating docs...');
 };
 
 function buildOutputDirectoryPath(clientDirectory, outputDirectory = './pitsby'){
@@ -22,8 +22,8 @@ function generateDocs(directory, onDocsGenerationComplete){
 
 function onDocsGenerationComplete(err){
   if(err)
-    return fileService.console.log('Ops! Something went wrong...', err);
-  return fileService.console.log('Docs successfully generated!');
+    return console.log('Ops! Something went wrong...', err);
+  return console.log('Docs successfully generated!');
 }
 
 module.exports = _public;

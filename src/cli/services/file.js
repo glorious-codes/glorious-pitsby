@@ -1,13 +1,14 @@
 const fs = require('fs');
+const fsextra = require('fs-extra');
 const glob = require('glob');
 const writefile = require('writefile');
 
 class FileService {
   constructor(dependencies = {}){
     this.fs = getDependency(dependencies, 'fs', fs);
+    this.fsextra = getDependency(dependencies, 'fsextra', fsextra);
     this.glob = getDependency(dependencies, 'glob', glob);
     this.writefile = getDependency(dependencies, 'writefile', writefile);
-    this.console = getDependency(dependencies, 'console', console);
     this.req = getDependency(dependencies, 'req', require);
   }
 
@@ -18,7 +19,7 @@ class FileService {
   read(filepath, onSuccess){
     this.fs.readFile(filepath, (err, data) => {
       if(err)
-        this.console.log(`Failed to read ${filepath}`, err);
+        console.log(`Failed to read ${filepath}`, err);
       else
         onSuccess(data);
     });
@@ -35,9 +36,18 @@ class FileService {
   collect(pattern, onSuccess){
     this.glob(pattern, (err, files) => {
       if(err)
-        this.console.log(`Failed to collect ${pattern} files!`, err);
+        console.log(`Failed to collect ${pattern} files!`, err);
       else
         onSuccess(files);
+    });
+  }
+
+  copy(source, destination, onSuccess){
+    this.fsextra.copy(source, destination, err => {
+      if(err)
+        console.log(`Failed to copy ${source}!`, err);
+      else
+        onSuccess();
     });
   }
 

@@ -13,7 +13,7 @@ _public.init = () => {
   generateExternalFiles(clientDirectory, config).then(() => {
     generateWebappIndexes(config);
     docsGenerator.init(clientDirectory, config.outputDirectory);
-  });
+  }, err => { console.log(err); });
 };
 
 function getPitsbyConfig(clientDirectory){
@@ -43,7 +43,8 @@ function generateWebappIndexes(config){
 function getExternalAssets(config){
   return {
     styles: config.styles,
-    scripts: config.scripts
+    scripts: config.scripts,
+    other: config.other
   };
 }
 

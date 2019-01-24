@@ -12,7 +12,7 @@ webpack.mockImplementation((config, onComplete) => {
 
 describe('Docs Generator Service', () => {
   beforeEach(() => {
-    fileService.console.log = jest.fn();
+    console.log = jest.fn();
     fileService.require = jest.fn(() => {
       return {};
     });
@@ -25,7 +25,7 @@ describe('Docs Generator Service', () => {
 
   it('should log files generation start', () => {
     docsGeneratorService.init('/client');
-    expect(fileService.console.log).toHaveBeenCalledWith('Generating docs...');
+    expect(console.log).toHaveBeenCalledWith('Generating docs...');
   });
 
   it('should compile files to a custom directory', () => {
@@ -48,7 +48,7 @@ describe('Docs Generator Service', () => {
 
   it('should log success on successfully generate files', () => {
     docsGeneratorService.init('/client');
-    expect(fileService.console.log).toHaveBeenCalledWith(
+    expect(console.log).toHaveBeenCalledWith(
       'Docs successfully generated!'
     );
   });
@@ -56,7 +56,7 @@ describe('Docs Generator Service', () => {
   it('should log error when files generation fails', () => {
     webpackMock.response = 'some error';
     docsGeneratorService.init('/client');
-    expect(fileService.console.log).toHaveBeenCalledWith(
+    expect(console.log).toHaveBeenCalledWith(
       'Ops! Something went wrong...',
       'some error'
     );
