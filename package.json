@@ -38,7 +38,7 @@
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "webpack": "^3.10.0",
+    "webpack": "^3.11.0",
     "writefile": "^0.2.8",
     "yargs": "8.0.2"
   },
