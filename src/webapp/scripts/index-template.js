@@ -10,7 +10,7 @@ const _public = {};
 const dependencies = [
   uirouter,
   components,
-  services,
+  services
   // inject:external-module-name
 ];
 

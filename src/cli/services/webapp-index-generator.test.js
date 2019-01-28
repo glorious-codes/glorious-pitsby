@@ -26,8 +26,8 @@ const _public = {};
 const dependencies = [
   uirouter,
   components,
-  services,
-  'external-module-name'
+  services
+  , 'external-module-name'
 ];
 
 _public.init = () => {
@@ -57,8 +57,7 @@ const _public = {};
 const dependencies = [
   uirouter,
   components,
-  services,
-  ''
+  services
 ];
 
 _public.init = () => {
