@@ -1,14 +1,14 @@
 const _ = require('lodash'),
   argv = require('yargs').argv,
-  webpackBaseConfig = require('./webpack.conf.base'),
-  webpackDevConfig = require('./webpack.conf.dev'),
-  webpackProdConfig = require('./webpack.conf.prod'),
-  webpackEnvConfig = argv.env == 'production' ? webpackProdConfig : webpackDevConfig;
+  baseConfig = require('./webpack.conf.base'),
+  devConfig = require('./webpack.conf.dev'),
+  prodConfig = require('./webpack.conf.prod'),
+  specificConfig = argv.env == 'production' ? prodConfig : devConfig;
 
 module.exports = _.mergeWith(
-  webpackBaseConfig,
-  webpackEnvConfig,
-  (baseValue, envValue) => {
-    if (_.isArray(baseValue)) return baseValue.concat(envValue);
+  baseConfig,
+  specificConfig,
+  (baseValue, specificValue) => {
+    if (_.isArray(baseValue)) return baseValue.concat(specificValue);
   }
 );
