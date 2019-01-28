@@ -4,7 +4,7 @@ const fs = require('fs'),
   webpack = require('webpack'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   CopyWebpackPlugin = require('copy-webpack-plugin'),
-  ExtractTextPlugin = require('extract-text-webpack-plugin'),
+  MiniCssExtractPlugin = require('mini-css-extract-plugin'),
   project = require('./project.json'),
   env = argv.env ? argv.env : 'development';
 
@@ -16,13 +16,11 @@ module.exports = {
   module: {
     rules: [{
       test: /\.(styl|css)$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [
-          { loader: 'css-loader', options: { minimize: true } },
-          'stylus-loader'
-        ]
-      })
+      use: [
+        MiniCssExtractPlugin.loader,
+        { loader: 'css-loader', options: { minimize: true } },
+        'stylus-loader'
+      ]
     }, {
       test: /\.html$/,
       include: [`${__dirname}/${project.scripts.source.root}`],
@@ -66,12 +64,7 @@ module.exports = {
       from: project.external.source.root,
       to: `${project.external.dist.root}[1]/[2]`,
       test: new RegExp(`${project.external.source.root}(.*)\/(.*)`)
-    }]),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(env)
-      }
-    })
+    }])
   ],
   context: path.resolve(__dirname)
 }

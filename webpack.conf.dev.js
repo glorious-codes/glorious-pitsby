@@ -1,16 +1,19 @@
 const fs = require('fs'),
   webpack = require('webpack'),
-  ExtractTextPlugin = require("extract-text-webpack-plugin"),
+  MiniCssExtractPlugin = require('mini-css-extract-plugin'),
   project = require('./project.json');
 
 module.exports = {
-  devtool: 'eval',
+  mode: 'development',
+  devtool: 'inline-source-map',
   output: {
     filename: project.scripts.dist.filename.dev
   },
   plugins: [
     new webpack.SourceMapDevToolPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin(project.styles.dist.filename.dev)
+    new MiniCssExtractPlugin({
+      filename: project.styles.dist.filename.dev
+    })
   ]
 }
