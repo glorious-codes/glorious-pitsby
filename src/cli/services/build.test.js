@@ -1,16 +1,18 @@
-const externalAssetsGenerator = require('./external-assets-generator');
+const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
+const externalAssetsGenerator = require('./external-assets-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 const docsGenerator = require('./docs-generator');
-const { fileService } = require('./file');
+const configService = require('./config');
 const buildService = require('./build');
 
 describe('Build Service', () => {
   function mockPitsbyConfig(){
     return {
-      collectFrom: './src/angular',
-      moduleName: 'external',
+      projects: [
+        { engine: 'angular', collectFrom: './src/angular', moduleName: 'external' }
+      ],
       styles: ['./dist/styles.css'],
       scripts: ['./dist/bundle.js'],
       other: ['./images/'],
@@ -31,20 +33,28 @@ describe('Build Service', () => {
   }
 
   beforeEach(() => {
+    externalProjectsDataGenerator.init = jest.fn();
     externalComponentsDataGenerator.init = jest.fn();
     externalAssetsGenerator.init = jest.fn();
     webappHtmlIndexGenerator.init = jest.fn();
     webappIndexGenerator.init = jest.fn();
     docsGenerator.init = jest.fn();
-    fileService.readJSONSync = jest.fn(() => mockPitsbyConfig());
+    configService.get = jest.fn(() => mockPitsbyConfig());
+  });
+
+  it('should generate data for external projects', () => {
+    const config = mockPitsbyConfig();
+    mockPromiseAll('success');
+    buildService.init();
+    expect(externalProjectsDataGenerator.init).toHaveBeenCalledWith(config.projects);
   });
 
   it('should generate data for external components', () => {
+    const projectsMock = mockPitsbyConfig().projects;
     mockPromiseAll('success');
     buildService.init();
     expect(externalComponentsDataGenerator.init).toHaveBeenCalledWith(
-      process.cwd(),
-      './src/angular'
+      process.cwd(), projectsMock
     );
   });
 
@@ -60,13 +70,14 @@ describe('Build Service', () => {
   });
 
   it('should generate webapp html index', () => {
+    const projectsMock = mockPitsbyConfig().projects;
     mockPromiseAll('success');
     buildService.init();
     expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith({
       styles: ['./dist/styles.css'],
       scripts: ['./dist/bundle.js'],
       other: ['./images/']
-    });
+    }, projectsMock);
   });
 
   it('should log error if external files generation fails', () => {
@@ -77,9 +88,10 @@ describe('Build Service', () => {
   });
 
   it('should generate webapp javascript index', () => {
+    const projectsMock = mockPitsbyConfig().projects;
     mockPromiseAll('success');
     buildService.init();
-    expect(webappIndexGenerator.init).toHaveBeenCalledWith('external');
+    expect(webappIndexGenerator.init).toHaveBeenCalledWith(projectsMock);
   });
 
   it('should generate docs', () => {

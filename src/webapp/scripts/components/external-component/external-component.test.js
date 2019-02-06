@@ -19,7 +19,7 @@ describe('External Component', () => {
     const controller = compile();
     routeService.getParams = jest.fn(() => 'page');
     controller.fetch();
-    expect(componentsResource.get).toHaveBeenCalledWith('page');
+    expect(componentsResource.get).toHaveBeenCalledWith('angular', 'page');
   });
 
   it('should set component on fetch success', () => {

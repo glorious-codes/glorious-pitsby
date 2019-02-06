@@ -11,7 +11,7 @@ const dependencies = [
   uirouter,
   components,
   services
-  // inject:external-module-name
+  // inject:external-angular-module-name
 ];
 
 _public.init = () => {

@@ -30,7 +30,7 @@ describe('External Components List', () => {
   it('should fetch components', () => {
     const controller = instantiateController();
     controller.fetch();
-    expect(componentsResource.get).toHaveBeenCalled();
+    expect(componentsResource.get).toHaveBeenCalledWith('angular');
   });
 
   it('should set components on fetch success', () => {

@@ -5,17 +5,29 @@ import componentsResource from './components';
 
 describe('Components Resource', () => {
   beforeEach(() => {
-    const promise = new PromiseMock('success', componentsMock.data);
-    dataResource.get = jest.fn(() => promise);
+    dataResource.get = jest.fn(uri => {
+      const engine = uri.split('-')[1];
+      return new PromiseMock('success', componentsMock.data[engine]);
+    });
   });
 
-  it('should be able to get components', () => {
-    const components = componentsResource.get();
-    expect(dataResource.get).toHaveBeenCalledWith('/components');
-    expect(components).toEqual(componentsMock.data);
+  it('should be able to get angular components', () => {
+    const components = componentsResource.get('angular');
+    expect(dataResource.get).toHaveBeenCalledWith('/components-angular');
+    expect(components).toEqual(componentsMock.data.angular);
   });
 
-  it('should be able to get a single component', () => {
-    expect(componentsResource.get('button')).toEqual(componentsMock.data[0]);
+  it('should be able to get an angular single component', () => {
+    expect(componentsResource.get('angular', 'button')).toEqual(componentsMock.data.angular[0]);
+  });
+
+  it('should be able to get vue components', () => {
+    const components = componentsResource.get('vue');
+    expect(dataResource.get).toHaveBeenCalledWith('/components-vue');
+    expect(components).toEqual(componentsMock.data.vue);
+  });
+
+  it('should be able to get a vue single component', () => {
+    expect(componentsResource.get('vue', 'badge')).toEqual(componentsMock.data.vue[0]);
   });
 });
