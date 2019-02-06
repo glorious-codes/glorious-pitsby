@@ -6,7 +6,7 @@ function controller (routeService){
   const $ctrl = this;
 
   $ctrl.fetch = () => {
-    return componentsResource.get();
+    return componentsResource.get('angular');
   };
 
   $ctrl.fetchSuccess = components => {

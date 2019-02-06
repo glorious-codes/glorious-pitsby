@@ -4,10 +4,14 @@ const assetsFilepathFilter = require('./assets-filepath-filter');
 
 const _public = {};
 
-_public.init = (options = {}) => {
+_public.init = (options = {}, projects = []) => {
   const linkTags = buildAssetTags(options.styles, buildLinkTag);
   const scriptTags = buildAssetTags(options.scripts, buildScriptTag);
-  const indexHtml = buildIndexHtml(linkTags, scriptTags, buildAngularScriptTag());
+  const indexHtml = buildIndexHtml(
+    linkTags,
+    handleVueScriptsTag(scriptTags, projects),
+    buildAngularScriptTag()
+  );
   fileService.write(path.join(__dirname, '../../webapp/index.html'), indexHtml);
 };
 
@@ -25,6 +29,29 @@ function buildLinkTag(path){
 
 function buildScriptTag(path){
   return `<script src="${buildExternalAssetPath(path)}"></script>`;
+}
+
+function handleVueScriptsTag(scriptTags, projects){
+  const vueProject = getVueProject(projects);
+  return vueProject ? prependVueScriptTag(scriptTags, vueProject) : scriptTags;
+}
+
+function getVueProject(projects){
+  for (var i = 0; i < projects.length; i++)
+    if(projects[i].engine == 'vue')
+      return projects[i];
+}
+
+function prependVueScriptTag(scriptTags, vueProject){
+  scriptTags.unshift(buildVueTagScript(vueProject));
+  return scriptTags;
+}
+
+function buildVueTagScript(vueProject){
+  const cdnUrl = 'https://cdnjs.cloudflare.com/ajax/libs/vue';
+  const version = vueProject.version || '2.5.13';
+  const file = 'vue.min.js';
+  return `<script src="${cdnUrl}/${version}/${file}"></script>`;
 }
 
 function buildAngularScriptTag(){

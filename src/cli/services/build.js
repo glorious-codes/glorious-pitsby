@@ -1,43 +1,45 @@
+const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 const docsGenerator = require('./docs-generator');
-const { fileService } = require('./file');
+const configService = require('./config');
 
 const _public = {};
 
 _public.init = () => {
   const clientDirectory = process.cwd();
-  const config = getPitsbyConfig(clientDirectory);
+  const config = configService.get(clientDirectory);
   generateExternalFiles(clientDirectory, config).then(() => {
     generateWebappIndexes(config);
     docsGenerator.init(clientDirectory, config.outputDirectory);
   }, err => { console.log(err); });
 };
 
-function getPitsbyConfig(clientDirectory){
-  return fileService.readJSONSync(`${clientDirectory}/pitsby.json`);
-}
-
 function generateExternalFiles(clientDirectory, config){
   return Promise.all([
-    generateExternalComponentsData(clientDirectory, config.collectFrom),
+    generateExternalProjectsData(config.projects),
+    generateExternalComponentsData(clientDirectory, config.projects),
     generateExternalAssets(clientDirectory, getExternalAssets(config))
   ]);
 }
 
+function generateExternalProjectsData(projects){
+  return externalProjectsDataGenerator.init(projects);
+}
+
 function generateExternalComponentsData(clientDirectory, collectFrom){
-  externalComponentsDataGenerator.init(clientDirectory, collectFrom);
+  return externalComponentsDataGenerator.init(clientDirectory, collectFrom);
 }
 
 function generateExternalAssets(clientDirectory, externalAssets){
-  externalAssetsGenerator.init(clientDirectory, externalAssets);
+  return externalAssetsGenerator.init(clientDirectory, externalAssets);
 }
 
 function generateWebappIndexes(config){
-  webappHtmlIndexGenerator.init(getExternalAssets(config));
-  webappIndexGenerator.init(config.moduleName);
+  webappHtmlIndexGenerator.init(getExternalAssets(config), config.projects);
+  webappIndexGenerator.init(config.projects);
 }
 
 function getExternalAssets(config){

@@ -11,7 +11,8 @@ const fs = require('fs'),
 module.exports = {
   entry: `${__dirname}/${project.scripts.source.index}`,
   externals: {
-    angular: 'angular'
+    angular: 'angular',
+    vue: 'Vue'
   },
   module: {
     rules: [{
