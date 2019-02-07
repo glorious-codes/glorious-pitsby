@@ -1,0 +1,12 @@
+<ul class="p-engine-menu">
+  <li
+    ng-repeat="project in $ctrl.projects"
+    class="p-engine-menu-item">
+    <a
+      ng-bind="project.engine"
+      class="p-engine-menu-link"
+      ui-sref-active="p-engine-menu-link-active"
+      ui-sref="app.external-components({ engine: '{{ project.engine }}' })">
+    </a>
+  </li>
+</ul>
