@@ -10,7 +10,6 @@ import externalComponentMarkup from '@scripts/components/external-component-mark
 import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
 import externalComponentsList from '@scripts/components/external-components-list/external-components-list';
-import externalComponentsViewport from '@scripts/components/external-components-viewport/external-components-viewport';
 import heading from '@scripts/components/heading/heading';
 import listItem from '@scripts/components/list-item/list-item';
 import list from '@scripts/components/list/list';
@@ -36,7 +35,6 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
   .component('pExternalComponentPreview', externalComponentPreview)
   .component('pExternalComponentsList', externalComponentsList)
-  .component('pExternalComponentsViewport', externalComponentsViewport)
   .component('pHeading', heading)
   .component('pList', list)
   .component('pListItem', listItem)

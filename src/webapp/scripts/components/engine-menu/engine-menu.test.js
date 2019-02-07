@@ -26,7 +26,7 @@ describe('Engine Menu', () => {
 
   it('should fetch projects on initialize', () => {
     const controller = compile();
-    stubGetProjects('success', mockProjects())
+    stubGetProjects('success', mockProjects());
     controller.$onInit();
     expect(projectsResource.get).toHaveBeenCalled();
   });

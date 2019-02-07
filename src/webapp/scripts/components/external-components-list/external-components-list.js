@@ -6,7 +6,7 @@ function controller (routeService){
   const $ctrl = this;
 
   $ctrl.fetch = () => {
-    return componentsResource.get('angular');
+    return componentsResource.get(routeService.getParams('engine'));
   };
 
   $ctrl.fetchSuccess = components => {
@@ -14,7 +14,8 @@ function controller (routeService){
   };
 
   $ctrl.onExternalComponentsListItemClick = component => {
-    routeService.go('externalComponents.component', {
+    routeService.go('app.external-components.component', {
+      engine: routeService.getParams('engine'),
       componentId: component.id
     }, {
       resetUrlPath: true
