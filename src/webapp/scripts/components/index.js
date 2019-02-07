@@ -2,6 +2,7 @@ import angular from 'angular';
 import alert from '@scripts/components/alert/alert';
 import btn from '@scripts/components/btn/btn';
 import container from '@scripts/components/container/container';
+import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
 import externalComponentExamplesList from '@scripts/components/external-component-examples-list/external-component-examples-list';
@@ -27,6 +28,7 @@ export default angular.module('pitsby-components', [])
   .component('pAlert', alert)
   .component('pBtn', btn)
   .component('pContainer', container)
+  .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
   .component('pExternalComponentExample', externalComponentExample)
   .component('pExternalComponentExamplesList', externalComponentExamplesList)
