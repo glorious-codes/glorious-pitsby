@@ -25,6 +25,7 @@ function controller(){
 
 export default {
   bindings: {
+    engine: '<',
     example: '<',
     exampleIndex: '<'
   },

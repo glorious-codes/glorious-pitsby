@@ -22,7 +22,8 @@ function functionToString(fn){
 }
 
 function stringToFunction(string){
-  return eval(`(${string})`);
+  const expression = startsWithFunctionWord(string) ? string : `function ${string}`;
+  return eval(`(${expression})`);
 }
 
 function handleVariableAccordingType(variable, handler, shouldHandle){
@@ -52,8 +53,22 @@ function isFunction(value){
   return typeof value == 'function';
 }
 
+function isString(value){
+  return value && typeof value == 'string';
+}
+
 function isStringifiedFunction(value){
-  return value && typeof value == 'string' && value.indexOf('function') === 0;
+  return isString(value) &&
+    (startsWithFunctionWord(value) || isStringifiedShorthandedFunction(value));
+}
+
+function startsWithFunctionWord(string){
+  return string.indexOf('function') === 0;
+}
+
+function isStringifiedShorthandedFunction(string){
+  const regex = new RegExp(/^(\w+)\((.*)\)\s?\{/);
+  return regex.test(string);
 }
 
 function isArray(value){
