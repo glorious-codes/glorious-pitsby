@@ -1,5 +1,5 @@
 # Pitsby
-> Docs generator for AngularJS components
+> Docs generator for AngularJS and Vue components
 
 [![CircleCI](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master)
 [![codecov](https://codecov.io/gh/glorious-codes/pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/pitsby)
@@ -14,23 +14,50 @@ This is pitsby's configuration file. This file should be create in the root dire
 
 ``` javascript
 {
-  "collectFrom": "./src",
-  "moduleName": "my-angular-components",
+  "projects": [
+    {
+      "engine": "angular",
+      "collectDocsFrom": "./src/angular",
+      "moduleName": "my-angular-components"
+    },
+    {
+      "engine": "vue",
+      "collectDocsFrom": "./src/vue",
+      "importFrom": "./dist/my-vue-components"
+    }
+  ],
   "styles": [
-    "./dist/my-angular-components.min.css"
+    "./dist/my-angular-components.css",
+    "./dist/my-vue-components.css"
   ],
   "scripts": [
-    "./dist/my-angular-components.min.js"
+    "./dist/my-angular-components.js",
+    "./dist/my-vue-components.js"
+  ],
+  "other": [
+    "./dist/images/",
+    "./dist/fonts/",
+    "./dist/etc/"
   ],
   "outputDirectory": "./docs"
 }
+
 ```
 
-#### `collectFrom`
-Directory where Pitsby should look for .doc.js files.
+#### `projects`
+A list of projects with their specifications.
 
-#### `moduleName`
-Angular module name that contains the components to be documented.
+##### `engine`
+Components' engine. Support for AngularJS (angular) and Vue (vue);
+
+##### `collectFrom`
+Directory where Pitsby should look for .doc.js files regardless the engine used.
+
+##### `moduleName`
+Angular module's name that contains the components you are writing `*.doc.js` for.
+
+##### `importFrom`
+The path Pitsby should use to import your Vue components. Your Vue components should be written using the [Vue plugin strategy](https://vuejs.org/v2/guide/plugins.html): `Vue.use(yourVueComponents)`.
 
 #### `styles`
 List of stylesheets that should be included in the documentation
@@ -38,12 +65,15 @@ List of stylesheets that should be included in the documentation
 #### `scripts`
 List of scripts that should be included in the documentation.
 
+#### `other`
+List of any other file/directory that should be included in the documentation.
+
 #### `outputDirectory`
-Directory where docs should be outputted to.
+Directory where docs should be outputted to. If not informed, documentation will be outputted to a directory called *Pitsby*.
 
 ### `*.doc.js`
 
-You should create one `.doc.js` file per component. The following is an example for some button component:
+You should create one `.doc.js` file per component. The following is an example for a button component:
 
 ``` javascript
 module.exports = {
@@ -63,43 +93,47 @@ module.exports = {
       required: 'No'
     }
   ],
+  // Angular Examples should be written like below:
   examples: [
     {
-      title: 'Default Button',
+      title: 'My Button Example',
+      description: 'This is my custom Angular button.'
+      controller: function($window){
+        const $ctrl = this;
+        $ctrl.label = 'Greet';
+        $ctrl.greet = () => $window.alert('Hello!');
+      },
+      dependencies: ['$window'],
       template: `
-      <my-button>
-        Save
+      <my-button
+        ng-click="$ctrl.greet()"
+        ng-bind="$ctrl.label">
       </my-button>`
-    },
+    }
+  ]
+  // Vue Examples should be written like below:
+  examples: [
     {
-      title: 'Primary Button',
+      title: 'My Button Example',
+      description: 'This is my custom Vue button.'
+      controller: {
+        data(){
+          return {
+            label: 'Greet'
+          };
+        },
+        methods: {
+          greet(){
+            window.alert('Hello!');
+          }
+        }
+      },
       template: `
-      <my-button data-theme="primary">
-        Save
+      <my-button @click="greet">
+        {{ label }}
       </my-button>`
-    },
-    {
-      title: 'Secondary Button',
-      template: `
-      <my-button data-theme="secondary">
-        Save
-      </my-button>`
-    },
-    {
-      title: 'Small Button',
-      template: `
-      <my-button data-size="small">
-        Save
-      </my-button>`
-    },
-    {
-      title: 'Large Button',
-      template: `
-      <my-button data-size="large">
-        Save
-      </my-button>`
-    },
-  ],
+    }
+  ]
 };
 
 ```
@@ -127,7 +161,7 @@ npm install
 
 6. Install and run pitsby on the root directory of the project previously cited.
 ``` bash
-pitsby
+pitsby build
 ```
 
 7. If you want just build the project, run:
@@ -140,7 +174,7 @@ npm run build
 npm run start
 ```
 
-The app will be running on `http://localhost:7000` and the browser will automatically reload with the changes you make in any source file.
+The app will be running on `http://localhost:8080` and the browser will automatically reload with the changes you make in any source file.
 
 ## Tests
 
