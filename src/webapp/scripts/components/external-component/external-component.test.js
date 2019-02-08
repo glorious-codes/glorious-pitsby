@@ -3,6 +3,13 @@ import componentsResource from '@scripts/resources/components';
 describe('External Component', () => {
   let compile, routeService;
 
+  function mockRouteParams(){
+    return {
+      componentId: 'page',
+      engine: 'vue'
+    };
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject($injector => {
@@ -13,13 +20,19 @@ describe('External Component', () => {
       };
     });
     componentsResource.get = jest.fn();
+    routeService.getParams = jest.fn(param => mockRouteParams()[param]);
+  });
+
+  it('should set engine on initialize', () => {
+    const controller = compile();
+    controller.$onInit();
+    expect(controller.engine).toEqual('vue');
   });
 
   it('should fetch component with component id', () => {
     const controller = compile();
-    routeService.getParams = jest.fn(() => 'page');
     controller.fetch();
-    expect(componentsResource.get).toHaveBeenCalledWith('page');
+    expect(componentsResource.get).toHaveBeenCalledWith('vue', 'page');
   });
 
   it('should set component on fetch success', () => {

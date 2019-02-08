@@ -1,21 +1,20 @@
-import home from '@scripts/views/home.html';
+import app from '@scripts/views/app.html';
 import externalComponents from '@scripts/views/external-components.html';
 import externalComponent from '@scripts/views/external-component.html';
 
 export default [
   {
-    name: 'home',
+    name: 'app',
     url: '/',
-    template: home,
-    redirectTo: 'externalComponents'
+    template: app
   },
   {
-    name: 'externalComponents',
-    url: '/components',
+    name: 'app.external-components',
+    url: 'components/:engine',
     template: externalComponents
   },
   {
-    name: 'externalComponents.component',
+    name: 'app.external-components.component',
     url: '/:componentId?externalComponentExampleTabs',
     template: externalComponent,
     reloadOnSearch: false

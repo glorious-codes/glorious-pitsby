@@ -4,6 +4,13 @@ import { PromiseMock } from '@mocks/promise';
 describe('External Components List', () => {
   let compile, instantiateController, routeService;
 
+  function mockRouteParams(){
+    return {
+      componentId: 'page',
+      engine: 'vue'
+    };
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile, $componentController, $injector) => {
@@ -20,6 +27,7 @@ describe('External Components List', () => {
       routeService = $injector.get('routeService');
     });
     componentsResource.get = jest.fn(() => new PromiseMock('success', {}));
+    routeService.getParams = jest.fn(param => mockRouteParams()[param]);
   });
 
   it('should have appropriate css class', () => {
@@ -30,7 +38,7 @@ describe('External Components List', () => {
   it('should fetch components', () => {
     const controller = instantiateController();
     controller.fetch();
-    expect(componentsResource.get).toHaveBeenCalled();
+    expect(componentsResource.get).toHaveBeenCalledWith('vue');
   });
 
   it('should set components on fetch success', () => {
@@ -44,7 +52,8 @@ describe('External Components List', () => {
     const controller = instantiateController();
     routeService.go = jest.fn();
     controller.onExternalComponentsListItemClick({id: 'button'});
-    expect(routeService.go).toHaveBeenCalledWith('externalComponents.component', {
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.component', {
+      engine: 'vue',
       componentId: 'button'
     }, {
       resetUrlPath: true
@@ -53,9 +62,8 @@ describe('External Components List', () => {
 
   it('should identify the active list item', () => {
     let isActive;
-    const componentId = 'button';
+    const componentId = 'page';
     const controller = instantiateController();
-    routeService.getParams = jest.fn(() => componentId);
     isActive = controller.isActiveListItem({id: componentId});
     expect(routeService.getParams).toHaveBeenCalledWith('componentId');
     expect(isActive).toEqual(true);

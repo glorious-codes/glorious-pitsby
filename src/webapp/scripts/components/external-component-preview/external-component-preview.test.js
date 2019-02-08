@@ -1,84 +1,56 @@
+import jsonService from '../../../../cli/services/json';
+
 describe('External Component Preview', () => {
-  let compile, $window;
+  let compile, angularComponentBuilder;
+
+  function mockExample(){
+    return {
+      controller: 'function(){}',
+      template: '<p>Hello!</p>'
+    };
+  }
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile, $injector) => {
-      const scope = $rootScope.$new(true);
-      $window = $injector.get('$window');
+      angularComponentBuilder = $injector.get('angularComponentBuilder');
       compile = (bindings = {}) => {
+        const scope = $rootScope.$new(true);
         const template = `<p-external-component-preview
-                            data-example="example">
+                            data-engine="$ctrl.engine"
+                            data-example="$ctrl.example">
                           </p-external-component-preview>`;
-        scope.example = bindings.example;
+        scope.$ctrl = bindings;
         const element = $compile(template)(scope);
         scope.$digest();
         return element;
       };
+      jsonService.parseFunctions = jest.fn(param => param);
+      angularComponentBuilder.build = jest.fn((component = {}) => {
+        return angular.element(component.template || '<p></p>');
+      });
+      console.log = jest.fn();
     });
   });
 
   it('should have appropriate css class', () => {
-    const element = compile();
+    const element = compile({engine: 'angular'});
     expect(element.find('div').attr('class')).toEqual('p-external-component-preview');
   });
 
-  it('should render an example if example has been given', () => {
-    const example = {
-      controller: `function() {
-        const $ctrl = this;
-        $ctrl.text = 'Hello!';
-      }`,
-      template: `
-        <p ng-bind="$ctrl.text"></p>
-      `
-    };
-    const element = compile({example});
+  it('should parse stringified function contained in example', () => {
+    const exampleMock = mockExample();
+    compile({engine: 'angular', example: exampleMock});
+    expect(jsonService.parseFunctions).toHaveBeenCalledWith(exampleMock);
+  });
+
+  it('should build an angular component if angular is the engine of the example', () => {
+    const exampleMock = mockExample();
+    const element = compile({engine: 'angular', example: exampleMock});
     expect(element.find('p').text()).toEqual('Hello!');
   });
 
-  it('should parse stringified functions in example', () => {
-    console.log = jest.fn();
-    const example = {
-      controller: `function() {
-        const $ctrl = this;
-        $ctrl.greet = name => console.log(name);
-      }`,
-      template: `
-        <button ng-click="$ctrl.greet('Rafael')">
-          Greet
-        </button>
-      `
-    };
-    const element = compile({ example });
-    expect(typeof example.controller).toEqual('function');
-    expect(element.find('button').triggerHandler('click'));
-    expect(console.log).toHaveBeenCalledWith('Rafael');
-  });
-
-  it('should handle controller dependencies', () => {
-    $window.alert = jest.fn();
-    const example = {
-      controller: `function($window) {
-        const $ctrl = this;
-        $ctrl.greet = name => $window.alert(name);
-      }`,
-      dependencies: ['$window'],
-      template: `
-        <button ng-click="$ctrl.greet('Rafael')">
-          Greet
-        </button>
-      `
-    };
-    const element = compile({ example });
-    expect(typeof example.controller).toEqual('function');
-    expect(element.find('button').triggerHandler('click'));
-    expect($window.alert).toHaveBeenCalledWith('Rafael');
-  });
-
-  it('should not render an example if no example has been given', () => {
-    const element = compile();
-    const children = element.find('div')[0].children;
-    expect(children.length).toEqual(0);
-  });
+  // it('should build a vue component if vue is the engine of the example', () => {
+  //
+  // });
 });

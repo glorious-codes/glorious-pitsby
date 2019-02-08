@@ -72,6 +72,15 @@ describe('JSON Service', () => {
     expect(parsedObj.c()).toEqual(1);
   });
 
+  it('should parse an attribute that contains a stringified function', () => {
+    const rawObj = {a: 'a(){ return 1; }'};
+    const rawObj2 = {b: 'b(){ return 2; }'};
+    const parsedObj = jsonService.parseFunctions(rawObj);
+    const parsedObj2 = jsonService.parseFunctions(rawObj2);
+    expect(parsedObj.a()).toEqual(1);
+    expect(parsedObj2.b()).toEqual(2);
+  });
+
   it('should parse stringified functions contained in an object', () => {
     const rawObj = {a: 1, b: 'hello', c: {d: 'function(){ return 1; }'}};
     const parsedObj = jsonService.parseFunctions(rawObj);
