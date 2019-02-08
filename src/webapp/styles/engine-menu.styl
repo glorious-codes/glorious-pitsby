@@ -12,8 +12,19 @@
   margin-left 20px
 
 .p-engine-menu-link
+  position relative
   color $color-grey
   text-decoration none
   text-transform capitalize
   &.p-engine-menu-link-active
     color $color-blue
+    &:after
+      position absolute
+      content ' '
+      top 36px
+      left 50%
+      width 6px
+      height 6px
+      background-color $color-blue
+      border-radius(3px)
+      transform('translate(-50%,50%)')
