@@ -13,7 +13,9 @@
       data-properties="$ctrl.component.properties">
     </p-external-component-properties-list>
     <p-external-component-examples-list
-      data-examples="$ctrl.component.examples">
+      ng-if="$ctrl.component.examples"
+      data-examples="$ctrl.component.examples"
+      data-engine="$ctrl.engine">
     </p-external-component-examples-list>
   </p-requester>
 </div>

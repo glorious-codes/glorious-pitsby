@@ -23,6 +23,12 @@ describe('External Component', () => {
     routeService.getParams = jest.fn(param => mockRouteParams()[param]);
   });
 
+  it('should set engine on initialize', () => {
+    const controller = compile();
+    controller.$onInit();
+    expect(controller.engine).toEqual('vue');
+  });
+
   it('should fetch component with component id', () => {
     const controller = compile();
     controller.fetch();
