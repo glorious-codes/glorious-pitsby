@@ -2,7 +2,7 @@ import { PromiseMock } from '@mocks/promise';
 import projectsResource from '@scripts/resources/projects';
 
 describe('Engine Menu', () => {
-  let compile;
+  let compile, routeService;
 
   function mockProjects(){
     return [{engine: 'angular'}, {engine: 'vue'}];
@@ -17,11 +17,14 @@ describe('Engine Menu', () => {
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject($injector => {
+      routeService = $injector.get('routeService');
       compile = () => {
         const $componentController = $injector.get('$componentController');
         return $componentController('pEngineMenu');
       };
     });
+    routeService.go = jest.fn();
+    routeService.getParams = jest.fn();
   });
 
   it('should fetch projects on initialize', () => {
@@ -37,6 +40,40 @@ describe('Engine Menu', () => {
     stubGetProjects('success', projectsMock);
     controller.$onInit();
     expect(controller.projects).toEqual(projectsMock);
+  });
+
+  it('should show engine menu if more than one project is found', () => {
+    const controller = compile();
+    stubGetProjects('success', mockProjects());
+    controller.$onInit();
+    expect(controller.shouldShowMenu).toEqual(true);
+  });
+
+  it('should not show engine menu if only one project is found', () => {
+    const controller = compile();
+    stubGetProjects('success', [{engine: 'angular'}]);
+    controller.$onInit();
+    expect(controller.shouldShowMenu).toEqual(false);
+  });
+
+  it('should select first project found on get projects success if no project is already selected', () => {
+    const projectsMock = mockProjects();
+    const controller = compile();
+    stubGetProjects('success', projectsMock);
+    controller.$onInit();
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components', {
+      engine: projectsMock[0].engine
+    });
+  });
+
+  it('should not select first project found on get projects success if some project is already selected', () => {
+    routeService.getParams = jest.fn(param => {
+      return param == 'engine' ? 'angular' : null;
+    });
+    const controller = compile();
+    stubGetProjects('success', mockProjects());
+    controller.$onInit();
+    expect(routeService.go).not.toHaveBeenCalled();
   });
 
   it('should log error on get projects error', () => {

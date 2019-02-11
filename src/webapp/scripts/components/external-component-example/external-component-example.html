@@ -13,10 +13,17 @@
         data-example="$ctrl.example">
       <p-external-component-preview>
     </p-tab>
-    <p-tab data-name="Markup">
-      <p-external-component-markup
-        data-markup="{{ $ctrl.example.template }}">
-      <p-external-component-markup>
+    <p-tab data-name="Template">
+      <p-external-component-code
+        data-code="{{ $ctrl.example.template }}"
+        data-language="html">
+      <p-external-component-code>
+    </p-tab>
+    <p-tab data-name="Controller">
+      <p-external-component-code
+        data-code="{{ $ctrl.example.controller }}"
+        data-language="javascript">
+      <p-external-component-code>
     </p-tab>
   </p-tabs>
 </div>
