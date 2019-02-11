@@ -7,7 +7,6 @@ function angularComponentBuilder($compile, $controller, $injector){
     const element = buildElement(template);
     const scope = buildScope($scope, controller, dependencies);
     $compile(element)(scope);
-    scope.$digest();
     return element;
   };
 

@@ -1,6 +1,12 @@
 describe('Angular Component Builder', () => {
   let service, $scope, $window;
 
+  function compileComponent(component, scope){
+    const element = service.build(component, scope);
+    scope.$digest();
+    return element;
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $injector) => {
@@ -14,7 +20,7 @@ describe('Angular Component Builder', () => {
     const component = {
       template: '<p>No Component</p>'
     };
-    const element = service.build(component, $scope);
+    const element = compileComponent(component, $scope);
     expect(element.text()).toEqual('No Component');
   });
 
@@ -26,7 +32,7 @@ describe('Angular Component Builder', () => {
       },
       template: '<p ng-bind="$ctrl.text"></p>'
     };
-    const element = service.build(component, $scope);
+    const element = compileComponent(component, $scope);
     expect(element.text()).toEqual('Hello!');
   });
 
@@ -44,7 +50,7 @@ describe('Angular Component Builder', () => {
         </button>
       `
     };
-    const element = service.build(component, $scope);
+    const element = compileComponent(component, $scope);
     expect(element.triggerHandler('click'));
     expect($window.alert).toHaveBeenCalledWith('Rafael');
   });
