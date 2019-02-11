@@ -1,25 +1,25 @@
 import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
 import textService from '@scripts/services/text';
-import template from './external-component-markup.html';
+import template from './external-component-code.html';
 
 function controller($element){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    injectMarkupIntoPreElement($ctrl.markup);
+    injectCodeIntoPreElement($ctrl.code);
   };
 
-  function injectMarkupIntoPreElement(markup){
+  function injectCodeIntoPreElement(code){
     const preElement = $element.find('pre')[0];
-    preElement.innerHTML = highlightMarkup(markup);
+    preElement.innerHTML = highlightCode(code);
   }
 
-  function highlightMarkup(markup){
+  function highlightCode(code){
     return Prism.highlight(
-      textService.normalizeIndentation(markup),
-      Prism.languages.html,
-      'html'
+      textService.normalizeIndentation(code),
+      Prism.languages[$ctrl.language],
+      `${$ctrl.language}`
     );
   }
 }
@@ -28,7 +28,8 @@ controller.$inject = ['$element'];
 
 export default {
   bindings: {
-    markup: '@'
+    code: '@',
+    language: '@'
   },
   controller,
   template
