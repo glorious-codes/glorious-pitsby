@@ -11,13 +11,27 @@ describe('Config Service', () => {
     };
   }
 
-  function mockConfigFile(configFile){
-    fileService.readJSONSync = jest.fn(() => configFile);
+  function mockConfigFile(configFile, fileType){
+    fileService.readJSONSync = jest.fn(param => {
+      if(param == '/client/pitsby.json' && fileType == 'json')
+        return configFile;
+    });
+    fileService.require = jest.fn(param => {
+      if(param == '/client/pitsby.js' && fileType == 'js')
+        return configFile;
+    });
   }
 
-  it('should get config file passing client directory', () => {
+  it('should get javascript config file', () => {
+    const configFileMock = {some: 'js-config'};
+    mockConfigFile(configFileMock, 'js');
+    const configFile = configService.get('/client');
+    expect(configFile).toEqual(configFileMock);
+  });
+
+  it('should get json config file if no javascript config file has been found', () => {
     const configFileMock = buildConfigFile();
-    mockConfigFile(configFileMock);
+    mockConfigFile(configFileMock, 'json');
     const configFile = configService.get('/client');
     expect(fileService.readJSONSync).toHaveBeenCalledWith('/client/pitsby.json');
     expect(configFile).toEqual(configFileMock);
@@ -27,7 +41,7 @@ describe('Config Service', () => {
     const configFileMock = buildConfigFile();
     configFileMock.collectFrom = './src/angular';
     configFileMock.moduleName = 'my-components';
-    mockConfigFile(configFileMock);
+    mockConfigFile(configFileMock, 'js');
     expect(configService.get('/client').projects).toEqual([
       { engine: 'vue', collectDocsFrom: './src/vue' },
       { engine: 'angular', collectDocsFrom: './src/angular', moduleName: 'my-components' }
@@ -39,14 +53,14 @@ describe('Config Service', () => {
     delete configFileMock.projects;
     configFileMock.collectFrom = './src/angular';
     configFileMock.moduleName = 'my-components';
-    mockConfigFile(configFileMock);
+    mockConfigFile(configFileMock, 'js');
     expect(configService.get('/client').projects).toEqual([
       { engine: 'angular', collectDocsFrom: './src/angular', moduleName: 'my-components' }
     ]);
   });
 
   it('should normalize project engine case', () => {
-    mockConfigFile({projects: [{ engine: 'Vue', collectDocsFrom: './src/vue' }]});
+    mockConfigFile({projects: [{ engine: 'Vue', collectDocsFrom: './src/vue' }]}, 'js');
     expect(configService.get('/client').projects).toEqual([
       { engine: 'vue', collectDocsFrom: './src/vue' }
     ]);
@@ -54,7 +68,7 @@ describe('Config Service', () => {
 
   it('should not normalize anything if config has no projects at all', () => {
     const configMock = {scripts: ['./dist/components.js']};
-    mockConfigFile(configMock);
+    mockConfigFile(configMock, 'js');
     expect(configService.get('/client')).toEqual(configMock);
   });
 });

@@ -8,7 +8,9 @@ _public.get = clientDirectory => {
 };
 
 function getPitsbyConfig(clientDirectory){
-  return fileService.readJSONSync(`${clientDirectory}/pitsby.json`);
+  const filepath = `${clientDirectory}/pitsby`;
+  const jsConfigFile = fileService.require(`${filepath}.js`);
+  return jsConfigFile ? jsConfigFile : fileService.readJSONSync(`${filepath}.json`);
 }
 
 function normalizeConfig(config){
