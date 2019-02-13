@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const pkg = require('../../../package.json');
+const argsService = require('./args');
 const { fileService } = require('./file');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const indexTemplate = fs.readFileSync(path.join(__dirname, '../../webapp/index-template.html'), 'utf-8');
@@ -16,9 +18,15 @@ describe('Webapp HTML Index Generator', () => {
     return [{engine: 'angular'}];
   }
 
+  function getAngularVersion(){
+    return pkg.devDependencies.angular.replace('^','');
+  }
+
   beforeEach(() => {
     fileService.readSync = jest.fn(() => indexTemplate);
     fileService.write = jest.fn();
+    argsService.getCliArgs = jest.fn();
+    Date.now = jest.fn(() => 123);
   });
 
   it('should include external assets on template', () => {
@@ -35,14 +43,14 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="expires" content="0">
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
     <meta http-equiv="pragma" content="no-cache">
-    <link href="https://some.lib.com/from/cdn.min.css" rel="stylesheet">
-<link href="external/dist/css/main.css" rel="stylesheet">
+    <link href="https://some.lib.com/from/cdn.min.css?t=123" rel="stylesheet">
+<link href="external/dist/css/main.css?t=123" rel="stylesheet">
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-    <script src="https://some.lib.com/from/cdn.min.js"></script>
-<script src="external/dist/scripts/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://some.lib.com/from/cdn.min.js?t=123"></script>
+<script src="external/dist/scripts/main.js?t=123"></script>
   </body>
 </html>
 `);
@@ -66,7 +74,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
 
   </body>
 </html>
@@ -93,8 +101,8 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
   </body>
 </html>
 `);
@@ -120,8 +128,8 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
   </body>
 </html>
 `);
@@ -147,8 +155,8 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.0/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.0/vue.js"></script>
   </body>
 </html>
 `);
@@ -172,8 +180,39 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
 
+  </body>
+</html>
+`);
+  });
+
+  it('should include minified component engine script tags if environment id production', () => {
+    const projects = mockProjects();
+    projects.push({engine: 'vue', version: '2.6.0'});
+    argsService.getCliArgs = jest.fn(param => {
+      if(param == '--env')
+        return 'production';
+    });
+    webappHtmlIndexGenerator.init({}, projects);
+    expect(fileService.write).toHaveBeenCalledWith(
+      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pitsby</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=yes">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="cache-control" content="max-age=0">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+    <meta http-equiv="pragma" content="no-cache">
+
+  </head>
+  <body ng-app="pitsby-app">
+    <ui-view></ui-view>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.0/vue.min.js"></script>
   </body>
 </html>
 `);

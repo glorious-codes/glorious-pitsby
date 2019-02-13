@@ -1,4 +1,6 @@
 const path = require('path');
+const pkg = require('../../../package.json');
+const argsService = require('./args');
 const { fileService } = require('./file');
 const assetsFilepathFilter = require('./assets-filepath-filter');
 
@@ -10,7 +12,7 @@ _public.init = (options = {}, projects = []) => {
   const indexHtml = buildIndexHtml(
     linkTags,
     handleVueScriptsTag(scriptTags, projects),
-    buildAngularScriptTag()
+    buildComponentEngineScriptTag('angular.js', pkg.devDependencies.angular.replace('^', ''))
   );
   fileService.write(path.join(__dirname, '../../webapp/index.html'), indexHtml);
 };
@@ -24,11 +26,11 @@ function buildAssetTags(paths = [], tagBuilderAction){
 }
 
 function buildLinkTag(path){
-  return `<link href="${buildExternalAssetPath(path)}" rel="stylesheet">`;
+  return `<link href="${buildExternalAssetPath(path)}?t=${Date.now()}" rel="stylesheet">`;
 }
 
 function buildScriptTag(path){
-  return `<script src="${buildExternalAssetPath(path)}"></script>`;
+  return `<script src="${buildExternalAssetPath(path)}?t=${Date.now()}"></script>`;
 }
 
 function handleVueScriptsTag(scriptTags, projects){
@@ -43,22 +45,19 @@ function getVueProject(projects){
 }
 
 function prependVueScriptTag(scriptTags, vueProject){
-  scriptTags.unshift(buildVueTagScript(vueProject));
+  scriptTags.unshift(buildComponentEngineScriptTag('vue', (vueProject.version || '2.5.13')));
   return scriptTags;
 }
 
-function buildVueTagScript(vueProject){
-  const cdnUrl = 'https://cdnjs.cloudflare.com/ajax/libs/vue';
-  const version = vueProject.version || '2.5.13';
-  const file = 'vue.min.js';
+function buildComponentEngineScriptTag(engine, version){
+  const cdnUrl = `https://cdnjs.cloudflare.com/ajax/libs/${engine}`;
+  const file = buildComponentEngineFileName(engine);
   return `<script src="${cdnUrl}/${version}/${file}"></script>`;
 }
 
-function buildAngularScriptTag(){
-  const cdnUrl = 'https://cdnjs.cloudflare.com/ajax/libs/angular.js';
-  const version = '1.7.5';
-  const file = 'angular.min.js';
-  return `<script src="${cdnUrl}/${version}/${file}"></script>`;
+function buildComponentEngineFileName(engine){
+  const suffix = argsService.getCliArgs('--env') == 'production' ? '.min.js' : '.js';
+  return `${engine.replace('.js', '')}${suffix}`;
 }
 
 function buildExternalAssetPath(path){
