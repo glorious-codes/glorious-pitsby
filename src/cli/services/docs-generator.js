@@ -1,6 +1,7 @@
 const path = require('path');
-const webpack = require('webpack');
-const { fileService } = require('./file');
+const argsService = require('./args');
+const bundler = require('./bundler');
+const webpackConfigBuilder = require('../../../webpack.conf.builder.js');
 
 const _public = {};
 
@@ -15,9 +16,9 @@ function buildOutputDirectoryPath(clientDirectory, outputDirectory = './pitsby')
 }
 
 function generateDocs(directory, onDocsGenerationComplete){
-  const config = fileService.require('../../../webpack.config.js');
+  const config = webpackConfigBuilder.build(argsService.getCliArgs('--env'));
   config.output = { path: directory };
-  webpack(config, onDocsGenerationComplete);
+  bundler.compile(config, onDocsGenerationComplete);
 }
 
 function onDocsGenerationComplete(err){
