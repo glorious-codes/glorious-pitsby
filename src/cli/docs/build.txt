@@ -5,5 +5,8 @@ Usage: pitsby build <args>
 Example:
   $ pitsby build
 
+Command Options:
+  --env                  Environment passed to the config (e.g.: production)
+
 Options:
   -h   --help            Display software help and usage details

@@ -17,7 +17,11 @@ function getOption(options){
 }
 
 function isValidOption(option){
-  return !option || ['-w', '--watch'].includes(option);
+  return !option || ['-w', '--watch', '--env'].includes(getOptionName(option));
+}
+
+function getOptionName(option){
+  return option.split('=')[0];
 }
 
 module.exports = _public;
