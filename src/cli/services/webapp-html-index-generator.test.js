@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const pkg = require('../../../package.json');
-const argsService = require('./args');
+const processService = require('./process');
 const { fileService } = require('./file');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const indexTemplate = fs.readFileSync(path.join(__dirname, '../../webapp/index-template.html'), 'utf-8');
@@ -25,7 +25,7 @@ describe('Webapp HTML Index Generator', () => {
   beforeEach(() => {
     fileService.readSync = jest.fn(() => indexTemplate);
     fileService.write = jest.fn();
-    argsService.getCliArgs = jest.fn();
+    processService.getNodeEnv = jest.fn(() => 'development');
     Date.now = jest.fn(() => 123);
   });
 
@@ -190,10 +190,7 @@ describe('Webapp HTML Index Generator', () => {
   it('should include minified component engine script tags if environment id production', () => {
     const projects = mockProjects();
     projects.push({engine: 'vue', version: '2.6.0'});
-    argsService.getCliArgs = jest.fn(param => {
-      if(param == '--env')
-        return 'production';
-    });
+    processService.getNodeEnv = jest.fn(() => 'production');
     webappHtmlIndexGenerator.init({}, projects);
     expect(fileService.write).toHaveBeenCalledWith(
       path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>

@@ -1,6 +1,6 @@
 const path = require('path');
 const pkg = require('../../../package.json');
-const argsService = require('./args');
+const processService = require('./process');
 const { fileService } = require('./file');
 const assetsFilepathFilter = require('./assets-filepath-filter');
 
@@ -56,7 +56,7 @@ function buildComponentEngineScriptTag(engine, version){
 }
 
 function buildComponentEngineFileName(engine){
-  const suffix = argsService.getCliArgs('--env') == 'production' ? '.min.js' : '.js';
+  const suffix = processService.getNodeEnv() == 'production' ? '.min.js' : '.js';
   return `${engine.replace('.js', '')}${suffix}`;
 }
 

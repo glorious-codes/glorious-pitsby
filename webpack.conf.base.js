@@ -1,12 +1,11 @@
-const fs = require('fs'),
-  path = require('path'),
-  argv = require('yargs').argv,
-  webpack = require('webpack'),
-  HtmlWebpackPlugin = require('html-webpack-plugin'),
-  CopyWebpackPlugin = require('copy-webpack-plugin'),
-  MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-  project = require('./project.json'),
-  env = process.env.NODE_ENV || argv.env || 'development';
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const project = require('./project.json');
+const env = process.env.NODE_ENV;
 
 module.exports = {
   entry: `${__dirname}/${project.scripts.source.index}`,

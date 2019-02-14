@@ -32,20 +32,6 @@ describe('Docs Generator Service', () => {
     expect(console.log).toHaveBeenCalledWith('Generating docs...');
   });
 
-  it('should set node environment as development if no environment has been provided', () => {
-    docsGeneratorService.init('/client');
-    expect(processService.setNodeEnv).toHaveBeenCalledWith('development');
-  });
-
-  it('should set node environment according the given environment', () => {
-    argsService.getCliArgs = jest.fn(param => {
-      if(param == '--env')
-        return 'production';
-    });
-    docsGeneratorService.init('/client');
-    expect(processService.setNodeEnv).toHaveBeenCalledWith('production');
-  });
-
   it('should compile files to a custom directory', () => {
     docsGeneratorService.init('/client', './docs');
     expect(webpack.mock.calls[0][0]).toEqual({

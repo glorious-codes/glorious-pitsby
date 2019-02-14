@@ -22,11 +22,25 @@ describe('Config Service', () => {
     });
   }
 
+  beforeEach(() => {
+    console.log = jest.fn();
+  });
+
   it('should get javascript config file', () => {
     const configFileMock = {some: 'js-config'};
     mockConfigFile(configFileMock, 'js');
     const configFile = configService.get('/client');
     expect(configFile).toEqual(configFileMock);
+  });
+
+  it('should log deprecation warning if no javascript config file has been found', () => {
+    fileService.require = jest.fn(() => {
+      throw 'File not found';
+    });
+    fileService.readJSONSync = jest.fn(() => buildConfigFile());
+    configService.get('/client');
+    const warning = '[WARN] pitsby.json is deprecated. Prefer to use pitsby.js config file.';
+    expect(console.log).toHaveBeenCalledWith(warning);
   });
 
   it('should get json config file if no javascript config file has been found', () => {

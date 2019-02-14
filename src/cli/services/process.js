@@ -1,7 +1,7 @@
 const _public = {};
 
-_public.setNodeEnv = env => {
-  process.env.NODE_ENV = env;
+_public.getNodeEnv = () => {
+  return process.env.NODE_ENV || 'development';
 };
 
 module.exports = _public;

@@ -1,7 +1,7 @@
-const fs = require('fs'),
-  webpack = require('webpack'),
-  MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-  project = require('./project.json');
+const fs = require('fs');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const project = require('./project.json');
 
 module.exports = {
   mode: 'development',
