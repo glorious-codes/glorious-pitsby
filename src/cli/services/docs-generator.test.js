@@ -1,18 +1,30 @@
-const webpackConfigBuilder = require('../../../webpack.conf.builder.js');
+const webpack = require('webpack');
+const argsService = require('./args');
+const processService = require('./process');
+const { fileService } = require('./file');
 const docsGeneratorService = require('./docs-generator');
-const bundler = require('./bundler');
+const webpackMock = {
+  response: ''
+};
+
+jest.mock('webpack');
+webpack.mockImplementation((config, onComplete) => {
+  onComplete(webpackMock.response);
+});
 
 describe('Docs Generator Service', () => {
-  function stubBundler(response){
-    bundler.compile = jest.fn((config, onComplete) => onComplete(response));
-  }
-
   beforeEach(() => {
     console.log = jest.fn();
-    webpackConfigBuilder.build = jest.fn(() => {
-      return {};
+    fileService.require = jest.fn(() => {
+      return { output: {} };
     });
-    stubBundler();
+  });
+
+  afterEach(() => {
+    webpackMock.response = null;
+    webpack.mockClear();
+    argsService.getCliArgs = jest.fn();
+    processService.setNodeEnv = jest.fn();
   });
 
   it('should log files generation start', () => {
@@ -20,9 +32,23 @@ describe('Docs Generator Service', () => {
     expect(console.log).toHaveBeenCalledWith('Generating docs...');
   });
 
+  it('should set node environment as development if no environment has been provided', () => {
+    docsGeneratorService.init('/client');
+    expect(processService.setNodeEnv).toHaveBeenCalledWith('development');
+  });
+
+  it('should set node environment according the given environment', () => {
+    argsService.getCliArgs = jest.fn(param => {
+      if(param == '--env')
+        return 'production';
+    });
+    docsGeneratorService.init('/client');
+    expect(processService.setNodeEnv).toHaveBeenCalledWith('production');
+  });
+
   it('should compile files to a custom directory', () => {
     docsGeneratorService.init('/client', './docs');
-    expect(bundler.compile.mock.calls[0][0]).toEqual({
+    expect(webpack.mock.calls[0][0]).toEqual({
       output: {
         path: '/client/docs'
       }
@@ -31,7 +57,7 @@ describe('Docs Generator Service', () => {
 
   it('should compile files to pitsby directory if no output directory has been given', () => {
     docsGeneratorService.init('/client');
-    expect(bundler.compile.mock.calls[0][0]).toEqual({
+    expect(webpack.mock.calls[0][0]).toEqual({
       output: {
         path: '/client/pitsby'
       }
@@ -46,7 +72,7 @@ describe('Docs Generator Service', () => {
   });
 
   it('should log error when files generation fails', () => {
-    stubBundler('some error');
+    webpackMock.response = 'some error';
     docsGeneratorService.init('/client');
     expect(console.log).toHaveBeenCalledWith(
       'Ops! Something went wrong...',
