@@ -9,8 +9,18 @@ _public.get = clientDirectory => {
 
 function getPitsbyConfig(clientDirectory){
   const filepath = `${clientDirectory}/pitsby`;
-  const jsConfigFile = fileService.require(`${filepath}.js`);
+  const jsConfigFile = lookForJavascriptConfigFile(filepath);
   return jsConfigFile ? jsConfigFile : fileService.readJSONSync(`${filepath}.json`);
+}
+
+function lookForJavascriptConfigFile(filepath){
+  let jsConfigFile;
+  try {
+    jsConfigFile = fileService.require(`${filepath}.js`);
+  } catch(err) {
+    console.log('[WARN] pitsby.json is deprecated. Prefer to use pitsby.js config file.');
+  }
+  return jsConfigFile;
 }
 
 function normalizeConfig(config){

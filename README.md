@@ -8,38 +8,38 @@
 
 Pitsby is based on two types of files:
 
-### `pitsby.json`
+### `pitsby.js`
 
 This is pitsby's configuration file. This file should be create in the root directory of the project which you want the documentation will be created for:
 
 ``` javascript
-{
-  "projects": [
+module.exports = {
+  projects: [
     {
-      "engine": "angular",
-      "collectDocsFrom": "./src/angular",
-      "moduleName": "my-angular-components"
+      engine: "angular",
+      collectDocsFrom: "./src/angular",
+      moduleName: "my-angular-components"
     },
     {
-      "engine": "vue",
-      "collectDocsFrom": "./src/vue",
-      "importFrom": "./dist/my-vue-components"
+      engine: "vue",
+      collectDocsFrom: "./src/vue",
+      importFrom: "./dist/my-vue-components"
     }
   ],
-  "styles": [
+  styles: [
     "./dist/my-angular-components.css",
     "./dist/my-vue-components.css"
   ],
-  "scripts": [
+  scripts: [
     "./dist/my-angular-components.js",
     "./dist/my-vue-components.js"
   ],
-  "other": [
+  other: [
     "./dist/images/",
     "./dist/fonts/",
     "./dist/etc/"
   ],
-  "outputDirectory": "./docs"
+  outputDirectory: "./docs"
 }
 
 ```
@@ -157,7 +157,7 @@ cd pitsby
 npm install
 ```
 
-5. Create the `pitsby.json` and, at least, one `*.doc.js` in a third party project.
+5. Create the `pitsby.js` and, at least, one `*.doc.js` in a third party project.
 
 6. Install and run pitsby on the root directory of the project previously cited.
 ``` bash

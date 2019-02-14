@@ -1,9 +1,18 @@
 const processService = require('./process');
 
 describe('Process Service', () => {
-  it('should set Node environment', () => {
+  afterEach(() => {
+    process.env.NODE_ENV = 'test';
+  });
+
+  it('should get Node environment', () => {
     const env = 'production';
-    processService.setNodeEnv(env);
-    expect(process.env.NODE_ENV).toEqual(env);
+    process.env.NODE_ENV = env;
+    expect(processService.getNodeEnv()).toEqual(env);
+  });
+
+  it('should respond environment as development if Node environment has not been specified', () => {
+    process.env.NODE_ENV = '';
+    expect(processService.getNodeEnv()).toEqual('development');
   });
 });

@@ -1,8 +1,8 @@
-const fs = require('fs'),
-  UglifyJsPlugin = require('uglifyjs-webpack-plugin'),
-  MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-  OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'),
-  project = require('./project.json');
+const fs = require('fs');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const project = require('./project.json');
 
 module.exports = {
   mode: 'production',

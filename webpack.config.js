@@ -1,10 +1,8 @@
 const _ = require('lodash'),
-  argv = require('yargs').argv,
   baseConfig = require('./webpack.conf.base'),
   devConfig = require('./webpack.conf.dev'),
   prodConfig = require('./webpack.conf.prod'),
-  env = process.env.NODE_ENV || argv.env || 'development';
-  specificConfig = env == 'production' ? prodConfig : devConfig;
+  specificConfig = process.env.NODE_ENV == 'production' ? prodConfig : devConfig;
 
 module.exports = _.mergeWith(
   baseConfig,

@@ -17,7 +17,7 @@ function getOption(options){
 }
 
 function isValidOption(option){
-  return !option || ['-w', '--watch', '--env'].includes(getOptionName(option));
+  return !option || ['-w', '--watch'].includes(getOptionName(option));
 }
 
 function getOptionName(option){
