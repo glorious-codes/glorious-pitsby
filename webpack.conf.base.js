@@ -64,7 +64,8 @@ module.exports = {
       from: project.external.source.root,
       to: `${project.external.dist.root}[1]/[2]`,
       test: new RegExp(`${project.external.source.root}(.*)\/(.*)`)
-    }])
+    }]),
+    new webpack.SourceMapDevToolPlugin()
   ],
   context: path.resolve(__dirname)
 }
