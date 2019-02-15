@@ -6,16 +6,12 @@ const project = require('./project.json');
 
 module.exports = {
   mode: 'production',
-  devtool: 'source-map',
   output: {
     filename: project.scripts.dist.filename.prod
   },
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true,
         uglifyOptions: {
           mangle: false
         }
