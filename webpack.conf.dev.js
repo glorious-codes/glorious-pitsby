@@ -10,7 +10,6 @@ module.exports = {
     filename: project.scripts.dist.filename.dev
   },
   plugins: [
-    new webpack.SourceMapDevToolPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new MiniCssExtractPlugin({
       filename: project.styles.dist.filename.dev

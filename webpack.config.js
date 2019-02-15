@@ -1,8 +1,8 @@
-const _ = require('lodash'),
-  baseConfig = require('./webpack.conf.base'),
-  devConfig = require('./webpack.conf.dev'),
-  prodConfig = require('./webpack.conf.prod'),
-  specificConfig = process.env.NODE_ENV == 'production' ? prodConfig : devConfig;
+const _ = require('lodash');
+const baseConfig = require('./webpack.conf.base');
+const devConfig = require('./webpack.conf.dev');
+const prodConfig = require('./webpack.conf.prod');
+const specificConfig = process.env.NODE_ENV == 'production' ? prodConfig : devConfig;
 
 module.exports = _.mergeWith(
   baseConfig,
