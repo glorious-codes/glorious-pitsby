@@ -19,12 +19,17 @@ function copyAssets(clientDirectory, filepaths){
 }
 
 function copyClientFilepathsContents(clientDirectory, filepaths){
-  return new Promise(resolve => {
-    filepaths.forEach((filepath, index) => {
+  return new Promise((resolve, reject) => {
+    let successfulCopies = 0;
+    filepaths.forEach(filepath => {
       const target = path.join(getExternalAssetsDirectory(), filepath);
       fileService.copy(path.join(clientDirectory, filepath), target, () => {
-        if(index === filepaths.length - 1)
+        successfulCopies++;
+        if(successfulCopies === filepaths.length)
           resolve();
+      }, err => {
+        console.log(err);
+        reject(err);
       });
     });
   });

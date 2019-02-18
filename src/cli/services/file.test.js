@@ -89,6 +89,16 @@ describe('File Service', () => {
     expect(file).toEqual({a:1});
   });
 
+  it('should remove a directory/file', () => {
+    const path = '/some/path/to/directory/or/file';
+    const fsextraMock = {remove: jest.fn()};
+    const fileService = new FileService({
+      fsextra: fsextraMock
+    });
+    fileService.remove(path);
+    expect(fileService.fsextra.remove).toHaveBeenCalledWith(path);
+  });
+
   it('should collect files that respect some pattern', () => {
     const successCallback = jest.fn();
     const filesMock = ['./test.json'];
@@ -118,28 +128,30 @@ describe('File Service', () => {
     const fileService = new FileService({
       fsextra: fsextraMock
     });
-    fileService.copy(
-      '/some/source/file.js',
-      '/some/dest/file.js',
-      onSuccess
-    );
-    expect(fileService.fsextra.copy.mock.calls[0][0]).toEqual('/some/source/file.js');
-    expect(fileService.fsextra.copy.mock.calls[0][1]).toEqual('/some/dest/file.js');
+    fileService.copy('source/file.js', 'dest/file.js', onSuccess);
+    expect(fileService.fsextra.copy.mock.calls[0][0]).toEqual('source/file.js');
+    expect(fileService.fsextra.copy.mock.calls[0][1]).toEqual('dest/file.js');
     expect(typeof fileService.fsextra.copy.mock.calls[0][2]).toEqual('function');
     expect(onSuccess).toHaveBeenCalled();
   });
 
-  it('should log error if copy fails', () => {
+  it('should execute error callback on copy error', () => {
+    const fsextraMock = {copy: jest.fn((source, destination, callback) => callback('error'))};
+    const onError = jest.fn();
+    const fileService = new FileService({
+      fsextra: fsextraMock
+    });
+    fileService.copy('/source/file', '/dest/file', jest.fn(), onError);
+    expect(onError).toHaveBeenCalledWith('error');
+  });
+
+  it('should log error on copy error if no error callback has been provided', () => {
     const fsextraMock = {copy: jest.fn((source, destination, callback) => callback('error'))};
     const fileService = new FileService({
       fsextra: fsextraMock
     });
-    fileService.copy(
-      '/some/source/file.js',
-      '/some/dest/file.js',
-      jest.fn()
-    );
-    expect(console.log).toHaveBeenCalledWith('Failed to copy /some/source/file.js!', 'error');
+    fileService.copy('source/file.js', 'dest/file.js', jest.fn());
+    expect(console.log).toHaveBeenCalledWith('Failed to copy source/file.js', 'error');
   });
 
   it('should write some file', () => {

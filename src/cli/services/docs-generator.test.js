@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 const argsService = require('./args');
 const processService = require('./process');
@@ -18,6 +19,7 @@ describe('Docs Generator Service', () => {
     fileService.require = jest.fn(() => {
       return { output: {} };
     });
+    fileService.remove = jest.fn();
   });
 
   afterEach(() => {
@@ -64,5 +66,12 @@ describe('Docs Generator Service', () => {
       'Ops! Something went wrong...',
       'some error'
     );
+  });
+
+  it('should remove webapp external directories on docs generation finish', () => {
+    const webappBasePath = path.join(__dirname, '../../webpapp');
+    docsGeneratorService.init('/client');
+    expect(fileService.remove).toHaveBeenCalledWith(`${webappBasePath}/data`);
+    expect(fileService.remove).toHaveBeenCalledWith(`${webappBasePath}/external`);
   });
 });

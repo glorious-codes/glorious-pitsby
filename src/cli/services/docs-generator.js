@@ -21,9 +21,17 @@ function generateDocs(directory, onDocsGenerationComplete){
 }
 
 function onDocsGenerationComplete(err){
+  removeWebappExternalDirectories();
   if(err)
     return console.log('Ops! Something went wrong...', err);
   return console.log('Docs successfully generated!');
+}
+
+function removeWebappExternalDirectories(){
+  const webappBasePath = path.join(__dirname, '../../webpapp');
+  ['data', 'external'].forEach(directory => {
+    fileService.remove(`${webappBasePath}/${directory}`);
+  });
 }
 
 module.exports = _public;
