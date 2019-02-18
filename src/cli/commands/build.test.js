@@ -14,11 +14,6 @@ describe('Build Command', () => {
     expect(docService.log).toHaveBeenCalledWith('build');
   });
 
-  it('should initialize build service if option given is valid', () => {
-    command.exec(['--watch']);
-    expect(buildService.init).toHaveBeenCalled();
-  });
-
   it('should initialize build service passing options if they have been given', () => {
     const options = ['--watch'];
     command.exec(options);
@@ -28,11 +23,5 @@ describe('Build Command', () => {
   it('should initialize build service with no options if options have not been given', () => {
     command.exec();
     expect(buildService.init).toHaveBeenCalledWith(undefined);
-  });
-
-  it('should log unkown option if option is not valid', () => {
-    const options = ['whatever'];
-    command.exec(options);
-    expect(docService.logUnknownOption).toHaveBeenCalledWith('build', options[0]);
   });
 });

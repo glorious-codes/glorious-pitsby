@@ -33,6 +33,10 @@ class FileService {
     return JSON.parse(this.readSync(filepath));
   }
 
+  remove(path){
+    return this.fsextra.remove(path);
+  }
+
   collect(pattern, onSuccess){
     this.glob(pattern, (err, files) => {
       if(err)
@@ -42,12 +46,11 @@ class FileService {
     });
   }
 
-  copy(source, destination, onSuccess){
+  copy(source, destination, onSuccess, onError){
     this.fsextra.copy(source, destination, err => {
       if(err)
-        console.log(`Failed to copy ${source}!`, err);
-      else
-        onSuccess();
+        return onError ? onError(err) : console.log(`Failed to copy ${source}`, err);
+      onSuccess();
     });
   }
 

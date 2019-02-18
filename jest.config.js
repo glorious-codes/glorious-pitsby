@@ -12,7 +12,6 @@ module.exports = {
     }
   },
   'moduleNameMapper': {
-    '@environment$': `<rootDir>/${project.environments.source.root}/development.js`,
     '@scripts\/(.*)$': `<rootDir>/${project.scripts.source.root}$1`,
     '@styles\/(.*)$': `<rootDir>/${project.styles.source.root}$1`,
     '@images\/(.*)$': `<rootDir>/${project.images.source.root}$1`,

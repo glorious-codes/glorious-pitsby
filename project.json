@@ -2,15 +2,11 @@
   "index": {
     "source": {
       "file": "src/webapp/index.html"
-    },
-    "dist": {
-      "root": "dist"
     }
   },
   "scripts": {
     "source": {
       "root": "src/webapp/scripts/",
-      "files": "src/webapp/scripts/**/*.js",
       "index": "src/webapp/scripts/index.js",
       "indexTemplate": "src/webapp/scripts/index-template.js"
     },
@@ -59,11 +55,6 @@
       "root": "external/"
     }
   },
-  "fonts": {
-    "dist": {
-      "root": "fonts/[name].[ext]"
-    }
-  },
   "tests": {
     "source": {
       "files": [
@@ -76,11 +67,6 @@
   "mocks": {
     "source": {
       "root": "src/webapp/mocks/"
-    }
-  },
-  "environments": {
-    "source": {
-      "root": "environments"
     }
   }
 }

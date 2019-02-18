@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const project = require('./project.json');
-const env = process.env.NODE_ENV;
 
 module.exports = {
   entry: `${__dirname}/${project.scripts.source.index}`,
@@ -27,21 +26,12 @@ module.exports = {
       use: 'html-loader'
     }, {
       test: /\.js$/,
-      exclude: /node_modules/,
+      exclude: /(node_modules|external)/,
       use: 'babel-loader'
-    }, {
-      test: /\.(ttf|eot|woff|woff2|svg)$/,
-      use: {
-        loader: "file-loader",
-        options: {
-          name: `${project.fonts.dist.root}`,
-        }
-      }
     }]
   },
   resolve: {
     alias: {
-      '@environment$': `${__dirname}/${project.environments.source.root}/${env}.js`,
       '@scripts': `${__dirname}/${project.scripts.source.root}`,
       '@styles': `${__dirname}/${project.styles.source.root}`
     }
@@ -62,10 +52,8 @@ module.exports = {
     },
     {
       from: project.external.source.root,
-      to: `${project.external.dist.root}[1]/[2]`,
-      test: new RegExp(`${project.external.source.root}(.*)\/(.*)`)
-    }]),
-    new webpack.SourceMapDevToolPlugin()
+      to: project.external.dist.root
+    }])
   ],
   context: path.resolve(__dirname)
 }
