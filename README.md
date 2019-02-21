@@ -2,7 +2,7 @@
 > Docs generator for AngularJS and Vue components
 
 [![CircleCI](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master)
-[![codecov](https://codecov.io/gh/glorious-codes/pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/pitsby)
+[![codecov](https://codecov.io/gh/glorious-codes/glorious-pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/glorious-pitsby)
 
 ## Basic Usage
 
