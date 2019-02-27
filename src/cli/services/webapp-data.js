@@ -3,8 +3,8 @@ const { fileService } = require('./file');
 
 const _public = {};
 
-_public.save = (filename, data) => {
-  fileService.write(buildFullFilepath(filename), JSON.stringify(data));
+_public.save = (filename, data, onSuccess, onError) => {
+  fileService.write(buildFullFilepath(filename), JSON.stringify(data), onSuccess, onError);
 };
 
 function buildFullFilepath(filename){

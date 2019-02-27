@@ -7,14 +7,16 @@ const assetsFilepathFilter = require('./assets-filepath-filter');
 const _public = {};
 
 _public.init = (options = {}, projects = []) => {
-  const linkTags = buildAssetTags(options.styles, buildLinkTag);
-  const scriptTags = buildAssetTags(options.scripts, buildScriptTag);
-  const indexHtml = buildIndexHtml(
-    linkTags,
-    handleVueScriptsTag(scriptTags, projects),
-    buildComponentEngineScriptTag('angular.js', pkg.devDependencies.angular.replace('^', ''))
-  );
-  fileService.write(path.join(__dirname, '../../webapp/index.html'), indexHtml);
+  return new Promise((resolve, reject) => {
+    const linkTags = buildAssetTags(options.styles, buildLinkTag);
+    const scriptTags = buildAssetTags(options.scripts, buildScriptTag);
+    const indexHtml = buildIndexHtml(
+      linkTags,
+      handleVueScriptsTag(scriptTags, projects),
+      buildComponentEngineScriptTag('angular.js', pkg.devDependencies.angular.replace('^', ''))
+    );
+    fileService.write(path.join(__dirname, '../../webapp/index.html'), indexHtml, resolve, reject);
+  });
 };
 
 function buildAssetTags(paths = [], tagBuilderAction){

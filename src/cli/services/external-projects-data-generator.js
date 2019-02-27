@@ -3,9 +3,8 @@ const webappDataService = require('./webapp-data');
 const _public = {};
 
 _public.init = projects => {
-  return new Promise(resolve => {
-    webappDataService.save('projects', buildData(projects));
-    resolve();
+  return new Promise((resolve, reject) => {
+    webappDataService.save('projects', buildData(projects), resolve, reject);
   });
 };
 

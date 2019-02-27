@@ -52,26 +52,24 @@ describe('Docs Generator Service', () => {
     });
   });
 
-  it('should log success on successfully generate files', () => {
-    docsGeneratorService.init('/client');
-    expect(console.log).toHaveBeenCalledWith(
-      'Docs successfully generated!'
-    );
-  });
-
-  it('should log error when files generation fails', () => {
-    webpackMock.response = 'some error';
-    docsGeneratorService.init('/client');
-    expect(console.log).toHaveBeenCalledWith(
-      'Ops! Something went wrong...',
-      'some error'
-    );
-  });
-
   it('should remove webapp external directories on docs generation finish', () => {
     const webappBasePath = path.join(__dirname, '../../webpapp');
     docsGeneratorService.init('/client');
     expect(fileService.remove).toHaveBeenCalledWith(`${webappBasePath}/data`);
     expect(fileService.remove).toHaveBeenCalledWith(`${webappBasePath}/external`);
+  });
+
+  it('should log success on successfully generate files', () => {
+    console.log = jest.fn();
+    docsGeneratorService.init('/client').then(() => {
+      expect(console.log).toHaveBeenCalledWith('Docs successfully generated!');
+    });
+  });
+
+  it('should log error when files generation fails', () => {
+    webpackMock.response = 'some error';
+    docsGeneratorService.init('/client').then(() => {}, err => {
+      expect(err).toEqual('some error');
+    });
   });
 });

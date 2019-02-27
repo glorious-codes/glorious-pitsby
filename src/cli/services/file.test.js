@@ -1,7 +1,8 @@
 const fs = require('fs');
 const fsextra = require('fs-extra');
 const glob = require('glob');
-const writefile = require('writefile');
+// const writefile = require('writefile');
+const fileSystem = require('file-system');
 const { FileService, fileService } = require('./file');
 
 describe('File Service', () => {
@@ -24,9 +25,9 @@ describe('File Service', () => {
     expect(fileService.glob).toEqual(glob);
   });
 
-  it('should use raw writefile if no writefile has been given', () => {
+  it('should use raw fileSystem if no fileSystem has been given', () => {
     const fileService = new FileService();
-    expect(fileService.writefile).toEqual(writefile);
+    expect(fileService.fileSystem).toEqual(fileSystem);
   });
 
   it('should use raw require if no require has been given', () => {
@@ -111,7 +112,18 @@ describe('File Service', () => {
     expect(successCallback).toHaveBeenCalledWith(filesMock);
   });
 
-  it('should log an error if collect fails', () => {
+  it('should execute error callback on collect error', () => {
+    const errorMock = 'some error';
+    const globMock = jest.fn((pattern, callback) => callback(errorMock));
+    const onError = jest.fn();
+    const fileService = new FileService({
+      glob: globMock
+    });
+    fileService.collect('**/*.json', jest.fn(), onError);
+    expect(onError).toHaveBeenCalledWith(errorMock);
+  });
+
+  it('should log error on collect error if no error callback has been provided', () => {
     const pattern = '**/*.js';
     const errorMock = {some: 'err'};
     const globMock = jest.fn((pattern, callback) => callback(errorMock));
@@ -119,7 +131,7 @@ describe('File Service', () => {
       glob: globMock
     });
     fileService.collect(pattern);
-    expect(console.log).toHaveBeenCalledWith('Failed to collect **/*.js files!', errorMock);
+    expect(console.log).toHaveBeenCalledWith('Failed to collect **/*.js files', errorMock);
   });
 
   it('should copy files', () => {
@@ -155,14 +167,54 @@ describe('File Service', () => {
   });
 
   it('should write some file', () => {
-    const writefileMock = jest.fn();
+    const fileSystemMock = { writeFile: jest.fn() };
     const filepath = './some/path/to/file.js';
     const data = 'some data';
     const fileService = new FileService({
-      writefile: writefileMock
+      fileSystem: fileSystemMock
     });
     fileService.write(filepath, data);
-    expect(writefileMock).toHaveBeenCalledWith(filepath, data);
+    expect(fileSystemMock.writeFile.mock.calls[0][0]).toEqual(filepath);
+    expect(fileSystemMock.writeFile.mock.calls[0][1]).toEqual(data);
+    expect(typeof fileSystemMock.writeFile.mock.calls[0][2]).toEqual('function');
+  });
+
+  it('should execute success callback on write file success if callback has been provided', () => {
+    const fileSystemMock = { writeFile: jest.fn((filepath, data, onComplete) => {
+      onComplete();
+    }) };
+    const onSuccess = jest.fn();
+    const fileService = new FileService({
+      fileSystem: fileSystemMock
+    });
+    fileService.write('./some/path/to/file.js', 'some data', onSuccess);
+    expect(onSuccess).toHaveBeenCalled();
+  });
+
+  it('should execute error callback on write file error', () => {
+    const errorMock = 'some error';
+    const fileSystemMock = { writeFile: jest.fn((filepath, data, onComplete) => {
+      onComplete(errorMock);
+    }) };
+    const onError = jest.fn();
+    const fileService = new FileService({
+      fileSystem: fileSystemMock
+    });
+    fileService.write('./some/path/to/file.js', 'some data', jest.fn(), onError);
+    expect(onError).toHaveBeenCalledWith(errorMock);
+  });
+
+  it('should log error on write file error if no error callback has been provided', () => {
+    const errorMock = 'some error';
+    const fileSystemMock = { writeFile: jest.fn((filepath, data, onComplete) => {
+      onComplete(errorMock);
+    }) };
+    const fileService = new FileService({
+      fileSystem: fileSystemMock
+    });
+    console.log = jest.fn();
+    fileService.write('./path/to/file.js', 'some data');
+    expect(console.log).toHaveBeenCalledWith('Failed to write ./path/to/file.js', errorMock);
   });
 
   it('should export a singleton', () => {

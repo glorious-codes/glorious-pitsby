@@ -6,14 +6,17 @@ const { fileService } = require('./file');
 const _public = {};
 
 _public.init = (clientDirectory, projects = []) => {
-  return new Promise(resolve => {
-    projects.forEach((project, index) => {
+  return new Promise((resolve, reject) => {
+    const fulfillments = [];
+    projects.forEach(project => {
       const pattern = buildCollectFromGlob(clientDirectory, project.collectDocsFrom);
       collectComponents(pattern, components => {
-        writeComponentsFile(components, project.engine);
-        if(index === projects.length - 1)
-          resolve();
-      });
+        writeComponentsFile(project.engine, components, () => {
+          fulfillments.push(project);
+          if(fulfillments.length === projects.length)
+            resolve();
+        }, reject);
+      }, reject);
     });
   });
 };
@@ -22,10 +25,10 @@ function buildCollectFromGlob(clientDirectory, collectDocsFrom){
   return `${path.join(clientDirectory, collectDocsFrom, './**/*.doc.js')}`;
 }
 
-function collectComponents(collectDocsFromPattern, onCollectSuccess){
+function collectComponents(collectDocsFromPattern, onSuccess, onError){
   fileService.collect(collectDocsFromPattern, files => {
-    onCollectSuccess(buildComponentsData(files));
-  });
+    onSuccess(buildComponentsData(files));
+  }, onError);
 }
 
 function buildComponentsData(files){
@@ -40,8 +43,8 @@ function appendComponentId(component){
   return component;
 }
 
-function writeComponentsFile(components, engine){
-  webappDataService.save(`components-${engine}`, components);
+function writeComponentsFile(engine, data, onSuccess, onError){
+  webappDataService.save(`components-${engine}`, data, onSuccess, onError);
 }
 
 module.exports = _public;
