@@ -11,10 +11,11 @@ const _public = {};
 _public.init = () => {
   const clientDirectory = process.cwd();
   const config = configService.get(clientDirectory);
-  generateExternalFiles(clientDirectory, config).then(() => {
-    generateWebappIndexes(config);
-    docsGenerator.init(clientDirectory, config.outputDirectory);
-  }, err => { console.log(err); });
+  return generateExternalFiles(clientDirectory, config).then(() => {
+    return generateWebappIndexes(config).then(() => {
+      return docsGenerator.init(clientDirectory, config.outputDirectory);
+    });
+  });
 };
 
 function generateExternalFiles(clientDirectory, config){
@@ -38,8 +39,10 @@ function generateExternalAssets(clientDirectory, externalAssets){
 }
 
 function generateWebappIndexes(config){
-  webappHtmlIndexGenerator.init(getExternalAssets(config), config.projects);
-  webappIndexGenerator.init(config.projects);
+  return Promise.all([
+    webappHtmlIndexGenerator.init(getExternalAssets(config), config.projects),
+    webappIndexGenerator.init(config.projects)
+  ]);
 }
 
 function getExternalAssets(config){

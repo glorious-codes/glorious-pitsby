@@ -29,10 +29,14 @@ describe('Webapp HTML Index Generator', () => {
     Date.now = jest.fn(() => 123);
   });
 
+  it('should save a file named index.html', () => {
+    webappHtmlIndexGenerator.init(mockOptions(), mockProjects());
+    expect(fileService.write.mock.calls[0][0]).toEqual(path.join(__dirname, '../../webapp/index.html'));
+  });
+
   it('should include external assets on template', () => {
     webappHtmlIndexGenerator.init(mockOptions(), mockProjects());
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -58,8 +62,7 @@ describe('Webapp HTML Index Generator', () => {
 
   it('should not include any external assets if no assets have been given', () => {
     webappHtmlIndexGenerator.init(undefined, mockProjects());
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -85,8 +88,7 @@ describe('Webapp HTML Index Generator', () => {
     const projects = mockProjects();
     projects.push({engine: 'vue'});
     webappHtmlIndexGenerator.init({}, projects);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -112,8 +114,7 @@ describe('Webapp HTML Index Generator', () => {
     const projects = mockProjects();
     projects.push({engine: 'vue'});
     webappHtmlIndexGenerator.init({}, projects);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -139,8 +140,7 @@ describe('Webapp HTML Index Generator', () => {
     const projects = mockProjects();
     projects.push({engine: 'vue', version: '2.6.0'});
     webappHtmlIndexGenerator.init({}, projects);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -164,8 +164,7 @@ describe('Webapp HTML Index Generator', () => {
 
   it('should not include vue script tag if no projects have been given', () => {
     webappHtmlIndexGenerator.init();
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -192,8 +191,7 @@ describe('Webapp HTML Index Generator', () => {
     projects.push({engine: 'vue', version: '2.6.0'});
     processService.getNodeEnv = jest.fn(() => 'production');
     webappHtmlIndexGenerator.init({}, projects);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/index.html'), `<!DOCTYPE html>
+    expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -213,5 +211,14 @@ describe('Webapp HTML Index Generator', () => {
   </body>
 </html>
 `);
+  });
+
+  it('should reject promise on write file error', () => {
+    const projects = mockProjects();
+    const errorMock = 'some error';
+    fileService.write = jest.fn((filename, data, onSuccess, onError) => onError(errorMock));
+    webappHtmlIndexGenerator.init({}, projects).then(() => {}, err => {
+      expect(err).toEqual(errorMock);
+    });
   });
 });

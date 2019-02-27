@@ -5,9 +5,13 @@ const { fileService } = require('./file');
 const _public = {};
 
 _public.init = (clientDirectory, outputDirectory) => {
-  console.log('Generating docs...');
-  const directory = buildOutputDirectoryPath(clientDirectory, outputDirectory);
-  generateDocs(directory, onDocsGenerationComplete);
+  return new Promise((resolve, reject) => {
+    console.log('Generating docs...');
+    const directory = buildOutputDirectoryPath(clientDirectory, outputDirectory);
+    generateDocs(directory, err => {
+      onDocsGenerationComplete(err, resolve, reject);
+    });
+  });
 };
 
 function buildOutputDirectoryPath(clientDirectory, outputDirectory = './pitsby'){
@@ -20,11 +24,12 @@ function generateDocs(directory, onDocsGenerationComplete){
   webpack(config, onDocsGenerationComplete);
 }
 
-function onDocsGenerationComplete(err){
+function onDocsGenerationComplete(err, resolve, reject){
   removeWebappExternalDirectories();
   if(err)
-    return console.log('Ops! Something went wrong...', err);
-  return console.log('Docs successfully generated!');
+    return reject(err);
+  console.log('Docs successfully generated!');
+  return resolve();
 }
 
 function removeWebappExternalDirectories(){

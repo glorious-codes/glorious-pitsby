@@ -20,47 +20,32 @@ describe('Build Service', () => {
     };
   }
 
-  function mockPromiseAll(responseType, { err } = {}){
-    Promise.all = jest.fn(() => {
-      return {
-        then: function(onSuccess, onError){
-          if(responseType == 'success')
-            return onSuccess();
-          return onError(err);
-        }
-      };
-    });
-  }
-
   beforeEach(() => {
-    externalProjectsDataGenerator.init = jest.fn();
-    externalComponentsDataGenerator.init = jest.fn();
-    externalAssetsGenerator.init = jest.fn();
-    webappHtmlIndexGenerator.init = jest.fn();
-    webappIndexGenerator.init = jest.fn();
-    docsGenerator.init = jest.fn();
+    externalProjectsDataGenerator.init = jest.fn(() => Promise.resolve());
+    externalComponentsDataGenerator.init = jest.fn(() => Promise.resolve());
+    externalAssetsGenerator.init = jest.fn(() => Promise.resolve());
+    webappHtmlIndexGenerator.init = jest.fn(() => Promise.resolve());
+    webappIndexGenerator.init = jest.fn(() => Promise.resolve());
+    docsGenerator.init = jest.fn(() => Promise.resolve());
     configService.get = jest.fn(() => mockPitsbyConfig());
   });
 
   it('should generate data for external projects', () => {
     const config = mockPitsbyConfig();
-    mockPromiseAll('success');
-    buildService.init();
+    buildService.init().then(() => {}, () => {});
     expect(externalProjectsDataGenerator.init).toHaveBeenCalledWith(config.projects);
   });
 
   it('should generate data for external components', () => {
     const projectsMock = mockPitsbyConfig().projects;
-    mockPromiseAll('success');
-    buildService.init();
+    buildService.init().then(() => {}, () => {});
     expect(externalComponentsDataGenerator.init).toHaveBeenCalledWith(
       process.cwd(), projectsMock
     );
   });
 
   it('should generate external assets', () => {
-    mockPromiseAll('success');
-    buildService.init();
+    buildService.init().then(() => {}, () => {});
     expect(externalAssetsGenerator.init).toHaveBeenCalledWith(
       process.cwd(), {
         styles: ['./dist/styles.css'],
@@ -69,37 +54,47 @@ describe('Build Service', () => {
       });
   });
 
-  it('should generate webapp html index', () => {
+  it('should generate webapp html index', done => {
     const projectsMock = mockPitsbyConfig().projects;
-    mockPromiseAll('success');
-    buildService.init();
-    expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith({
-      styles: ['./dist/styles.css'],
-      scripts: ['./dist/bundle.js'],
-      other: ['./images/']
-    }, projectsMock);
-  });
-
-  it('should log error if external files generation fails', () => {
-    console.log = jest.fn();
-    mockPromiseAll('error', {err: 'err'});
-    buildService.init();
-    expect(console.log).toHaveBeenCalledWith('err');
+    buildService.init().then(() => {
+      expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith({
+        styles: ['./dist/styles.css'],
+        scripts: ['./dist/bundle.js'],
+        other: ['./images/']
+      }, projectsMock);
+      done();
+    });
   });
 
   it('should generate webapp javascript index', () => {
     const projectsMock = mockPitsbyConfig().projects;
-    mockPromiseAll('success');
-    buildService.init();
-    expect(webappIndexGenerator.init).toHaveBeenCalledWith(projectsMock);
+    buildService.init().then(() => {
+      expect(webappIndexGenerator.init).toHaveBeenCalledWith(projectsMock);
+    });
   });
 
-  it('should generate docs', () => {
-    mockPromiseAll('success');
-    buildService.init();
-    expect(docsGenerator.init).toHaveBeenCalledWith(
-      process.cwd(),
-      './docs'
-    );
+  it('should not generate webapp indexes if external files generation fails', () => {
+    externalComponentsDataGenerator.init = jest.fn(() => Promise.reject('some error'));
+    buildService.init().then(() => {}, () => {
+      expect(webappIndexGenerator.init).not.toHaveBeenCalled();
+      expect(webappHtmlIndexGenerator.init).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should generate docs', done => {
+    buildService.init().then(() => {
+      expect(docsGenerator.init).toHaveBeenCalledWith(
+        process.cwd(),
+        './docs'
+      );
+      done();
+    });
+  });
+
+  it('should not generate docs if webapp indexes generation fails', () => {
+    webappHtmlIndexGenerator.init = jest.fn(() => Promise.reject('some error'));
+    buildService.init().then(() => {}, () => {
+      expect(docsGenerator.init).not.toHaveBeenCalled();
+    });
   });
 });

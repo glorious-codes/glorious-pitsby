@@ -6,7 +6,7 @@ describe('Build Command', () => {
   beforeEach(() => {
     docService.log = jest.fn();
     docService.logUnknownOption = jest.fn();
-    buildService.init = jest.fn();
+    buildService.init = jest.fn(() => Promise.resolve());
   });
 
   it('should log doc if help flag has been given', () => {
@@ -23,5 +23,19 @@ describe('Build Command', () => {
   it('should initialize build service with no options if options have not been given', () => {
     command.exec();
     expect(buildService.init).toHaveBeenCalledWith(undefined);
+  });
+
+  it('should log success on build success', () => {
+    buildService.init = jest.fn(() => Promise.resolve('success'));
+    command.exec().then(response => {
+      expect(response).toEqual('success');
+    });
+  });
+
+  it('should log error on build error', () => {
+    buildService.init = jest.fn(() => Promise.resolve('some error'));
+    command.exec().then(() => {}, err => {
+      expect(err).toEqual('some error');
+    });
   });
 });

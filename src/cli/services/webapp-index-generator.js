@@ -6,10 +6,14 @@ const EXTERNAL_MODULE_NAME_PLACEHOLDER = '// inject:external-angular-module-name
 const _public = {};
 
 _public.init = projects => {
-  fileService.write(
-    path.join(__dirname, '../../webapp/scripts/index.js'),
-    buildIndex(projects)
-  );
+  return new Promise((resolve, reject) => {
+    fileService.write(
+      path.join(__dirname, '../../webapp/scripts/index.js'),
+      buildIndex(projects),
+      resolve,
+      reject
+    );
+  });
 };
 
 function buildIndex(projects){

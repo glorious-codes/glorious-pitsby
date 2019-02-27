@@ -10,14 +10,20 @@ describe('Webapp Index Generator', () => {
     fileService.write = jest.fn();
   });
 
+  it('should save a file named index.js', () => {
+    webappIndexGenerator.init([{
+      engine: 'angular',
+      moduleName: 'external-module-name'
+    }]);
+    expect(fileService.write.mock.calls[0][0]).toEqual(path.join(__dirname, '../../webapp/scripts/index.js'));
+  });
+
   it('should include external angular module name on template', () => {
     webappIndexGenerator.init([{
       engine: 'angular',
       moduleName: 'external-module-name'
     }]);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/scripts/index.js'),
-      `import '@styles/_native.styl';
+    expect(fileService.write.mock.calls[0][1]).toEqual(`import '@styles/_native.styl';
 import angular from 'angular';
 import uirouter from '@uirouter/angularjs/release/angular-ui-router';
 import router from '@scripts/router';
@@ -46,9 +52,7 @@ export default _public;
 
   it('should not include external angular module name on template if no name has been given', () => {
     webappIndexGenerator.init();
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/scripts/index.js'),
-      `import '@styles/_native.styl';
+    expect(fileService.write.mock.calls[0][1]).toEqual(`import '@styles/_native.styl';
 import angular from 'angular';
 import uirouter from '@uirouter/angularjs/release/angular-ui-router';
 import router from '@scripts/router';
@@ -79,9 +83,7 @@ export default _public;
       engine: 'vue',
       importFrom: './dist/vue-components'
     }]);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, '../../webapp/scripts/index.js'),
-      `import Vue from 'vue';
+    expect(fileService.write.mock.calls[0][1]).toEqual(`import Vue from 'vue';
 import vueComponents from '../external/dist/vue-components';
 Vue.use(vueComponents);
 import '@styles/_native.styl';
@@ -108,5 +110,13 @@ _public.init();
 
 export default _public;
 `);
+  });
+
+  it('should reject promise on write file error', () => {
+    const errorMock = 'some error';
+    fileService.write = jest.fn((filename, data, onSuccess, onError) => onError(errorMock));
+    webappIndexGenerator.init([{engine: 'vue', importFrom: './dist/vue-components'}]).then(() => {}, err => {
+      expect(err).toEqual(errorMock);
+    });
   });
 });

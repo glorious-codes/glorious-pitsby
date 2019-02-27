@@ -10,10 +10,12 @@ describe('Webapp Data Service', () => {
   it('should save data', () => {
     const filename = 'projects';
     const data = [{engine: 'vue'}, {engine: 'angular'}];
-    webappDataService.save('projects', data);
-    expect(fileService.write).toHaveBeenCalledWith(
-      path.join(__dirname, `../../webapp/data/${filename}.json`),
-      JSON.stringify(data)
+    const onSuccess = jest.fn();
+    webappDataService.save('projects', data, onSuccess);
+    expect(fileService.write.mock.calls[0][0]).toEqual(
+      path.join(__dirname, `../../webapp/data/${filename}.json`)
     );
+    expect(fileService.write.mock.calls[0][1]).toEqual(JSON.stringify(data));
+    expect(fileService.write.mock.calls[0][2]).toEqual(onSuccess);
   });
 });
