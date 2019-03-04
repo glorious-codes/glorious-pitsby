@@ -1,19 +1,23 @@
+const argsService = require('./args');
 const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 const docsGenerator = require('./docs-generator');
+const watchService = require('./watch');
 const configService = require('./config');
 
 const _public = {};
 
-_public.init = () => {
+_public.init = ({ isWatching } = {}) => {
+  if(isWatching)
+    console.log('Updating docs...');
   const clientDirectory = process.cwd();
   const config = configService.get(clientDirectory);
   return generateExternalFiles(clientDirectory, config).then(() => {
     return generateWebappIndexes(config).then(() => {
-      return docsGenerator.init(clientDirectory, config.outputDirectory);
+      return generateDocs(clientDirectory, config, isWatching);
     });
   });
 };
@@ -43,6 +47,30 @@ function generateWebappIndexes(config){
     webappHtmlIndexGenerator.init(getExternalAssets(config), config.projects),
     webappIndexGenerator.init(config.projects)
   ]);
+}
+
+function generateDocs(clientDirectory, config, isWatching){
+  if(isWatching)
+    return true;
+  return docsGenerator.init(clientDirectory, config.outputDirectory).then(() => {
+    return handleWatch(clientDirectory, getExternalAssets(config), argsService.getCliArgs('--watch'));
+  });
+}
+
+function handleWatch(clientDirectory, externalAssets, shouldWatch){
+  if(shouldWatch)
+    watchService.init(getFilesToWatch(clientDirectory, externalAssets), () => {
+      return _public.init({ isWatching: true });
+    });
+  return true;
+}
+
+function getFilesToWatch(clientDirectory, assets){
+  let files = [`${clientDirectory}/pitsby.js`, `${clientDirectory}/**/*.doc.js`];
+  Object.keys(assets).forEach(asset => {
+    files = files.concat(assets[asset]);
+  });
+  return files;
 }
 
 function getExternalAssets(config){

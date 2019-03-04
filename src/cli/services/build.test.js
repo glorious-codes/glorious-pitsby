@@ -1,3 +1,4 @@
+const argsService = require('./args');
 const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
@@ -5,6 +6,7 @@ const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 const docsGenerator = require('./docs-generator');
 const configService = require('./config');
+const watchService = require('./watch');
 const buildService = require('./build');
 
 describe('Build Service', () => {
@@ -20,6 +22,13 @@ describe('Build Service', () => {
     };
   }
 
+  function stubFileChange(){
+    argsService.getCliArgs = jest.fn(param => param == '--watch');
+    watchService.init = jest.fn((files, changeCallback) => {
+      changeCallback();
+    });
+  }
+
   beforeEach(() => {
     externalProjectsDataGenerator.init = jest.fn(() => Promise.resolve());
     externalComponentsDataGenerator.init = jest.fn(() => Promise.resolve());
@@ -28,6 +37,9 @@ describe('Build Service', () => {
     webappIndexGenerator.init = jest.fn(() => Promise.resolve());
     docsGenerator.init = jest.fn(() => Promise.resolve());
     configService.get = jest.fn(() => mockPitsbyConfig());
+    argsService.getCliArgs = jest.fn();
+    watchService.init = jest.fn();
+    console.log = jest.fn();
   });
 
   it('should generate data for external projects', () => {
@@ -95,6 +107,32 @@ describe('Build Service', () => {
     webappHtmlIndexGenerator.init = jest.fn(() => Promise.reject('some error'));
     buildService.init().then(() => {}, () => {
       expect(docsGenerator.init).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should watch for external assets changes if "watch" flag has been provided', () => {
+    argsService.getCliArgs = jest.fn(param => param == '--watch');
+    const configFilepath = `${process.cwd()}/pitsby.js`;
+    const docsFileGlob = `${process.cwd()}/**/*.doc.js`;
+    buildService.init().then(() => {
+      expect(watchService.init.mock.calls[0][0]).toEqual([
+        configFilepath, docsFileGlob, './dist/styles.css', './dist/bundle.js', './images/'
+      ]);
+      expect(typeof watchService.init.mock.calls[0][1]).toEqual('function');
+    });
+  });
+
+  it('should not generate documentation if build is already watching docs changes', () => {
+    stubFileChange();
+    buildService.init().then(() => {
+      expect(docsGenerator.init.mock.calls.length).toEqual(1);
+    });
+  });
+
+  it('should log documentation update', () => {
+    stubFileChange();
+    buildService.init().then(() => {
+      expect(console.log).toHaveBeenCalledWith('Updating docs...');
     });
   });
 });

@@ -25,28 +25,52 @@ function buildOutputDirectoryPath(clientDirectory, outputDirectory = './pitsby')
 function generateDocs(directory, onSuccess){
   const config = getCompilationConfig(directory);
   if(argsService.getCliArgs('--watch'))
-    return compile(config, { shouldWatch: true });
+    return compile(config, { shouldWatch: true, directory, onSuccess });
   return compile(config, { onSuccess });
 }
 
 function getCompilationConfig(directory){
+  let defaultConfig = getCompilationDefaultConfig(directory);
+  if(argsService.getCliArgs('--watch'))
+    defaultConfig = appendWebsocketConfig(defaultConfig, directory);
+  return defaultConfig;
+}
+
+function getCompilationDefaultConfig(directory){
   const config = fileService.require('../../../webpack.config');
   config.output.path = directory;
-  if(argsService.getCliArgs('--watch')) {
-    config.entry.unshift(`webpack-dev-server/client?http://localhost:${SERVER_PORT}/`)
-    config.devServer = { contentBase: directory, host: '0.0.0.0', hot: true };
-  }
   return config;
 }
 
-function compile(config, { onSuccess, shouldWatch }){
-  if(shouldWatch)
-    return new Server(webpack(config)).listen(SERVER_PORT);
-  return webpack(config, onDocsGenerationComplete);
+function appendWebsocketConfig(defaultConfig, directory){
+  defaultConfig.entry.unshift(`webpack-dev-server/client?http://localhost:${SERVER_PORT}/`);
+  return defaultConfig;
+}
+
+function compile(config, { shouldWatch, directory, onSuccess }){
+  if(shouldWatch){
+    const compiler = webpack(config);
+    const server = new Server(compiler, buildServerConfig(directory));
+    server.listen(SERVER_PORT, 'localhost', () => {
+      console.log(`Documentation successfully served on http://localhost:${SERVER_PORT}`);
+      onSuccess();
+    });
+  } else {
+    webpack(config, onSuccess);
+  }
+}
+
+function buildServerConfig(directory){
+  return {
+    contentBase: directory,
+    clientLogLevel: 'none',
+    host: '0.0.0.0',
+    progress: true,
+    quiet: true
+  };
 }
 
 function onDocsGenerationComplete(err, resolve, reject){
-  removeWebappExternalDirectories();
   if(err)
     return reject(err);
   console.log('Docs successfully generated!');

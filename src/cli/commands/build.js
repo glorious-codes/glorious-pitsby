@@ -7,7 +7,7 @@ _public.exec = options => {
   const option = getOption(options);
   if(docService.isHelpFlag(option))
     return docService.log('build');
-  return buildService.init(options);
+  return buildService.init();
 };
 
 function getOption(options){

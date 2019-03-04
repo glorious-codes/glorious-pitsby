@@ -1,18 +1,20 @@
-const path = require('path');
 const webpack = require('webpack');
 const Server = require('webpack-dev-server');
 const argsService = require('./args');
 const processService = require('./process');
 const { fileService } = require('./file');
 const docsGeneratorService = require('./docs-generator');
-const serverListenMock = jest.fn();
+const serverListenMock = jest.fn((port, host, onSuccess) => onSuccess());
+const compilerObjectMock = {};
 const webpackMock = {
   response: ''
 };
 
 jest.mock('webpack');
 webpack.mockImplementation((config, onComplete) => {
-  return onComplete ?onComplete(webpackMock.response) : {};
+  if(onComplete)
+    onComplete(webpackMock.response);
+  return compilerObjectMock;
 });
 
 jest.mock('webpack-dev-server');
@@ -42,7 +44,7 @@ describe('Docs Generator Service', () => {
     expect(console.log).toHaveBeenCalledWith('Generating docs...');
   });
 
-  it('should compile files to a custom directory', () => {
+  it('should output compiled files to a custom directory', () => {
     docsGeneratorService.init('/client', './docs');
     expect(webpack.mock.calls[0][0]).toEqual({
       entry: [],
@@ -52,7 +54,7 @@ describe('Docs Generator Service', () => {
     });
   });
 
-  it('should compile files to pitsby directory if no output directory has been given', () => {
+  it('should output compiled files to pitsby directory if no output directory has been given', () => {
     docsGeneratorService.init('/client');
     expect(webpack.mock.calls[0][0]).toEqual({
       entry: [],
@@ -60,13 +62,6 @@ describe('Docs Generator Service', () => {
         path: '/client/pitsby'
       }
     });
-  });
-
-  it('should remove webapp external directories on docs generation finish', () => {
-    const webappBasePath = path.join(__dirname, '../../webpapp');
-    docsGeneratorService.init('/client');
-    expect(fileService.remove).toHaveBeenCalledWith(`${webappBasePath}/data`);
-    expect(fileService.remove).toHaveBeenCalledWith(`${webappBasePath}/external`);
   });
 
   it('should log success on successfully generate files', () => {
@@ -77,19 +72,32 @@ describe('Docs Generator Service', () => {
   });
 
   it('should serve generated docs if "watch" flag has been provided', () => {
-    argsService.getCliArgs = jest.fn(param => {
-      return param == '--watch';
-    });
+    argsService.getCliArgs = jest.fn(param => param == '--watch');
     docsGeneratorService.init('/client');
     expect(webpack.mock.calls[0][0]).toEqual({
       entry: ['webpack-dev-server/client?http://localhost:7000/'],
       output: {
         path: '/client/pitsby'
-      },
-      devServer: { contentBase: '/client/pitsby', host: '0.0.0.0', hot: true }
+      }
     });
-    expect(typeof Server.mock.calls[0][0]).toEqual('object');
-    expect(serverListenMock).toHaveBeenCalledWith(7000);
+    expect(Server).toHaveBeenCalledWith(compilerObjectMock, {
+      contentBase: '/client/pitsby',
+      clientLogLevel: 'none',
+      host: '0.0.0.0',
+      progress: true,
+      quiet: true
+    });
+    expect(serverListenMock.mock.calls[0][0]).toEqual(7000);
+    expect(serverListenMock.mock.calls[0][1]).toEqual('localhost');
+    expect(typeof serverListenMock.mock.calls[0][2]).toEqual('function');
+  });
+
+  it('should log succes on serve generated documentation on serve success', () => {
+    argsService.getCliArgs = jest.fn(param => param == '--watch');
+    docsGeneratorService.init('/client').then(() => {
+      const message = 'Documentation successfully served on http://localhost:7000';
+      expect(console.log).toHaveBeenCalledWith(message);
+    });
   });
 
   it('should log error when files generation fails', () => {
