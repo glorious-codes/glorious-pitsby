@@ -10,6 +10,7 @@
     </p-heading>
     <p ng-bind="$ctrl.component.description"></p>
     <p-external-component-properties-list
+      ng-if="$ctrl.component.properties"
       data-properties="$ctrl.component.properties">
     </p-external-component-properties-list>
     <p-external-component-examples-list

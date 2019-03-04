@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const project = require('./project.json');
 
 module.exports = {
-  entry: `${__dirname}/${project.scripts.source.index}`,
+  entry: [`${__dirname}/${project.scripts.source.index}`],
   externals: {
     angular: 'angular',
     vue: 'Vue'
