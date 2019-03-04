@@ -16,9 +16,9 @@ $ npm install @glorious/pitsby -g
 
 Pitsby is based on two types of files:
 
-- [Configuration File]() (pitsby.js)
+- [Configuration File](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/configuration.md) (pitsby.js)
   - Responsible for telling Pitsby where documentation files are and for informing all the assets that should be included on the documentation.
-- [Documentation File]() (eg. button.doc.js)
+- [Documentation File](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/documentation.md) (eg. button.doc.js)
   - Used by Pitsby to build the page that contains all the component details in the documentation.
 
 ### Build
@@ -42,4 +42,4 @@ Go to `http://localhost:7000` and see the documentation you have just created.
 
 ## Contributions
 
-If you are interested in contribute with this project, refer to the [Contributing Steps]().
+If you are interested in contribute with this project, refer to the [Contributing Steps](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/contributing.md).
