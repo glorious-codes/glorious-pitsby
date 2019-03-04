@@ -23,6 +23,7 @@
     "babel-jest": "^23.6.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.7.0",
+    "chokidar": "^2.1.2",
     "copy-webpack-plugin": "^4.5.4",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
