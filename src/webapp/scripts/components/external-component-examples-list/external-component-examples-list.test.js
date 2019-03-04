@@ -27,7 +27,7 @@ describe('External Component Example List', () => {
   });
 
   it('should bind examples', () => {
-    const examplesMock = [{some: 'example'}, {other: 'example'}];
+    const examplesMock = [{some: 'example', template: ''}, {other: 'example', template: ''}];
     const element = compile({examples: examplesMock});
     expect(element.isolateScope().$ctrl.examples).toEqual(examplesMock);
   });
