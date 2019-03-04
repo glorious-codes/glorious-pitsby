@@ -33,6 +33,7 @@ function collectComponents(collectDocsFromPattern, onSuccess, onError){
 
 function buildComponentsData(files){
   return files.map(file => {
+    delete require.cache[file];
     const component = jsonService.stringifyFunctions(fileService.require(file));
     return appendComponentId(component);
   });
