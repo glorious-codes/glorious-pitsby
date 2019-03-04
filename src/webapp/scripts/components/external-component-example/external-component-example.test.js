@@ -4,6 +4,13 @@ vueComponentBuilder.build = jest.fn();
 describe('External Component Example', () => {
   let compile;
 
+  function buildExampleMock(){
+    return {
+      template: '',
+      controller: ''
+    };
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
@@ -15,6 +22,7 @@ describe('External Component Example', () => {
                             data-example-index="exampleIndex">
                           </p-external-component-example>`;
         scope.$ctrl = bindings;
+        scope.$ctrl.example = scope.$ctrl.example || buildExampleMock();
         scope.exampleIndex = exampleIndex;
         const element = $compile(template)(scope);
         scope.$digest();
@@ -41,8 +49,10 @@ describe('External Component Example', () => {
   });
 
   it('should render a title if example title has been given', () => {
+    const exampleMock = buildExampleMock();
     const title = 'Example Title';
-    const element = compile({example: {title}});
+    exampleMock.title = title;
+    const element = compile({example: exampleMock});
     expect(element.find('h4').text()).toEqual(title);
   });
 

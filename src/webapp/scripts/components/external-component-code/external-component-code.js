@@ -1,5 +1,6 @@
 import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
+import codeService from '@scripts/services/code';
 import textService from '@scripts/services/text';
 import template from './external-component-code.html';
 
@@ -7,19 +8,24 @@ function controller($element){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    injectCodeIntoPreElement($ctrl.code);
+    injectCodeIntoPreElement(formatCode($ctrl.code), $ctrl.language);
   };
 
-  function injectCodeIntoPreElement(code){
-    const preElement = $element.find('pre')[0];
-    preElement.innerHTML = highlightCode(code);
+  function formatCode(code){
+    return typeof code == 'object' ? JSON.stringify(code, null, 2) : code;
   }
 
-  function highlightCode(code){
+  function injectCodeIntoPreElement(code, language){
+    const preElement = $element.find('pre')[0];
+    const improvedCodeSyntax = codeService.improveStringifiedCodeSyntax(code, language);
+    preElement.innerHTML = highlightCode(improvedCodeSyntax, language);
+  }
+
+  function highlightCode(code, language){
     return Prism.highlight(
       textService.normalizeIndentation(code),
-      Prism.languages[$ctrl.language],
-      `${$ctrl.language}`
+      Prism.languages[language],
+      language
     );
   }
 }
@@ -28,7 +34,7 @@ controller.$inject = ['$element'];
 
 export default {
   bindings: {
-    code: '@',
+    code: '<',
     language: '@'
   },
   controller,

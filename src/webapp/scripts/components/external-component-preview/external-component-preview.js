@@ -6,7 +6,8 @@ function controller($scope, $element, angularComponentBuilder){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    const component = jsonService.parseFunctions($ctrl.example);
+    const exampleCopy = angular.copy($ctrl.example);
+    const component = jsonService.parseFunctions(exampleCopy);
     return $ctrl.engine == 'angular' ?
       handleAngularComponent(component) :
       handleVueComponent(component);
