@@ -42,7 +42,7 @@ function getCompilationDefaultConfig(directory){
   return config;
 }
 
-function appendWebsocketConfig(defaultConfig, directory){
+function appendWebsocketConfig(defaultConfig){
   defaultConfig.entry.unshift(`webpack-dev-server/client?http://localhost:${SERVER_PORT}/`);
   return defaultConfig;
 }
