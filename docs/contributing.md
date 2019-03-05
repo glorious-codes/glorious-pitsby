@@ -19,9 +19,9 @@ npm install
 
 5. Create the `pitsby.js` and, at least, one `*.doc.js` in a third party project.
 
-6. Install and run pitsby on the root directory of the project previously cited according the [Basic Usage]() instructions.
+6. Install and run Pitsby on the root directory of the project previously cited according to the [Basic Usage]() instructions.
 
-7. If you want just build the project, run:
+7. If you want just to build the project, run:
 ``` bash
 npm run build
 ```
