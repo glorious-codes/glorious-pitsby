@@ -1,12 +1,31 @@
 {
   "name": "@glorious/pitsby",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Docs generator for AngularJS and Vue components",
-  "author": "Rafael Camargo <contato@rafaelcamargo.com>",
+  "author": "Rafael Camargo <hello@rafaelcamargo.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/glorious-codes/glorious-pitsby"
   },
+  "keywords": [
+    "components",
+    "legacy",
+    "modern",
+    "angularjs",
+    "angular",
+    "vue",
+    "vuejs",
+    "documentation",
+    "docs",
+    "generator",
+    "tool",
+    "graphic user interface",
+    "single page application",
+    "web application",
+    "design system",
+    "GUI",
+    "SPA"
+  ],
   "license": "MIT",
   "bin": "./src/cli/index.js",
   "scripts": {

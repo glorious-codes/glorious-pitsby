@@ -14,12 +14,12 @@ $ npm install @glorious/pitsby -g
 
 ### Setup
 
-Pitsby is based on two types of files:
+Pitsby is based on two types of file:
 
 - [Configuration File](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/configuration.md) (pitsby.js)
-  - Responsible for telling Pitsby where documentation files are and for informing all the assets that should be included on the documentation.
+  - Responsible for telling Pitsby where the documentation files are and for informing all the assets that should be included in the documentation.
 - [Documentation File](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/documentation.md) (eg. button.doc.js)
-  - Used by Pitsby to build the page that contains all the component details in the documentation.
+  - Used by Pitsby to build the page that contains all the component details.
 
 ### Build
 
@@ -28,18 +28,18 @@ Since you have set up the `pitsby.js` for your project and, at least, one docume
 $ pitsby build
 ```
 
-Once built, you can see the result serving the files just created using `http-server` or any lib that you prefer:
+Once built, you can see the result serving the files just created using [http-server](https://www.npmjs.com/package/http-server) or any other lib that you prefer:
 ```
 $ http-server ./pitsby -p 7000
 ```
 
-To keep Pitsby watching changes that you make on any file listed on `pitsby.js`, use the watch flag when building the documentation:
+To keep Pitsby watching the changes that you make on any file listed on `pitsby.js`, run:
 ```
 $ pitsby build --watch
 ```
 
-Go to `http://localhost:7000` and see the documentation you have just created.
+Go to `http://localhost:7000` and see the documentation that has been just created.
 
 ## Contributions
 
-If you are interested in contribute with this project, refer to the [Contributing Steps](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/contributing.md).
+If you are interested in contributing to this project, refer to the [Contributing Steps](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/contributing.md).

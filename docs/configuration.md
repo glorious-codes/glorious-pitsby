@@ -2,7 +2,7 @@
 
 ## pitsby.js
 
-This is pitsby's configuration file. This file should be create in the root directory of the project which you want the documentation will be created for:
+This is Pitsby's configuration file. This file should be created in the root directory of the project which you want the documentation will be created for:
 
 ``` javascript
 module.exports = {
@@ -43,7 +43,7 @@ A list of projects with their specifications:
 Components' engine. Support for AngularJS (angular) and Vue (vue);
 
 ##### `collectFrom`
-Directory where Pitsby should look for .doc.js files regardless the engine used.
+The directory where Pitsby should look for .doc.js files regardless of the engine used.
 
 ##### `moduleName`
 Angular module's name that contains the components you are writing `*.doc.js` for.
@@ -61,4 +61,4 @@ List of scripts that should be included in the documentation.
 List of any other *file/directory* that should be included in the documentation.
 
 ### Output directory
-Directory where docs should be outputted to. If not informed, documentation will be outputted to a directory called *pitsby*.
+The directory where docs should be outputted to. If not informed, documentation will be outputted to a directory called *pitsby*.
