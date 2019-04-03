@@ -30,6 +30,9 @@ describe('External Components Data Generator', () => {
         },
         'email-input.doc.js': {
           name: 'Email Input'
+        },
+        'async-content-wrapper.doc.js': {
+          name: 'Async Content Wrapper'
         }
       },
       '/client/src/vue/**/*.doc.js': {
@@ -89,7 +92,8 @@ describe('External Components Data Generator', () => {
             }`
       }], id: 'button', },
       {name: 'Card', examples: [{ template: '<card></card>'}], id: 'card'},
-      {name: 'Email Input', id: 'email-input'}
+      {name: 'Email Input', id: 'email-input'},
+      {name: 'Async Content Wrapper', id: 'async-content-wrapper'}
     ];
     externalComponentsDataGenerator.init('/client', mockProjects());
     expect(webappDataService.save.mock.calls[0][0]).toEqual('components-angular');
