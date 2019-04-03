@@ -40,7 +40,7 @@ function buildComponentsData(files){
 }
 
 function appendComponentId(component){
-  component.id = component.name.toLowerCase().replace(' ', '-').trim();
+  component.id = component.name.toLowerCase().replace(/\s+/g, '-').trim();
   return component;
 }
 
