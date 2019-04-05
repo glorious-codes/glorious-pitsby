@@ -1,7 +1,8 @@
 const argsService = require('./args');
-const externalProjectsDataGenerator = require('./external-projects-data-generator');
-const externalComponentsDataGenerator = require('./external-components-data-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
+const externalComponentsDataGenerator = require('./external-components-data-generator');
+const externalMetricsIdsModuleGenerator = require('./external-metrics-ids-module-generator');
+const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 const docsGenerator = require('./docs-generator');
@@ -26,7 +27,8 @@ function generateExternalFiles(clientDirectory, config){
   return Promise.all([
     generateExternalProjectsData(config.projects),
     generateExternalComponentsData(clientDirectory, config.projects),
-    generateExternalAssets(clientDirectory, getExternalAssets(config))
+    generateExternalAssets(clientDirectory, getExternalAssets(config)),
+    generateMetricsIdsModule(config.metrics)
   ]);
 }
 
@@ -40,6 +42,10 @@ function generateExternalComponentsData(clientDirectory, collectFrom){
 
 function generateExternalAssets(clientDirectory, externalAssets){
   return externalAssetsGenerator.init(clientDirectory, externalAssets);
+}
+
+function generateMetricsIdsModule(metrics){
+  return externalMetricsIdsModuleGenerator.init(metrics);
 }
 
 function generateWebappIndexes(config){

@@ -16,7 +16,7 @@ describe('External Projects Data Generator', () => {
       {engine: 'angular', moduleName: 'ng-components'},
       {engine: 'vue', importFrom: './dist/vue-components'}
     ]);
-    expect(webappDataService.save.mock.calls[0][0]).toEqual('projects');
+    expect(webappDataService.save.mock.calls[0][0]).toEqual('projects.json');
     expect(webappDataService.save.mock.calls[0][1]).toEqual([ {engine: 'angular'}, {engine: 'vue'} ]);
     expect(typeof webappDataService.save.mock.calls[0][2]).toEqual('function');
     expect(typeof webappDataService.save.mock.calls[0][3]).toEqual('function');

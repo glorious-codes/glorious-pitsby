@@ -4,7 +4,7 @@ const _public = {};
 
 _public.init = projects => {
   return new Promise((resolve, reject) => {
-    webappDataService.save('projects', buildData(projects), resolve, reject);
+    webappDataService.save('projects.json', buildData(projects), resolve, reject);
   });
 };
 

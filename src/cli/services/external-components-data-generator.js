@@ -45,7 +45,7 @@ function appendComponentId(component){
 }
 
 function writeComponentsFile(engine, data, onSuccess, onError){
-  webappDataService.save(`components-${engine}`, data, onSuccess, onError);
+  webappDataService.save(`components-${engine}.json`, data, onSuccess, onError);
 }
 
 module.exports = _public;
