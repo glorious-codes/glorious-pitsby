@@ -96,7 +96,7 @@ describe('External Components Data Generator', () => {
       {name: 'Async Content Wrapper', id: 'async-content-wrapper'}
     ];
     externalComponentsDataGenerator.init('/client', mockProjects());
-    expect(webappDataService.save.mock.calls[0][0]).toEqual('components-angular');
+    expect(webappDataService.save.mock.calls[0][0]).toEqual('components-angular.json');
     expect(webappDataService.save.mock.calls[0][1]).toEqual(data);
     expect(typeof webappDataService.save.mock.calls[0][2]).toEqual('function');
     expect(typeof webappDataService.save.mock.calls[0][3]).toEqual('function');

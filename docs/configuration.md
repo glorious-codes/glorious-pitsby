@@ -31,6 +31,9 @@ module.exports = {
     "./dist/fonts/",
     "./dist/etc/"
   ],
+  metrics: {
+    googleAnalyticsId: 'UA-XXXXXXXXX-X'
+  },
   outputDirectory: "./docs"
 }
 
@@ -59,6 +62,9 @@ List of scripts that should be included in the documentation.
 
 ### Other
 List of any other *file/directory* that should be included in the documentation.
+
+### Metrics
+IDs to be used on third party metrics services integration. For now, Pitsby support Google Analytics only.
 
 ### Output directory
 The directory where docs should be outputted to. If not informed, documentation will be outputted to a directory called *pitsby*.

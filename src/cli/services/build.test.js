@@ -1,7 +1,8 @@
 const argsService = require('./args');
-const externalProjectsDataGenerator = require('./external-projects-data-generator');
-const externalComponentsDataGenerator = require('./external-components-data-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
+const externalComponentsDataGenerator = require('./external-components-data-generator');
+const externalMetricsIdsModuleGenerator = require('./external-metrics-ids-module-generator');
+const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 const docsGenerator = require('./docs-generator');
@@ -18,7 +19,10 @@ describe('Build Service', () => {
       styles: ['./dist/styles.css'],
       scripts: ['./dist/bundle.js'],
       other: ['./images/'],
-      outputDirectory: './docs'
+      outputDirectory: './docs',
+      metrics: {
+        googleAnalyticsId: '123'
+      }
     };
   }
 
@@ -30,16 +34,16 @@ describe('Build Service', () => {
   }
 
   beforeEach(() => {
-    externalProjectsDataGenerator.init = jest.fn(() => Promise.resolve());
-    externalComponentsDataGenerator.init = jest.fn(() => Promise.resolve());
     externalAssetsGenerator.init = jest.fn(() => Promise.resolve());
+    externalComponentsDataGenerator.init = jest.fn(() => Promise.resolve());
+    externalMetricsIdsModuleGenerator.init = jest.fn(() => Promise.resolve());
+    externalProjectsDataGenerator.init = jest.fn(() => Promise.resolve());
     webappHtmlIndexGenerator.init = jest.fn(() => Promise.resolve());
     webappIndexGenerator.init = jest.fn(() => Promise.resolve());
     docsGenerator.init = jest.fn(() => Promise.resolve());
     configService.get = jest.fn(() => mockPitsbyConfig());
     argsService.getCliArgs = jest.fn();
     watchService.init = jest.fn();
-    console.log = jest.fn();
   });
 
   it('should generate data for external projects', () => {
@@ -64,6 +68,13 @@ describe('Build Service', () => {
         scripts: ['./dist/bundle.js'],
         other: ['./images/']
       });
+  });
+
+  it('should generate external metrics ids module', () => {
+    buildService.init().then(() => {}, () => {});
+    expect(externalMetricsIdsModuleGenerator.init).toHaveBeenCalledWith({
+      googleAnalyticsId: '123'
+    });
   });
 
   it('should generate webapp html index', done => {
@@ -123,6 +134,7 @@ describe('Build Service', () => {
   });
 
   it('should not generate documentation if build is already watching docs changes', () => {
+    console.log = jest.fn();
     stubFileChange();
     buildService.init().then(() => {
       expect(docsGenerator.init.mock.calls.length).toEqual(1);
@@ -130,6 +142,7 @@ describe('Build Service', () => {
   });
 
   it('should log documentation update', () => {
+    console.log = jest.fn();
     stubFileChange();
     buildService.init().then(() => {
       expect(console.log).toHaveBeenCalledWith('Updating docs...');

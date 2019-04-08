@@ -30,6 +30,7 @@ module.exports = {
   },
   resolve: {
     alias: {
+      '@data': `${__dirname}/${project.data.source.root}`,
       '@scripts': `${__dirname}/${project.scripts.source.root}`,
       '@styles': `${__dirname}/${project.styles.source.root}`
     }

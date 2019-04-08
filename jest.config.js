@@ -12,6 +12,7 @@ module.exports = {
     }
   },
   'moduleNameMapper': {
+    '@data\/(.*)$': `<rootDir>/${project.data.source.root}$1`,
     '@scripts\/(.*)$': `<rootDir>/${project.scripts.source.root}$1`,
     '@styles\/(.*)$': `<rootDir>/${project.styles.source.root}$1`,
     '@images\/(.*)$': `<rootDir>/${project.images.source.root}$1`,
