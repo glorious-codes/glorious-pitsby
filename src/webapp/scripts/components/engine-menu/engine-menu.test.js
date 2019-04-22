@@ -18,9 +18,9 @@ describe('Engine Menu', () => {
     angular.mock.module('pitsby-app');
     inject($injector => {
       routeService = $injector.get('routeService');
-      compile = () => {
+      compile = bindings => {
         const $componentController = $injector.get('$componentController');
-        return $componentController('pEngineMenu');
+        return $componentController('pEngineMenu', {}, bindings);
       };
     });
     routeService.go = jest.fn();
@@ -40,6 +40,25 @@ describe('Engine Menu', () => {
     stubGetProjects('success', projectsMock);
     controller.$onInit();
     expect(controller.projects).toEqual(projectsMock);
+  });
+
+  it('should execute load complete callback on fetch complete if callback has been provided', () => {
+    const onLoadComplete = jest.fn();
+    const projectsMock = mockProjects();
+    const controller = compile({ onLoadComplete });
+    stubGetProjects('success', projectsMock);
+    controller.$onInit();
+    expect(onLoadComplete).toHaveBeenCalledWith(projectsMock);
+  });
+
+  it('should not execute load complete callback on fetch complete if callback has not been provided', () => {
+    const onLoadComplete = jest.fn();
+    const projectsMock = mockProjects();
+    const controller = compile({ onLoadComplete });
+    stubGetProjects('success', projectsMock);
+    delete controller.onLoadComplete;
+    controller.$onInit();
+    expect(onLoadComplete).not.toHaveBeenCalledWith(projectsMock);
   });
 
   it('should show engine menu if more than one project is found', () => {

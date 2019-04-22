@@ -1,7 +1,15 @@
+@require '_variables'
+
 .p-external-component-properties-list
-  .p-list
-    margin-top 20px
+  p-list-item
+    &:not(:first-child)
+      border-top 1px solid $color-grey-semi-light
+  .p-row-item-label
+    font-size $font-size-xxxs
+    font-weight 600
+    text-transform uppercase
   .p-row-item-value
-    font-family monospace
+    font-family $font-family-secondary
+    font-size $font-size-xxs
     white-space normal
     overflow visible

@@ -2,17 +2,15 @@
 @require '_mixins'
 
 active()
-  padding-left 15px
-  background-color $color-lightest
-  border-left-width 1px
+  background-color $color-grey-light
 
 .p-external-components-list
   p-list-item
+    padding 12px 30px
     cursor pointer
     border-left-color $color-primary
     border-left-style solid
     border-left-width 0
-    border-radius(0 3px 3px 0)
     box-sizing(border-box)
     transition(all, 300ms)
     unselectable()
@@ -20,5 +18,8 @@ active()
       active()
     &.p-external-components-list-item-active
       active()
+      padding-left 27px
+      font-weight 600
+      border-left-width 3px
       cursor default
       pointer-events none

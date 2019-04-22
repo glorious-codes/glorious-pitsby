@@ -1,30 +1,38 @@
 @require '_variables'
 @require '_mixins'
 
+.p-engine-menu-container
+  background-color alpha($color-lightest, .9)
+  border-bottom 1px solid $color-grey-semi-light
+  clearfix()
+
 .p-engine-menu
-  margin 9.5px 0 0
+  position relative
+  left 50%
+  bottom -1px
+  float left
+  margin 0
   padding 0
   list-style-type none
-  clearfix()
+  transform('translateX(-50%)')
 
 .p-engine-menu-item
   float left
-  margin-left 20px
 
 .p-engine-menu-link
-  position relative
+  display inline-block
+  padding 20px
+  min-width 120px
   color $color-grey
+  text-align center
+  font-size $font-size-xxs
+  font-weight 600
   text-decoration none
-  text-transform capitalize
+  text-transform uppercase
+  border-bottom-width 3px
+  border-bottom-style solid
+  border-bottom-color $color-grey
+  box-sizing(border-box)
   &.p-engine-menu-link-active
     color $color-blue
-    &:after
-      position absolute
-      content ' '
-      top 38px
-      left 50%
-      width 6px
-      height 6px
-      background-color $color-blue
-      border-radius(3px)
-      transform('translate(-50%,50%)')
+    border-bottom-color $color-blue

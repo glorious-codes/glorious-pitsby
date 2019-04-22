@@ -1,7 +1,6 @@
 import angular from 'angular';
 import alert from '@scripts/components/alert/alert';
 import btn from '@scripts/components/btn/btn';
-import container from '@scripts/components/container/container';
 import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
@@ -14,19 +13,20 @@ import heading from '@scripts/components/heading/heading';
 import listItem from '@scripts/components/list-item/list-item';
 import list from '@scripts/components/list/list';
 import loader from '@scripts/components/loader/loader';
+import logo from '@scripts/components/logo/logo';
+import main from '@scripts/components/main/main';
 import requester from '@scripts/components/requester/requester';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
+import sidebar from '@scripts/components/sidebar/sidebar';
 import tabs from '@scripts/components/tabs/tabs';
 import tab from '@scripts/components/tab/tab';
-import topbar from '@scripts/components/topbar/topbar';
 import viewport from '@scripts/components/viewport/viewport';
 import welcome from '@scripts/components/welcome/welcome';
 
 export default angular.module('pitsby-components', [])
   .component('pAlert', alert)
   .component('pBtn', btn)
-  .component('pContainer', container)
   .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
   .component('pExternalComponentExample', externalComponentExample)
@@ -39,12 +39,14 @@ export default angular.module('pitsby-components', [])
   .component('pList', list)
   .component('pListItem', listItem)
   .component('pLoader', loader)
+  .component('pLogo', logo)
+  .component('pMain', main)
   .component('pRequester', requester)
   .component('pRow', row)
   .component('pRowItem', rowItem)
+  .component('pSidebar', sidebar)
   .component('pTabs', tabs)
   .component('pTab', tab)
-  .component('pTopbar', topbar)
   .component('pViewport', viewport)
   .component('pWelcome', welcome)
   .name;

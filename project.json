@@ -37,6 +37,11 @@
       "root": "images/[name].[ext]"
     }
   },
+  "favicon": {
+    "source": {
+      "file": "src/webapp/images/favicon-pitsby.png"
+    }
+  },
   "data": {
     "source": {
       "root": "src/webapp/data/",

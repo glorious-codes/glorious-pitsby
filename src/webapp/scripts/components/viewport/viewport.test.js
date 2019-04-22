@@ -19,16 +19,6 @@ describe('Viewport', () => {
     expect(element.find('div').attr('class')).toEqual('p-viewport');
   });
 
-  it('should contain a topbar', () => {
-    const element = compile();
-    expect(element.find('p-topbar')).toBeDefined();
-  });
-
-  it('should contain a container', () => {
-    const element = compile();
-    expect(element.find('p-container')).toBeDefined();
-  });
-
   it('should transclude some content', () => {
     const element = compile('<p>Hello!</p>');
     expect(element.find('p').text()).toEqual('Hello!');

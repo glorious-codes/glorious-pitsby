@@ -10,9 +10,7 @@ function controller(routeService) {
   };
 
   function fetchProjects(){
-    projectsResource.get().then(onFetchProjectsSuccess, err => {
-      console.log('Failed to get projects', err);
-    });
+    projectsResource.get().then(onFetchProjectsSuccess, onFetchProjectsError);
   }
 
   function onFetchProjectsSuccess(projects){
@@ -20,6 +18,17 @@ function controller(routeService) {
     configMenuVisibility(projects);
     if(!isNoProjectSelected())
       selectProject(projects[0]);
+    onFetchProjectsComplete(projects);
+  }
+
+  function onFetchProjectsError(err){
+    console.log('Failed to get projects', err);
+    onFetchProjectsComplete();
+  }
+
+  function onFetchProjectsComplete(projects){
+    if($ctrl.onLoadComplete)
+      $ctrl.onLoadComplete(projects);
   }
 
   function setProjects(projects){
@@ -49,6 +58,9 @@ function controller(routeService) {
 controller.$inject = ['routeService'];
 
 export default {
+  bindings: {
+    onLoadComplete: '<'
+  },
   controller,
   template
 };
