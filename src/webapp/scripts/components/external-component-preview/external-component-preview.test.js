@@ -1,4 +1,5 @@
 import jsonService from '../../../../cli/services/json';
+import vueComponentBuilder from '@scripts/services/vue-component-builder';
 
 describe('External Component Preview', () => {
   let compile, angularComponentBuilder;
@@ -29,7 +30,7 @@ describe('External Component Preview', () => {
       angularComponentBuilder.build = jest.fn((component = {}) => {
         return angular.element(component.template || '<p></p>');
       });
-      console.log = jest.fn();
+      vueComponentBuilder.build = jest.fn();
     });
   });
 
@@ -45,12 +46,21 @@ describe('External Component Preview', () => {
   });
 
   it('should build an angular component if angular is the engine of the example', () => {
-    const exampleMock = mockExample();
-    const element = compile({engine: 'angular', example: exampleMock});
+    const element = compile({engine: 'angular', example: mockExample()});
     expect(element.find('p').text()).toEqual('Hello!');
   });
 
-  // it('should build a vue component if vue is the engine of the example', () => {
-  //
-  // });
+  it('should build a vue component if vue is the engine of the example', () => {
+    const exampleMock = mockExample();
+    const element = compile({engine: 'vue', example: exampleMock});
+    expect(vueComponentBuilder.build).toHaveBeenCalledWith(exampleMock, element.find('div')[0]);
+  });
+
+  it('should append example styles if example contains styles', () => {
+    const stylesMock = 'p { color: red }';
+    const exampleMock = mockExample();
+    exampleMock.styles = stylesMock;
+    const element = compile({engine: 'angular', example: exampleMock});
+    expect(element.find('style')[0].innerHTML).toEqual(stylesMock);
+  });
 });
