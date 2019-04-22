@@ -1,19 +1,18 @@
 import '@styles/main.styl';
+import projectsResource from '@scripts/resources/projects';
 import template from './main.html';
 
 function controller(){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    setTopOffsetCssClass(buildTopOffsetCssClass());
+    projectsResource.get().then(projects => {
+      setTopOffsetCssClass(buildTopOffsetCssClass(projects));
+    }, err => console.log('Failed to get projects', err));
   };
 
-  function buildTopOffsetCssClass(){
-    return hasEngineMenu() ? 'p-main-top-offset' : '';
-  }
-
-  function hasEngineMenu(){
-    return document.querySelector('[data-engine-menu-container]');
+  function buildTopOffsetCssClass(projects){
+    return projects && projects.length > 1 ? 'p-main-top-offset' : '';
   }
 
   function setTopOffsetCssClass(cssClass){
