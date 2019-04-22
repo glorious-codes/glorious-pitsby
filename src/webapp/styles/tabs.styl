@@ -2,22 +2,26 @@
 @require '_mixins'
 
 .p-tabs-bar
-  border-bottom 1px solid $color-grey
+  border-bottom 3px solid $color-grey-semi-light
   clearfix()
 
 .p-tabs-bar-item
   position relative
-  bottom -1px
+  bottom -3px
   float left
   padding 10px
+  color $color-grey
   font-size $font-size-xxxs
+  font-weight 600
   text-transform uppercase
   cursor pointer
-  opacity .5
+  border-bottom-width 3px
+  border-bottom-style solid
+  border-bottom-color $color-grey
   unselectable()
   &.p-tabs-bar-item-active
-    border-bottom 1px solid $color-primary
-    opacity 1
+    color $color-blue
+    border-bottom-color $color-primary
 
 .p-tabs-content
   padding 30px

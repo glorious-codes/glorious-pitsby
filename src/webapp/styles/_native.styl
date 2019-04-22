@@ -1,16 +1,14 @@
-@import url('https://rsms.me/inter/inter.css');
 @require '_variables'
 @require '_mixins'
 
 html,
 body
-  background-color $color-grey-light
   color $color-darkest
   font-weight 300
 
 body
   margin 0
-  font-family 'Inter', Helvetica, Arial, sans-serif
+  font-family $font-family-primary
 
 h1, h2, h3, h4, h5, h6
   font-weight 500
@@ -23,3 +21,5 @@ p
 
 pre
   margin 0
+  font-family $font-family-secondary
+  font-size $font-size-xxs

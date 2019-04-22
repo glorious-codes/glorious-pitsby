@@ -5,31 +5,10 @@
   h1, h2, h3, h4, h5, h6
     position relative
     margin 0
-    padding-left 15px
+    font-weight 600
     box-sizing(border-box)
-    &:before
-      position absolute
-      content ''
-      top 50%
-      left 0
-      width 4px
-      height 5px
-      background-color $color-primary
-      transform('translate(0, 130%)')
+  h3
+    font-size $font-size-md
+    text-transform uppercase
   h4, h5, h6
     font-weight normal
-  h2
-    &:before
-      transform('translate(0, 65%)')
-  h3
-    &:before
-      transform('translate(0, 20%)')
-  h4
-    &:before
-      transform('translate(0, 10%)')
-  h5
-    &:before
-      transform('translate(0, -25%)')
-  h6
-    &:before
-      transform('translate(0, -25%)')

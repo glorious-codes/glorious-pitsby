@@ -1,6 +1,23 @@
 @require '_variables'
 @require '_mixins'
+@require 'sidebar'
+
+horizontal-offset()
+  margin-left $sidebar-max-width
+  width 'calc(100% - %s)' % $sidebar-max-width
 
 .p-viewport
   position relative
-  padding 100px 0 50px
+  .p-logo
+    margin 50px 30px
+  .p-main
+    horizontal-offset()
+  .p-engine-menu-container
+    position fixed
+    top 0
+    left 0
+    z-index $layer-low
+    horizontal-offset()
+  .p-external-component
+    padding 30px
+    box-sizing(border-box)
