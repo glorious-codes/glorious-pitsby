@@ -6,11 +6,11 @@ function controller(routeService) {
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    fetchProjects();
+    fetchProjects().then(onFetchProjectsSuccess, onFetchProjectsError);
   };
 
   function fetchProjects(){
-    projectsResource.get().then(onFetchProjectsSuccess, onFetchProjectsError);
+    return projectsResource.get();
   }
 
   function onFetchProjectsSuccess(projects){
