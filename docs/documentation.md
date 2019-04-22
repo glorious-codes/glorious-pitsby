@@ -42,7 +42,11 @@ module.exports = {
       <my-button
         ng-click="$ctrl.greet()"
         ng-bind="$ctrl.label">
-      </my-button>`
+      </my-button>`,
+      // Sometimes you need to customize styles for documentation purpose only.
+      // Use this attribute to target some styles for your example:
+      styles: `
+      .my-button { color: red; }`
     }
   ]
   // Vue Examples should be written like below:
@@ -65,7 +69,11 @@ module.exports = {
       template: `
       <my-button @click="greet">
         {{ label }}
-      </my-button>`
+      </my-button>`,
+      // Sometimes you need to customize styles for documentation purpose only.
+      // Use this attribute to target some styles for your example:
+      styles: `
+      .my-button { color: red; }`
     }
   ]
 };
