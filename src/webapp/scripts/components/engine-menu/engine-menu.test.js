@@ -42,25 +42,6 @@ describe('Engine Menu', () => {
     expect(controller.projects).toEqual(projectsMock);
   });
 
-  it('should execute load complete callback on fetch complete if callback has been provided', () => {
-    const onLoadComplete = jest.fn();
-    const projectsMock = mockProjects();
-    const controller = compile({ onLoadComplete });
-    stubGetProjects('success', projectsMock);
-    controller.$onInit();
-    expect(onLoadComplete).toHaveBeenCalledWith(projectsMock);
-  });
-
-  it('should not execute load complete callback on fetch complete if callback has not been provided', () => {
-    const onLoadComplete = jest.fn();
-    const projectsMock = mockProjects();
-    const controller = compile({ onLoadComplete });
-    stubGetProjects('success', projectsMock);
-    delete controller.onLoadComplete;
-    controller.$onInit();
-    expect(onLoadComplete).not.toHaveBeenCalledWith(projectsMock);
-  });
-
   it('should show engine menu if more than one project is found', () => {
     const controller = compile();
     stubGetProjects('success', mockProjects());

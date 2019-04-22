@@ -14,6 +14,12 @@ describe('Main', () => {
     });
   });
 
+  afterEach(() => {
+    const fakeEngineMenuElement = document.querySelector('[data-engine-menu-container]');
+    if(fakeEngineMenuElement)
+      fakeEngineMenuElement.remove();
+  });
+
   it('should have appropriate css class', () => {
     const element = compile();
     expect(element.find('main').attr('class').trim()).toEqual('p-main');
@@ -29,19 +35,16 @@ describe('Main', () => {
     expect(element.find('p').text()).toEqual('Hello!');
   });
 
-  it('should set additional top margin to main content if engine menu has more than one engine', () => {
-    const engines = [{engine: 'angular'}, {engine: 'vue'}];
+  it('should set additional top margin to main content if engine menu is visible', () => {
+    const fakeEngineMenuElement = document.createElement('div');
+    fakeEngineMenuElement.setAttribute('data-engine-menu-container', '');
+    document.body.appendChild(fakeEngineMenuElement);
     const element = compile();
-    element.isolateScope().$ctrl.onEngineMenuLoadComplete(engines);
-    element.isolateScope().$digest();
     expect(element.find('main').hasClass('p-main-top-offset')).toEqual(true);
   });
 
-  it('should not set additional top margin to main content if engine menu has only one engine', () => {
-    const engines = [{engine: 'angular'}];
+  it('should not set additional top margin to main content if engine menu is not visible', () => {
     const element = compile();
-    element.isolateScope().$ctrl.onEngineMenuLoadComplete(engines);
-    element.isolateScope().$digest();
     expect(element.find('main').hasClass('p-main-top-offset')).toEqual(false);
   });
 });
