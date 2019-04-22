@@ -38,6 +38,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: project.index.source.file,
+      favicon: project.favicon.source.file,
       minify: {
         collapseWhitespace: true
       }
