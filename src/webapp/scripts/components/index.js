@@ -21,7 +21,6 @@ import rowItem from '@scripts/components/row-item/row-item';
 import sidebar from '@scripts/components/sidebar/sidebar';
 import tabs from '@scripts/components/tabs/tabs';
 import tab from '@scripts/components/tab/tab';
-import topbar from '@scripts/components/topbar/topbar';
 import viewport from '@scripts/components/viewport/viewport';
 import welcome from '@scripts/components/welcome/welcome';
 
@@ -48,7 +47,6 @@ export default angular.module('pitsby-components', [])
   .component('pSidebar', sidebar)
   .component('pTabs', tabs)
   .component('pTab', tab)
-  .component('pTopbar', topbar)
   .component('pViewport', viewport)
   .component('pWelcome', welcome)
   .name;
