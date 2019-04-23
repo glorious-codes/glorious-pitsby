@@ -29,28 +29,8 @@ describe('Main', () => {
     expect(element.find('main').attr('class').trim()).toEqual('p-main');
   });
 
-  it('should set top offset if project has more than one engine on initialize', () => {
-    stubGetProjects('success', [{engine: 'angular'}, {engine: 'vue'}]);
-    const element = compile();
-    expect(element.find('main').hasClass('p-main-top-offset')).toEqual(true);
-  });
-
-  it('should not set top offset if project has only one engine on initialize', () => {
-    stubGetProjects('success', [{engine: 'angular'}]);
-    const element = compile();
-    expect(element.find('main').hasClass('p-main-top-offset')).toEqual(false);
-  });
-
   it('should transclude some content', () => {
     const element = compile('<p>Hello!</p>');
     expect(element.find('p').text()).toEqual('Hello!');
-  });
-
-  it('should log error on get projects error', () => {
-    console.log = jest.fn();
-    const err = {some: 'error'};
-    stubGetProjects('error', err);
-    compile();
-    expect(console.log).toHaveBeenCalledWith('Failed to get projects', err);
   });
 });
