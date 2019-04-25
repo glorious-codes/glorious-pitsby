@@ -1,5 +1,5 @@
 describe('Loader', () => {
-  let compile, element;
+  let compile;
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
@@ -7,14 +7,15 @@ describe('Loader', () => {
       const scope = $rootScope.$new(true);
       compile = () => {
         const template = '<p-loader></p-loader>';
-        element = $compile(template)(scope);
+        const element = $compile(template)(scope);
         scope.$digest();
+        return element;
       };
     });
   });
 
   it('should have appropriate css class', () => {
-    compile();
+    const element = compile();
     expect(element.find('div').attr('class')).toEqual('p-loader');
   });
 });
