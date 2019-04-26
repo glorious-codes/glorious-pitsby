@@ -19,6 +19,7 @@ import requester from '@scripts/components/requester/requester';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
 import sidebar from '@scripts/components/sidebar/sidebar';
+import searchInput from '@scripts/components/search-input/search-input';
 import tabs from '@scripts/components/tabs/tabs';
 import tab from '@scripts/components/tab/tab';
 import viewport from '@scripts/components/viewport/viewport';
@@ -45,6 +46,7 @@ export default angular.module('pitsby-components', [])
   .component('pRow', row)
   .component('pRowItem', rowItem)
   .component('pSidebar', sidebar)
+  .component('pSearchInput', searchInput)
   .component('pTabs', tabs)
   .component('pTab', tab)
   .component('pViewport', viewport)
