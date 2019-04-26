@@ -2,26 +2,24 @@
 @require '_mixins'
 
 .p-engine-menu-container
+  padding 0 30px
   border-bottom 1px solid alpha($color-grey, .5)
   clearfix()
 
 .p-engine-menu
   position relative
-  left 50%
   bottom -1px
-  float left
   margin 0
   padding 0
   list-style-type none
-  transform('translateX(-50%)')
+  clearfix()
 
 .p-engine-menu-item
   float left
 
 .p-engine-menu-link
-  display inline-block
+  display block
   padding 20px
-  min-width 120px
   color $color-grey
   text-align center
   font-size $font-size-xxs
@@ -32,6 +30,10 @@
   border-bottom-style solid
   border-bottom-color $color-grey
   box-sizing(border-box)
+  &:focus
+    outline 0
+    background-color alpha($color-lightest, .25)
+    border-radius(6px 6px 0 0)
   &.p-engine-menu-link-active
     color $color-blue
     border-bottom-color $color-blue

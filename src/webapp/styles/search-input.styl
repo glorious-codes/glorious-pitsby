@@ -1,0 +1,24 @@
+@require '_variables'
+@require '_mixins'
+
+.p-search-input
+  position relative
+  display block
+  +placeholder()
+    color $color-grey
+    font-size $font-size-xxs
+    text-transform uppercase
+    font-weight 600
+  .p-search-input-icon
+    position absolute
+    top 10px
+    right 20px
+    width 20px
+    height 20px
+    background-repeat no-repeat
+    background-size 75%
+    background-position center
+    background-image('magnifying-glass.svg')
+  input
+    width 100%
+    padding-right 60px

@@ -11,6 +11,7 @@ function controller() {
 
   function onFetchProjectsSuccess(projects){
     setProjects(projects);
+    setItemsWidth(buildItemsWidth(projects.length));
     configMenuVisibility(projects);
   }
 
@@ -20,6 +21,14 @@ function controller() {
 
   function setProjects(projects){
     $ctrl.projects = projects;
+  }
+
+  function buildItemsWidth(numberOfProjects){
+    return `${parseFloat(100 / numberOfProjects).toFixed(3)}%`;
+  }
+
+  function setItemsWidth(width){
+    $ctrl.itemsWidth = width;
   }
 
   function configMenuVisibility(projects){

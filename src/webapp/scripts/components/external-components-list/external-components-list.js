@@ -11,6 +11,7 @@ function controller (routeService){
 
   $ctrl.fetchSuccess = components => {
     setComponents(components);
+    setFilteredComponents(components);
   };
 
   $ctrl.onExternalComponentsListItemClick = component => {
@@ -26,8 +27,22 @@ function controller (routeService){
     return routeService.getParams('componentId') === component.id;
   };
 
+  $ctrl.onSearchTermChange = term => {
+    setFilteredComponents(filterComponentsByTerm($ctrl.components, term));
+  };
+
   function setComponents(components){
     $ctrl.components = components;
+  }
+
+  function filterComponentsByTerm(components, term){
+    return !term ? components : components.filter(component => {
+      return component.name.toLowerCase().includes(term.toLowerCase());
+    });
+  }
+
+  function setFilteredComponents(components){
+    $ctrl.filteredComponents = components;
   }
 }
 
