@@ -39,6 +39,14 @@ describe('Engine Menu', () => {
     expect(controller.projects).toEqual(projectsMock);
   });
 
+  it('should set items width on get projects success', () => {
+    const projectsMock = mockProjects();
+    const controller = compile();
+    stubGetProjects('success', projectsMock);
+    controller.$onInit();
+    expect(controller.itemsWidth).toEqual('50.000%');
+  });
+
   it('should show engine menu if more than one project is found', () => {
     const controller = compile();
     stubGetProjects('success', mockProjects());
