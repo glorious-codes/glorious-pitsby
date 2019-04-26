@@ -48,6 +48,13 @@ describe('External Components List', () => {
     expect(controller.components).toEqual(componentsMock);
   });
 
+  it('should set filtered components on fetch success', () => {
+    const componentsMock = [{some: 'component'}];
+    const controller = instantiateController();
+    controller.fetchSuccess(componentsMock);
+    expect(controller.filteredComponents).toEqual(componentsMock);
+  });
+
   it('should go to the external component route on list item click', () => {
     const controller = instantiateController();
     routeService.go = jest.fn();
@@ -69,5 +76,21 @@ describe('External Components List', () => {
     expect(isActive).toEqual(true);
     isActive = controller.isActiveListItem({id: 'card'});
     expect(isActive).toEqual(false);
+  });
+
+  it('should filter components list by component name', () => {
+    const componentsMock = [{name: 'Button'}, {name: 'Input'}];
+    const controller = instantiateController();
+    controller.fetchSuccess(componentsMock);
+    controller.onSearchTermChange('But');
+    expect(controller.filteredComponents).toEqual([{name: 'Button'}]);
+  });
+
+  it('should show all components when search term is cleared', () => {
+    const componentsMock = [{name: 'Button'}, {name: 'Input'}];
+    const controller = instantiateController();
+    controller.fetchSuccess(componentsMock);
+    controller.onSearchTermChange('');
+    expect(controller.filteredComponents).toEqual(componentsMock);
   });
 });
