@@ -4,11 +4,16 @@ function engineRedirectionService(routeService){
   const _public = {};
 
   _public.init = () => {
-    projectsResource.get().then(redirect, onGetProjectsError);
+    projectsResource.get().then(onGetProjectsSuccess, onGetProjectsError);
   };
 
   function onGetProjectsError(err){
     console.log('Failed to redirect to the appropriate engine', err);
+  }
+
+  function onGetProjectsSuccess(projects){
+    if(!routeService.getParams('engine'))
+      redirect(projects);
   }
 
   function redirect(projects){
