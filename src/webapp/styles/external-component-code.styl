@@ -1,0 +1,24 @@
+@require '_variables'
+
+.p-external-component-code
+  color alpha($color-darkest, .9)
+  line-height 1.5
+  .token
+    &.keyword
+      color $color-clay
+    &.function,
+    &.attr-value
+      color $color-blue-semi-dark
+    &.string,
+    &.attr-name
+      color $color-green
+    &.class-name
+      color $color-purple
+    &.tag
+      color $color-clay
+    &.number
+      color $color-orange
+    &.operator
+      color $color-clay
+    &.punctuation
+      color alpha($color-darkest, .7)
