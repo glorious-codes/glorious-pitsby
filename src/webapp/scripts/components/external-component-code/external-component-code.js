@@ -1,3 +1,4 @@
+import '@styles/external-component-code.styl';
 import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
 import codeIndentationService from '@scripts/services/code-indentation';
