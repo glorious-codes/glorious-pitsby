@@ -1,10 +1,10 @@
 const _public = {};
 
-_public.improveStringifiedCodeSyntax = (code = '', language) => {
+_public.improve = (code = '') => {
   let improvedText = removeBreaklineMarks(code);
   improvedText = removeCharacterEscaping(improvedText);
   improvedText = deduplicateFunctionNames(improvedText);
-  improvedText = removeQuotesAroundFunctions(improvedText, language);
+  improvedText = removeQuotesAroundFunctions(improvedText);
   return shorthandFunctions(improvedText);
 };
 
@@ -20,11 +20,9 @@ function deduplicateFunctionNames(text){
   return text.replace(/"(.*)": "(.*)\((.*){/g, '"$1": "function ($3{');
 }
 
-function removeQuotesAroundFunctions(text, language){
-  if(language == 'javascript')
-    return  text.replace(/"function/g, 'function')
-      .replace(/}"/g, '}');
-  return text;
+function removeQuotesAroundFunctions(text){
+  return  text.replace(/"function/g, 'function')
+    .replace(/}"/g, '}');
 }
 
 function shorthandFunctions(text){

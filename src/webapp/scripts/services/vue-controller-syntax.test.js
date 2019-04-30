@@ -1,9 +1,9 @@
-import codeService from './code';
+import vueControllerSyntaxService from './vue-controller-syntax';
 
-describe('Code Service', () => {
+describe('Vue Controller Syntax Service', () => {
   it('should remove breakline marks', () => {
     const code = 'function () {\\n alert("Hello!");\\n}';
-    const improvedText = codeService.improveStringifiedCodeSyntax(code, 'javascript');
+    const improvedText = vueControllerSyntaxService.improve(code, 'javascript');
     expect(improvedText).toEqual(`function () {
  alert("Hello!");
 }`);
@@ -11,7 +11,7 @@ describe('Code Service', () => {
 
   it('should remove character escaping', () => {
     const code = 'function () { alert(\\"Hello!\\"); }';
-    const improvedText = codeService.improveStringifiedCodeSyntax(code, 'javascript');
+    const improvedText = vueControllerSyntaxService.improve(code, 'javascript');
     expect(improvedText).toEqual('function () { alert("Hello!"); }');
   });
 
@@ -21,7 +21,7 @@ describe('Code Service', () => {
     "greet": "greet() { alert('Hello!'); }"
   }
 }`;
-    const improvedText = codeService.improveStringifiedCodeSyntax(code, 'javascript');
+    const improvedText = vueControllerSyntaxService.improve(code, 'javascript');
     expect(improvedText).toEqual(`{
   "methods": {
     greet() { alert('Hello!'); }
@@ -37,7 +37,7 @@ describe('Code Service', () => {
     }"
   }
 }`;
-    const improvedText = codeService.improveStringifiedCodeSyntax(code, 'javascript');
+    const improvedText = vueControllerSyntaxService.improve(code, 'javascript');
     expect(improvedText).toEqual(`{
   "methods": {
     greet() {
@@ -48,6 +48,6 @@ describe('Code Service', () => {
   });
 
   it('should return empty string if no code has been provided', () => {
-    expect(codeService.improveStringifiedCodeSyntax()).toEqual('');
+    expect(vueControllerSyntaxService.improve()).toEqual('');
   });
 });

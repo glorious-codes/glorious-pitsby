@@ -13,19 +13,4 @@ third line`);
     const text = 'first line';
     expect(textService.removeBlankFirstLine(text)).toEqual('first line');
   });
-
-  it('should normalize indentation', () => {
-    const markup = `
-      <div class="parent">
-        <div class="child"></div>
-      </div>`;
-    expect(textService.normalizeIndentation(markup)).toEqual(`<div class="parent">
-  <div class="child"></div>
-</div>`);
-  });
-
-  it('should do nothing when indentation is already normalized', () => {
-    const markup = '<p>Hello</p>';
-    expect(textService.normalizeIndentation(markup)).toEqual(markup);
-  });
 });
