@@ -12,6 +12,10 @@ describe('Engine Redirection Service', () => {
     projectsResource.get = jest.fn(() => new PromiseMock(responseType, response));
   }
 
+  function stubGetRouteParams(params = {}){
+    routeService.getParams = jest.fn((param) => params[param]);
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject($injector => {
@@ -19,6 +23,7 @@ describe('Engine Redirection Service', () => {
       routeService = $injector.get('routeService');
     });
     routeService.go = jest.fn();
+    stubGetRouteParams();
     stubGetProject('success', mockProjects());
   });
 
@@ -32,6 +37,12 @@ describe('Engine Redirection Service', () => {
     expect(routeService.go).toHaveBeenCalledWith('app.external-components', {
       engine: 'angular'
     });
+  });
+
+  it('should not redirect to the appropriate components on get projects success if it was already redirected', () => {
+    stubGetRouteParams({engine: 'angular'});
+    service.init();
+    expect(routeService.go).not.toHaveBeenCalled();
   });
 
   it('should log error on get projects error', () => {

@@ -1,6 +1,7 @@
 import Prism from 'prismjs';
-import codeService from '@scripts/services/code';
-import textService from '@scripts/services/text';
+import codeIndentationService from '@scripts/services/code-indentation';
+import vueControllerIndentationService from '@scripts/services/vue-controller-indentation';
+import vueControllerSyntaxService from '@scripts/services/vue-controller-syntax';
 
 describe('External Component Code', () => {
   let compile;
@@ -24,8 +25,9 @@ describe('External Component Code', () => {
         return element;
       };
     });
-    codeService.improveStringifiedCodeSyntax = jest.fn(code => code);
-    textService.normalizeIndentation = jest.fn(code => code);
+    codeIndentationService.normalize = jest.fn(code => code);
+    vueControllerSyntaxService.improve = jest.fn(code => code);
+    vueControllerIndentationService.normalize = jest.fn(code => code);
   });
 
   it('should have appropriate css class', () => {
@@ -34,11 +36,11 @@ describe('External Component Code', () => {
     expect(element.find('div').attr('class')).toEqual('p-external-component-code');
   });
 
-  it('should improve stringified code syntax', () => {
+  it('should normalize code indentation', () => {
     const code = 'function () {}';
-    const language = 'javascript';
-    compile({code, language});
-    expect(codeService.improveStringifiedCodeSyntax).toHaveBeenCalledWith(code, language);
+    stubPrism(code);
+    compile({ code });
+    expect(codeIndentationService.normalize).toHaveBeenCalledWith(code);
   });
 
   it('should render component template code into pre element', () => {
@@ -49,7 +51,7 @@ describe('External Component Code', () => {
     expect(element.find('pre')[0].innerHTML).toEqual(code);
   });
 
-  it('should render component controller code into pre element', () => {
+  it('should render Angular controller code into pre element', () => {
     const code = 'function(){}';
     stubPrism(code);
     const element = compile({code, language: 'javascript'});
@@ -57,12 +59,17 @@ describe('External Component Code', () => {
     expect(element.find('pre')[0].innerHTML).toEqual(code);
   });
 
-  it('should render component controller code into pre element when controller is a plain object', () => {
-    const controller = {methods: {greet: 'function () { alert("Hello!"); }'}};
-    const stringifiedController = JSON.stringify(controller, null, 2);
-    stubPrism(stringifiedController);
-    const element = compile({code: controller, language: 'javascript'});
-    expect(Prism.highlight).toHaveBeenCalledWith(stringifiedController, Prism.languages.javascript, 'javascript');
-    expect(element.find('pre').text()).toEqual(stringifiedController);
+  it('should improve Vue controller syntax', () => {
+    const code = { data(){ return { user: 'Rafael' }; } };
+    stubPrism(code);
+    compile({ code });
+    expect(vueControllerSyntaxService.improve).toHaveBeenCalledWith(JSON.stringify(code, null, 2));
+  });
+
+  it('should normalize Vue controller indentation', () => {
+    const code = { data(){ return { user: 'Rafael' }; } };
+    stubPrism(code);
+    compile({ code });
+    expect(vueControllerIndentationService.normalize).toHaveBeenCalledWith(JSON.stringify(code, null, 2));
   });
 });

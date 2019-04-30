@@ -1,32 +1,35 @@
 import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
-import codeService from '@scripts/services/code';
-import textService from '@scripts/services/text';
+import codeIndentationService from '@scripts/services/code-indentation';
+import vueControllerIndentationService from '@scripts/services/vue-controller-indentation';
+import vueControllerSyntaxService from '@scripts/services/vue-controller-syntax';
 import template from './external-component-code.html';
 
 function controller($element){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    injectCodeIntoPreElement(formatCode($ctrl.code), $ctrl.language);
+    injectCodeIntoPreElement(highlightCode(formatCode($ctrl.code), $ctrl.language));
   };
 
   function formatCode(code){
-    return typeof code == 'object' ? JSON.stringify(code, null, 2) : code;
+    return typeof code == 'object' ?
+      normalizeVueControllerSyntax(JSON.stringify(code, null, 2)) :
+      codeIndentationService.normalize(code);
   }
 
-  function injectCodeIntoPreElement(code, language){
+  function normalizeVueControllerSyntax(stringifiedController){
+    const code = vueControllerSyntaxService.improve(stringifiedController);
+    return vueControllerIndentationService.normalize(code);
+  }
+
+  function injectCodeIntoPreElement(code){
     const preElement = $element.find('pre')[0];
-    const improvedCodeSyntax = codeService.improveStringifiedCodeSyntax(code, language);
-    preElement.innerHTML = highlightCode(improvedCodeSyntax, language);
+    preElement.innerHTML = code;
   }
 
   function highlightCode(code, language){
-    return Prism.highlight(
-      textService.normalizeIndentation(code),
-      Prism.languages[language],
-      language
-    );
+    return Prism.highlight(code, Prism.languages[language], language);
   }
 }
 
