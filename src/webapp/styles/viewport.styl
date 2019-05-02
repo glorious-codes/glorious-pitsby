@@ -4,9 +4,53 @@
 
 .p-viewport
   position relative
+  .p-topbar
+    position fixed
+    top -100%
+    left 0
+    padding 20px 30px
+    width 100%
+    z-index $layer-lowest
+    box-sizing(border-box)
+    transition(top, 300ms)
+    .p-logo
+      z-index $layer-low
+  .p-sidebar
+    position fixed
+    top 0
+    left 0
+    width 90%
+    height 100vh
+    z-index $layer-lowest
+    transition(all, 300ms)
+    .p-back-trigger
+      display none
   .p-main
     margin-left $sidebar-max-width
     width 'calc(100% - %s)' % $sidebar-max-width
+    transition(margin-left, 300ms)
   .p-external-component
     padding 60px 30px
     box-sizing(border-box)
+
++breakpoint('xs')
+  .p-viewport
+    .p-topbar
+      top 0
+    .p-sidebar
+      position fixed
+      top 0
+      left 0
+      box-shadow(3px 0 32px 0 alpha($color-darkest, 0))
+      transform('translateX(-100%)')
+      &.p-sidebar-visible
+        transform('translateX(0)')
+        box-shadow(3px 0 32px 0 alpha($color-darkest, .25))
+      .p-back-trigger
+        display block
+      .p-logo
+        display none
+    .p-main
+      margin-left 0
+      padding-top 60px
+      width 100%
