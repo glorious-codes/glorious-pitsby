@@ -21,6 +21,11 @@ describe('Viewport', () => {
     expect(element.find('div').attr('class')).toEqual('p-viewport');
   });
 
+  it('should contain a topbar', () => {
+    const element = compile();
+    expect(element.find('p-topbar').length).toEqual(1);
+  });
+
   it('should initialize engine redirection service on initialize', () => {
     compile();
     expect(engineRedirectionService.init).toHaveBeenCalled();
