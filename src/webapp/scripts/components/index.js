@@ -23,6 +23,7 @@ import sidebar from '@scripts/components/sidebar/sidebar';
 import searchInput from '@scripts/components/search-input/search-input';
 import tabs from '@scripts/components/tabs/tabs';
 import tab from '@scripts/components/tab/tab';
+import topbar from '@scripts/components/topbar/topbar';
 import trigger from '@scripts/components/trigger/trigger';
 import viewport from '@scripts/components/viewport/viewport';
 import welcome from '@scripts/components/welcome/welcome';
@@ -52,6 +53,7 @@ export default angular.module('pitsby-components', [])
   .component('pSearchInput', searchInput)
   .component('pTabs', tabs)
   .component('pTab', tab)
+  .component('pTopbar', topbar)
   .component('pTrigger', trigger)
   .component('pViewport', viewport)
   .component('pWelcome', welcome)
