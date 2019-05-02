@@ -15,12 +15,9 @@ function controller (routeService){
   };
 
   $ctrl.onExternalComponentsListItemClick = component => {
-    routeService.go('app.external-components.component', {
-      engine: routeService.getParams('engine'),
-      componentId: component.id
-    }, {
-      resetUrlPath: true
-    });
+    goToExternalComponentDetailsView(routeService.getParams('engine'), component.id);
+    if($ctrl.onListItemClick)
+      $ctrl.onListItemClick(component);
   };
 
   $ctrl.isActiveListItem = component => {
@@ -44,11 +41,20 @@ function controller (routeService){
   function setFilteredComponents(components){
     $ctrl.filteredComponents = components;
   }
+
+  function goToExternalComponentDetailsView(engine, componentId){
+    routeService.go('app.external-components.component', { engine, componentId }, {
+      resetUrlPath: true
+    });
+  }
 }
 
 controller.$inject = ['routeService'];
 
 export default {
+  bindings: {
+    onListItemClick: '<',
+  },
   controller,
   template
 };

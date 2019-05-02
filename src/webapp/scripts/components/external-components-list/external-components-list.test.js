@@ -21,8 +21,8 @@ describe('External Components List', () => {
         scope.$digest();
         return element;
       };
-      instantiateController = () => {
-        return $componentController('pExternalComponentsList');
+      instantiateController = bindings => {
+        return $componentController('pExternalComponentsList', {}, bindings);
       };
       routeService = $injector.get('routeService');
     });
@@ -65,6 +65,25 @@ describe('External Components List', () => {
     }, {
       resetUrlPath: true
     });
+  });
+
+  it('should execute click callback on list item click', () => {
+    const onListItemClick = jest.fn();
+    const listItem = {id: 'button'};
+    const controller = instantiateController({ onListItemClick });
+    routeService.go = jest.fn();
+    controller.onExternalComponentsListItemClick(listItem);
+    expect(onListItemClick).toHaveBeenCalledWith(listItem);
+  });
+
+  it('should not execute click callback on list item click if no callback has been provided', () => {
+    const onListItemClick = jest.fn();
+    const listItem = {id: 'button'};
+    const controller = instantiateController({ onListItemClick });
+    routeService.go = jest.fn();
+    delete controller.onListItemClick;
+    controller.onExternalComponentsListItemClick(listItem);
+    expect(onListItemClick).not.toHaveBeenCalled();
   });
 
   it('should identify the active list item', () => {
