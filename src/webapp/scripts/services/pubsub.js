@@ -23,9 +23,10 @@ _public.unsubscribe = subscriberId => {
 };
 
 _public.publish = (eventName, data) => {
-  for (var i = 0; i < subscribers.length; i++)
-    if(subscribers[i].eventName === eventName)
-      subscribers[i].callback(data);
+  subscribers.forEach(subscriber => {
+    if(subscriber.eventName === eventName)
+      subscriber.callback(data);
+  });
 };
 
 function areSubscribeArgumentsValid(eventName, callback){
@@ -36,7 +37,7 @@ function areSubscribeArgumentsValid(eventName, callback){
 function isArgumentValid(argument, argumentType, errorMessage){
   if(typeof argument === argumentType)
     return true;
-  return throwTopicRequiredError(errorMessage);
+  return throwInvalidArgumentError(errorMessage);
 }
 
 function addSubscriber({ eventName, callback }){
@@ -55,7 +56,7 @@ function getSubscriberIndex(subscriberId){
   });
 }
 
-function throwTopicRequiredError(message){
+function throwInvalidArgumentError(message){
   console.error(message);
 }
 
