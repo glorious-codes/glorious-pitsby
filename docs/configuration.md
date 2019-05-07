@@ -15,7 +15,9 @@ module.exports = {
     {
       engine: "vue",
       collectDocsFrom: "./src/vue",
-      importFrom: "./dist/my-vue-components"
+      importFrom: "./dist/my-vue-components",
+      // You may optionally declare some specific Vue version (Default: 2.5.13)
+      version: "2.6.0" 
     }
   ],
   styles: [
