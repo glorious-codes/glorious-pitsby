@@ -76,5 +76,24 @@ module.exports = {
       .my-button { color: red; }`
     }
   ]
+  // Vanilla Examples should be written like below:
+  examples: [
+    {
+      title: 'My Button Example',
+      description: 'This is an example using just vanilla javascript.'
+      controller: function(element){
+        const input = element.querySelector('input');
+        const button = element.querySelector('button');
+        button.addEventListener('click', () => window.alert(input.value));
+      },
+      template: `
+      <input type="text" />
+      <button class="my-button" type="button">Greet</button>`,
+      // Sometimes you need to customize styles for documentation purpose only.
+      // Use this attribute to target some styles for your example:
+      styles: `
+      .my-button { color: red; }`
+    }
+  ]
 };
 ```

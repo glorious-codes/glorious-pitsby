@@ -1,5 +1,5 @@
 # Pitsby
-> Docs generator for AngularJS and Vue components
+> Docs generator for AngularJS, Vue and Vanilla components.
 
 [![CircleCI](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master)
 [![codecov](https://codecov.io/gh/glorious-codes/glorious-pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/glorious-pitsby)
