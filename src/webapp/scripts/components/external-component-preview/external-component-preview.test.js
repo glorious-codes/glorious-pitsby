@@ -1,4 +1,5 @@
 import jsonService from '../../../../cli/services/json';
+import vanillaComponentBuilder from '@scripts/services/vanilla-component-builder';
 import vueComponentBuilder from '@scripts/services/vue-component-builder';
 
 describe('External Component Preview', () => {
@@ -9,6 +10,10 @@ describe('External Component Preview', () => {
       controller: 'function(){}',
       template: '<p>Hello!</p>'
     };
+  }
+
+  function mockBuiltComponentELement(component = {}){
+    return angular.element(component.template || '<p></p>');
   }
 
   beforeEach(() => {
@@ -27,9 +32,8 @@ describe('External Component Preview', () => {
         return element;
       };
       jsonService.parseFunctions = jest.fn(param => param);
-      angularComponentBuilder.build = jest.fn((component = {}) => {
-        return angular.element(component.template || '<p></p>');
-      });
+      angularComponentBuilder.build = jest.fn(mockBuiltComponentELement);
+      vanillaComponentBuilder.build = jest.fn(mockBuiltComponentELement);
       vueComponentBuilder.build = jest.fn();
     });
   });
@@ -54,6 +58,13 @@ describe('External Component Preview', () => {
     const exampleMock = mockExample();
     const element = compile({engine: 'vue', example: exampleMock});
     expect(vueComponentBuilder.build).toHaveBeenCalledWith(exampleMock, element.find('div')[0]);
+  });
+
+  it('should build a vanilla component if vanilla is the engine of the example', () => {
+    const exampleMock = mockExample();
+    const element = compile({engine: 'vanilla', example: exampleMock});
+    expect(vanillaComponentBuilder.build).toHaveBeenCalledWith(exampleMock);
+    expect(element.find('p').text()).toEqual('Hello!');
   });
 
   it('should append example styles if example contains styles', () => {

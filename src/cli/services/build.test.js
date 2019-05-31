@@ -133,6 +133,20 @@ describe('Build Service', () => {
     });
   });
 
+  it('should not pass undefined external assets attributes to watch service', () => {
+    const config = mockPitsbyConfig();
+    config.other = undefined;
+    configService.get = jest.fn(() => config);
+    argsService.getCliArgs = jest.fn(param => param == '--watch');
+    const configFilepath = `${process.cwd()}/pitsby.js`;
+    const docsFileGlob = `${process.cwd()}/**/*.doc.js`;
+    buildService.init().then(() => {
+      expect(watchService.init.mock.calls[0][0]).toEqual([
+        configFilepath, docsFileGlob, './dist/styles.css', './dist/bundle.js'
+      ]);
+    });
+  });
+
   it('should not generate documentation if build is already watching docs changes', () => {
     console.log = jest.fn();
     stubFileChange();
