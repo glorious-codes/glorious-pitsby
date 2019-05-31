@@ -74,7 +74,8 @@ function handleWatch(clientDirectory, externalAssets, shouldWatch){
 function getFilesToWatch(clientDirectory, assets){
   let files = [`${clientDirectory}/pitsby.js`, `${clientDirectory}/**/*.doc.js`];
   Object.keys(assets).forEach(asset => {
-    files = files.concat(assets[asset]);
+    if(assets[asset])
+      files = files.concat(assets[asset]);
   });
   return files;
 }

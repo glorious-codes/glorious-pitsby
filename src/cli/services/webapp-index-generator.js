@@ -20,16 +20,21 @@ function buildIndex(projects){
   let template = getIndexTemplate();
   return projects && projects.length ?
     handleProjects(projects, template):
-    removeAngulerExternalModuleNamePlaceholderFromTemplate(template);
+    removeAngularExternalModuleNamePlaceholderFromTemplate(template);
 }
 
 function handleProjects(projects, template){
   if(!containsAngularProject(projects))
-    template = removeAngulerExternalModuleNamePlaceholderFromTemplate(template);
+    template = removeAngularExternalModuleNamePlaceholderFromTemplate(template);
   projects.forEach(project => {
-    template = project.engine == 'angular' ?
-      registerAngulerExternalModule(template, project.moduleName) :
-      registerVueExternalModule(template, project);
+    switch (project.engine) {
+    case 'angular':
+      template = registerAngularExternalModule(template, project.moduleName);
+      break;
+    case 'vue':
+      template = registerVueExternalModule(template, project);
+      break;
+    }
   });
   return template;
 }
@@ -40,13 +45,13 @@ function containsAngularProject(projects){
       return true;
 }
 
-function registerAngulerExternalModule(template, externalModuleName){
+function registerAngularExternalModule(template, externalModuleName){
   return template.replace(
     EXTERNAL_MODULE_NAME_PLACEHOLDER, `, '${externalModuleName}'`
   );
 }
 
-function removeAngulerExternalModuleNamePlaceholderFromTemplate(template){
+function removeAngularExternalModuleNamePlaceholderFromTemplate(template){
   const lines = template.split('\n');
   lines.splice(getExternalModuleNameLineNumber(lines), 1);
   return lines.join('\n');

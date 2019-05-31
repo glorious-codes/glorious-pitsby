@@ -1,5 +1,6 @@
 import jsonService from '../../../../cli/services/json';
 import vueComponentBuilder from '@scripts/services/vue-component-builder';
+import vanillaComponentBuilder from '@scripts/services/vanilla-component-builder';
 import template from './external-component-preview.html';
 
 function controller($scope, $element, angularComponentBuilder){
@@ -15,10 +16,16 @@ function controller($scope, $element, angularComponentBuilder){
     return example && example.styles;
   }
 
+  /* eslint-disable complexity */
   function buildComponent(engine, component){
-    return engine == 'angular' ?
-      handleAngularComponent(component) :
-      handleVueComponent(component);
+    switch (engine) {
+    case 'angular':
+      return handleAngularComponent(component);
+    case 'vue':
+      return handleVueComponent(component);
+    case 'vanilla':
+      return handleVanillaComponent(component);
+    }
   }
 
   function handleAngularComponent(component){
@@ -28,6 +35,11 @@ function controller($scope, $element, angularComponentBuilder){
 
   function handleVueComponent(component){
     vueComponentBuilder.build(component, $element.find('div')[0]);
+  }
+
+  function handleVanillaComponent(component){
+    const element = vanillaComponentBuilder.build(component);
+    $element.find('div').append(element);
   }
 
   function handleExampleStyles(styles){
