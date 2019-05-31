@@ -17,16 +17,22 @@ module.exports = {
       collectDocsFrom: "./src/vue",
       importFrom: "./dist/my-vue-components",
       // You may optionally declare some specific Vue version (Default: 2.5.13)
-      version: "2.6.0" 
+      version: "2.6.0"
+    },
+    {
+      engine: "vanilla",
+      collectDocsFrom: "./src",
     }
   ],
   styles: [
     "./dist/my-angular-components.css",
-    "./dist/my-vue-components.css"
+    "./dist/my-vue-components.css",
+    "./dist/my-vanilla-components.css"
   ],
   scripts: [
     "./dist/my-angular-components.js",
-    "./dist/my-vue-components.js"
+    "./dist/my-vue-components.js",
+    "./dist/my-vanilla-components.js"
   ],
   other: [
     "./dist/images/",
