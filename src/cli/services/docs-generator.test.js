@@ -35,7 +35,7 @@ describe('Docs Generator Service', () => {
   afterEach(() => {
     webpackMock.response = null;
     webpack.mockClear();
-    Server.mockClear();
+    serverListenMock.mockClear();
     processService.setNodeEnv = jest.fn();
   });
 
@@ -98,6 +98,22 @@ describe('Docs Generator Service', () => {
       const message = 'Documentation successfully served on http://localhost:7000';
       expect(console.log).toHaveBeenCalledWith(message);
     });
+  });
+
+  it('should serve files on custom server port if port has been given', () => {
+    const params = { '--watch': true, '--port': 5000 };
+    argsService.getCliArgs = jest.fn(param => params[param]);
+    docsGeneratorService.init('/client').then(() => {
+      const message = 'Documentation successfully served on http://localhost:5000';
+      expect(console.log).toHaveBeenCalledWith(message);
+    });
+    expect(webpack.mock.calls[0][0]).toEqual({
+      entry: ['webpack-dev-server/client?http://localhost:5000/'],
+      output: {
+        path: '/client/pitsby'
+      }
+    });
+    expect(serverListenMock.mock.calls[0][0]).toEqual(5000);
   });
 
   it('should log error when files generation fails', () => {

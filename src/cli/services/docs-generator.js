@@ -6,7 +6,7 @@ const { fileService } = require('./file');
 
 const _public = {};
 
-const SERVER_PORT = 7000;
+const DEFAULT_SERVER_PORT = 7000;
 
 _public.init = (clientDirectory, outputDirectory) => {
   return new Promise((resolve, reject) => {
@@ -43,21 +43,26 @@ function getCompilationDefaultConfig(directory){
 }
 
 function appendWebsocketConfig(defaultConfig){
-  defaultConfig.entry.unshift(`webpack-dev-server/client?http://localhost:${SERVER_PORT}/`);
+  defaultConfig.entry.unshift(`webpack-dev-server/client?http://localhost:${getServerPort()}/`);
   return defaultConfig;
 }
 
 function compile(config, { shouldWatch, directory, onSuccess }){
-  if(shouldWatch){
-    const compiler = webpack(config);
-    const server = new Server(compiler, buildServerConfig(directory));
-    server.listen(SERVER_PORT, 'localhost', () => {
-      console.log(`Documentation successfully served on http://localhost:${SERVER_PORT}`);
-      onSuccess();
-    });
-  } else {
-    webpack(config, onSuccess);
-  }
+  if(!shouldWatch)
+    return webpack(config, onSuccess);
+  return serve(new Server(webpack(config), buildServerConfig(directory)), onSuccess);
+}
+
+function serve(server, onSuccess){
+  const port = getServerPort();
+  server.listen(port, 'localhost', () => {
+    console.log(`Documentation successfully served on http://localhost:${port}`);
+    onSuccess();
+  });
+}
+
+function getServerPort(){
+  return argsService.getCliArgs('--port') || DEFAULT_SERVER_PORT;
 }
 
 function buildServerConfig(directory){
