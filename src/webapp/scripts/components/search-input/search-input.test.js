@@ -1,9 +1,10 @@
 describe('Search Input', () => {
-  let compile;
+  let compile, $timeout;
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
-    inject(($rootScope, $compile) => {
+    inject(($rootScope, $compile, _$timeout_) => {
+      $timeout = _$timeout_;
       compile = onChange => {
         const scope = $rootScope.$new(true);
         const template = '<p-search-input on-change="onChange"></p-search-input>';
@@ -26,6 +27,7 @@ describe('Search Input', () => {
     const element = compile(onChange);
     element.find('input').val('button');
     element.find('input').triggerHandler('change');
+    $timeout.flush();
     expect(onChange).toHaveBeenCalledWith(term);
   });
 });
