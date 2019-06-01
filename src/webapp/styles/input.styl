@@ -1,0 +1,20 @@
+@require '_variables'
+@require '_mixins'
+
+.p-input-wrapper
+  +placeholder()
+    color $color-grey
+    font-size $font-size-xxs
+
+.p-input
+  padding 0 20px
+  font-size $font-size-sm
+  line-height 40px
+  border-width 1px
+  border-style solid
+  border-color transparent
+  border-radius(6px)
+  box-sizing(border-box)
+  &:focus
+    outline 0
+    border-color $color-blue

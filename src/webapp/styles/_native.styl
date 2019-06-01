@@ -1,42 +1,8 @@
 @require '_variables'
-@require '_mixins'
 
 html,
 body
+  margin 0
   color $color-darkest
-  font-weight 300
-
-body
-  margin 0
   font-family $font-family-primary
-
-h1, h2, h3, h4, h5, h6
-  font-weight 500
-
-p
-  margin 0
-  line-height 1.35
-  & + p
-    margin-top 20px
-
-input
-  padding 0 20px
-  font-size $font-size-sm
-  line-height 40px
-  border-width 1px
-  border-style solid
-  border-color transparent
-  border-radius(6px)
-  box-sizing(border-box)
-  &:focus
-    outline 0
-    border-color $color-blue
-
-pre
-  margin 0
-  font-family $font-family-secondary
-  font-size $font-size-xxs
-
-+placeholder()
-  color $color-grey
-  font-size $font-size-xxs
+  font-weight 300

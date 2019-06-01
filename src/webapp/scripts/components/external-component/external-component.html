@@ -8,7 +8,9 @@
       data-text="{{ $ctrl.component.name }}"
       data-size="2">
     </p-heading>
-    <p ng-bind="$ctrl.component.description"></p>
+    <p-paragraph>
+      {{ $ctrl.component.description }}
+    </p-paragraph>
     <p-external-component-properties-list
       ng-if="$ctrl.component.properties"
       data-properties="$ctrl.component.properties">
