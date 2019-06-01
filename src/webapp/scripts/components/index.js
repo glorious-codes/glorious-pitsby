@@ -18,6 +18,7 @@ import loader from '@scripts/components/loader/loader';
 import logo from '@scripts/components/logo/logo';
 import main from '@scripts/components/main/main';
 import menuTrigger from '@scripts/components/menu-trigger/menu-trigger';
+import paragraph from '@scripts/components/paragraph/paragraph';
 import requester from '@scripts/components/requester/requester';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
@@ -50,6 +51,7 @@ export default angular.module('pitsby-components', [])
   .component('pLogo', logo)
   .component('pMain', main)
   .component('pMenuTrigger', menuTrigger)
+  .component('pParagraph', paragraph)
   .component('pRequester', requester)
   .component('pRow', row)
   .component('pRowItem', rowItem)
