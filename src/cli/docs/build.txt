@@ -7,6 +7,7 @@ Example:
 
 Command Flags:
   --watch                Watch for changes on any file listed on pitsby.js
+  --port                 Integer representing the port to listen on
 
 Options:
   -h   --help            Display software help and usage details
