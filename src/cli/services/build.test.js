@@ -123,7 +123,7 @@ describe('Build Service', () => {
 
   it('should watch for external assets changes if "watch" flag has been provided', () => {
     argsService.getCliArgs = jest.fn(param => param == '--watch');
-    const configFilepath = `${process.cwd()}/pitsby.js`;
+    const configFilepath = `${process.cwd()}/pitsby.config.js`;
     const docsFileGlob = `${process.cwd()}/**/*.doc.js`;
     buildService.init().then(() => {
       expect(watchService.init.mock.calls[0][0]).toEqual([
@@ -138,7 +138,7 @@ describe('Build Service', () => {
     config.other = undefined;
     configService.get = jest.fn(() => config);
     argsService.getCliArgs = jest.fn(param => param == '--watch');
-    const configFilepath = `${process.cwd()}/pitsby.js`;
+    const configFilepath = `${process.cwd()}/pitsby.config.js`;
     const docsFileGlob = `${process.cwd()}/**/*.doc.js`;
     buildService.init().then(() => {
       expect(watchService.init.mock.calls[0][0]).toEqual([
