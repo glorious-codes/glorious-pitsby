@@ -169,3 +169,4 @@ src/webapp/data
 src/webapp/external
 src/webapp/index.html
 src/webapp/scripts/index.js
+src/webapp/scripts/components/logo/logo.html
