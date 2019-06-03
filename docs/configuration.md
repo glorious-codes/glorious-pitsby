@@ -1,6 +1,6 @@
 # Configuration
 
-## pitsby.js
+## pitsby.config.js
 
 This is Pitsby's configuration file. This file should be created in the root directory of the project which you want the documentation will be created for:
 

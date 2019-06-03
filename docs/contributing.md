@@ -17,7 +17,7 @@ cd glorious-pitsby
 npm install
 ```
 
-5. Create the `pitsby.js` and, at least, one `*.doc.js` in a third party project.
+5. Create the `pitsby.config.js` and, at least, one `*.doc.js` in a third party project.
 
 6. Install and run Pitsby on the root directory of the project previously cited according to the [Basic Usage]() instructions.
 
