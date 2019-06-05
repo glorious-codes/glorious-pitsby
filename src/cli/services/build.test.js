@@ -5,13 +5,14 @@ const externalMetricsIdsModuleGenerator = require('./external-metrics-ids-module
 const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
+const webappLogoGenerator = require('./webapp-logo-generator');
 const docsGenerator = require('./docs-generator');
 const configService = require('./config');
 const watchService = require('./watch');
 const buildService = require('./build');
 
 describe('Build Service', () => {
-  function mockPitsbyConfig(){
+  function mockPitsbyConfig({ custom } = {}){
     return {
       projects: [
         { engine: 'angular', collectFrom: './src/angular', moduleName: 'external' }
@@ -22,7 +23,8 @@ describe('Build Service', () => {
       outputDirectory: './docs',
       metrics: {
         googleAnalyticsId: '123'
-      }
+      },
+      custom
     };
   }
 
@@ -40,6 +42,7 @@ describe('Build Service', () => {
     externalProjectsDataGenerator.init = jest.fn(() => Promise.resolve());
     webappHtmlIndexGenerator.init = jest.fn(() => Promise.resolve());
     webappIndexGenerator.init = jest.fn(() => Promise.resolve());
+    webappLogoGenerator.init = jest.fn(() => Promise.resolve());
     docsGenerator.init = jest.fn(() => Promise.resolve());
     configService.get = jest.fn(() => mockPitsbyConfig());
     argsService.getCliArgs = jest.fn();
@@ -85,6 +88,15 @@ describe('Build Service', () => {
         scripts: ['./dist/bundle.js'],
         other: ['./images/']
       }, projectsMock);
+      done();
+    });
+  });
+
+  it('should generate webapp logo', done => {
+    const customAttributes = {};
+    configService.get = jest.fn(() => mockPitsbyConfig({ custom: customAttributes }));
+    buildService.init().then(() => {
+      expect(webappLogoGenerator.init).toHaveBeenCalledWith(customAttributes);
       done();
     });
   });
