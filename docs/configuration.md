@@ -42,6 +42,14 @@ module.exports = {
   metrics: {
     googleAnalyticsId: 'UA-XXXXXXXXX-X'
   },
+  custom: {
+    logo: {
+      // This image should be included in the "other" attribute above
+      filepath: './some/path/to/image.svg',
+      width: '100px',
+      height: '100px'
+    }
+  },
   outputDirectory: "./docs"
 }
 
@@ -73,6 +81,9 @@ List of any other *file/directory* that should be included in the documentation.
 
 ### Metrics
 IDs to be used on third party metrics services integration. For now, Pitsby support Google Analytics only.
+
+### Custom
+UI Elements attributes that should be customised.
 
 ### Output directory
 The directory where docs should be outputted to. If not informed, documentation will be outputted to a directory called *pitsby*.

@@ -5,6 +5,7 @@ const externalMetricsIdsModuleGenerator = require('./external-metrics-ids-module
 const externalProjectsDataGenerator = require('./external-projects-data-generator');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
+const webappLogoGenerator = require('./webapp-logo-generator');
 const docsGenerator = require('./docs-generator');
 const watchService = require('./watch');
 const configService = require('./config');
@@ -17,7 +18,7 @@ _public.init = ({ isWatching } = {}) => {
   const clientDirectory = process.cwd();
   const config = configService.get(clientDirectory);
   return generateExternalFiles(clientDirectory, config).then(() => {
-    return generateWebappIndexes(config).then(() => {
+    return generateWebappFiles(config).then(() => {
       return generateDocs(clientDirectory, config, isWatching);
     });
   });
@@ -48,8 +49,9 @@ function generateMetricsIdsModule(metrics){
   return externalMetricsIdsModuleGenerator.init(metrics);
 }
 
-function generateWebappIndexes(config){
+function generateWebappFiles(config){
   return Promise.all([
+    webappLogoGenerator.init(config.custom),
     webappHtmlIndexGenerator.init(getExternalAssets(config), config.projects),
     webappIndexGenerator.init(config.projects)
   ]);
