@@ -51,8 +51,8 @@ function generateMetricsIdsModule(metrics){
 
 function generateWebappFiles(config){
   return Promise.all([
+    webappHtmlIndexGenerator.init(config),
     webappLogoGenerator.init(config.custom),
-    webappHtmlIndexGenerator.init(getExternalAssets(config), config.projects),
     webappIndexGenerator.init(config.projects)
   ]);
 }

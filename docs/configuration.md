@@ -48,7 +48,12 @@ module.exports = {
       filepath: './some/path/to/image.svg',
       width: '100px',
       height: '100px'
-    }
+    },
+    favicon: {
+      // This image should be included in the "other" attribute above
+      filepath: './some/path/to/favicon.png'
+    },
+    windowTitle: 'My project'
   },
   outputDirectory: "./docs"
 }

@@ -81,13 +81,9 @@ describe('Build Service', () => {
   });
 
   it('should generate webapp html index', done => {
-    const projectsMock = mockPitsbyConfig().projects;
+    const config = mockPitsbyConfig();
     buildService.init().then(() => {
-      expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith({
-        styles: ['./dist/styles.css'],
-        scripts: ['./dist/bundle.js'],
-        other: ['./images/']
-      }, projectsMock);
+      expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith(config);
       done();
     });
   });
