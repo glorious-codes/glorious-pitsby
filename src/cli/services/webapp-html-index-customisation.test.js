@@ -28,6 +28,13 @@ describe('Webapp HTML Index Customisation', () => {
     expect(template.includes('<link href="external/dist/images/favicon.png?t=123" rel="shortcut icon">')).toEqual(true);
   });
 
+  it('should set custom favicon external href on template if it has been given', () => {
+    const template = webappHtmlIndexCustomisation.init(buildTemplateMock(), {
+      favicon: { filepath: 'https://some.other.domain/images/favicon.png' }
+    });
+    expect(template.includes('<link href="https://some.other.domain/images/favicon.png?t=123" rel="shortcut icon">')).toEqual(true);
+  });
+
   it('should set Pitsby window title on template by default', () => {
     const template = webappHtmlIndexCustomisation.init(buildTemplateMock());
     expect(template.includes('<title>Pitsby</title>')).toEqual(true);
