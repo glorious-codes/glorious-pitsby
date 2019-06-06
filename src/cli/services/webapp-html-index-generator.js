@@ -3,18 +3,19 @@ const pkg = require('../../../package.json');
 const processService = require('./process');
 const { fileService } = require('./file');
 const assetsFilepathFilter = require('./assets-filepath-filter');
+const webappHtmlIndexCustomisation = require('./webapp-html-index-customisation');
 
 const _public = {};
 
-_public.init = (options = {}, projects = []) => {
+_public.init = ({ scripts, styles, custom, projects = [] } = {}) => {
   return new Promise((resolve, reject) => {
-    const linkTags = buildAssetTags(options.styles, buildLinkTag);
-    const scriptTags = buildAssetTags(options.scripts, buildScriptTag);
-    const indexHtml = buildIndexHtml(
+    const linkTags = buildAssetTags(styles, buildLinkTag);
+    const scriptTags = buildAssetTags(scripts, buildScriptTag);
+    const indexHtml = webappHtmlIndexCustomisation.init(buildIndexHtml(
       linkTags,
       handleVueScriptsTag(scriptTags, projects),
       buildComponentEngineScriptTag('angular.js', pkg.devDependencies.angular.replace('^', ''))
-    );
+    ), custom);
     fileService.write(path.join(__dirname, '../../webapp/index.html'), indexHtml, resolve, reject);
   });
 };
