@@ -2,6 +2,7 @@ import angular from 'angular';
 import alert from '@scripts/components/alert/alert';
 import backTrigger from '@scripts/components/back-trigger/back-trigger';
 import btn from '@scripts/components/btn/btn';
+import credits from '@scripts/components/credits/credits';
 import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
@@ -12,6 +13,7 @@ import externalComponentPreview from '@scripts/components/external-component-pre
 import externalComponentsList from '@scripts/components/external-components-list/external-components-list';
 import heading from '@scripts/components/heading/heading';
 import input from '@scripts/components/input/input';
+import link from '@scripts/components/link/link';
 import listItem from '@scripts/components/list-item/list-item';
 import list from '@scripts/components/list/list';
 import loader from '@scripts/components/loader/loader';
@@ -34,8 +36,9 @@ import welcome from '@scripts/components/welcome/welcome';
 
 export default angular.module('pitsby-components', [])
   .component('pAlert', alert)
-  .component('pBtn', btn)
   .component('pBackTrigger', backTrigger)
+  .component('pBtn', btn)
+  .component('pCredits', credits)
   .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
   .component('pExternalComponentExample', externalComponentExample)
@@ -46,6 +49,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentsList', externalComponentsList)
   .component('pHeading', heading)
   .component('pInput', input)
+  .component('pLink', link)
   .component('pList', list)
   .component('pListItem', listItem)
   .component('pLoader', loader)
