@@ -1,14 +1,16 @@
 @require '_variables'
 
-$sidebar-color = $color-grey-semi-light
+$sidebar-padding-top = 50px
 $sidebar-max-width = 400px
+$sidebar-color = $color-grey-semi-light
 
 .p-sidebar
+  padding-top $sidebar-padding-top
   max-width $sidebar-max-width
   background-color $sidebar-color
   overflow-x hidden
   overflow-y scroll
   .p-logo
-    margin 50px 30px 30px
+    margin 0 30px 30px
   .p-external-components-list
     margin-top 50px

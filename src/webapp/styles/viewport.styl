@@ -21,10 +21,23 @@
     left 0
     width 90%
     height 100vh
+    padding-top $sidebar-padding-top
     z-index $layer-lowest
     transition(all, 300ms)
     .p-back-trigger
       display none
+  .p-sidebar-content
+    position relative
+    padding-bottom 50px
+    height 'calc(100vh - %s)' % $sidebar-padding-top
+    .p-credits
+      position absolute
+      left 50%
+      bottom 10px
+      transform('translateX(-50%)')
+  .p-sidebar,
+  .p-sidebar-content
+    box-sizing(border-box)
   .p-main
     margin-left $sidebar-max-width
     width 'calc(100% - %s)' % $sidebar-max-width
