@@ -1,3 +1,4 @@
+import '@styles/link.styl';
 import template from './link.html';
 
 function controller(){
