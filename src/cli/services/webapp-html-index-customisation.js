@@ -3,8 +3,9 @@ const path = require('path');
 const _public = {};
 
 _public.init = (template, customConfig = {}) => {
-  const html = handleFavicon(customConfig.favicon, template);
-  return handleWindowTitle(customConfig.windowTitle, html);
+  let html = handleFavicon(customConfig.favicon, template);
+  html = handleWindowTitle(customConfig.windowTitle, html);
+  return handleStyles(customConfig.styles, html);
 };
 
 function handleFavicon({ filepath } = {}, template){
@@ -22,6 +23,23 @@ function buildCustomFaviconHref(filepath){
 
 function handleWindowTitle(title = 'Pitsby', template){
   return template.replace('{{ title }}', title);
+}
+
+function handleStyles(styles, template){
+  const styleTag = styles ? `<style data-custom-styles>${removeUnwantedChars(styles)}</style>` : '';
+  return template.replace('<!-- inject:custom-styles -->', styleTag);
+}
+
+function removeUnwantedChars(styles){
+  return removeLineBreaks(removeUnnecessarySpaces(styles));
+}
+
+function removeLineBreaks(text){
+  return text.replace(/[\n\t]/g, '');
+}
+
+function removeUnnecessarySpaces(text){
+  return text.replace(/[ ]{2,}/g, ' ').trim();
 }
 
 module.exports = _public;

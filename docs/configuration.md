@@ -43,16 +43,23 @@ module.exports = {
     googleAnalyticsId: 'UA-XXXXXXXXX-X'
   },
   custom: {
+    favicon: {
+      // This image should be included in the "other" attribute above
+      filepath: './some/path/to/favicon.png'
+    },
     logo: {
       // This image should be included in the "other" attribute above
       filepath: './some/path/to/image.svg',
       width: '100px',
       height: '100px'
     },
-    favicon: {
-      // This image should be included in the "other" attribute above
-      filepath: './some/path/to/favicon.png'
-    },
+    // Styles to be applied globally.
+    // This is perfect when you need to do just a few overrides, otherwise,
+    // prefer to create a dedicated stylesheet for documentation and include it
+    // in the "styles" attribute above.
+    styles: `
+      p-main { color: red; }
+    `,
     windowTitle: 'My project'
   },
   outputDirectory: "./docs"

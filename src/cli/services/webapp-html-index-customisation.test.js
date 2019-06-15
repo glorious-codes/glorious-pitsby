@@ -7,6 +7,7 @@ describe('Webapp HTML Index Customisation', () => {
   <head>
   <title>{{ title }}</title>
   <link href="{{ faviconHref }}" rel="shortcut icon">
+  <!-- inject:custom-styles -->
   </head>
   <body></body>
 </html>`;
@@ -43,5 +44,19 @@ describe('Webapp HTML Index Customisation', () => {
   it('should set custom window title on template if custom window title has been given', () => {
     const template = webappHtmlIndexCustomisation.init(buildTemplateMock(), { windowTitle: 'Taslonic' });
     expect(template.includes('<title>Taslonic</title>')).toEqual(true);
+  });
+
+  it('should set custom styles if it has been given', () => {
+    const styles = `
+    .p-main {    color: red;    }
+    .p-sidebar {    color: blue;    }
+`;
+    const template = webappHtmlIndexCustomisation.init(buildTemplateMock(), { styles });
+    expect(template.includes('<style data-custom-styles>.p-main { color: red; } .p-sidebar { color: blue; }</style>')).toEqual(true);
+  });
+
+  it('should remove custom styles placeholder if it has not been given', () => {
+    const template = webappHtmlIndexCustomisation.init(buildTemplateMock());
+    expect(template.includes('<style data-custom-styles>')).toEqual(false);
   });
 });

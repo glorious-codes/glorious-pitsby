@@ -2,12 +2,14 @@ import angular from 'angular';
 import { angularModuleMock } from '@mocks/angular';
 import router from '@scripts/router';
 import analyticsService from '@scripts/services/analytics';
+import stylesheetsOrderService from '@scripts/services/stylesheets-order';
 import appIndexTemplate from '@scripts/index-template';
 
 describe('App Index Template', () => {
   beforeEach(() => {
     angular.module = jest.fn(() => angularModuleMock);
     analyticsService.init = jest.fn();
+    stylesheetsOrderService.makeLestStylesheetAsFirst = jest.fn();
   });
 
   it('should instantiate application module', () => {
@@ -19,13 +21,18 @@ describe('App Index Template', () => {
     ]);
   });
 
-  it('should configure application router', () => {
+  it('should make last stylesheet as the first one', () => {
     appIndexTemplate.init();
-    expect(angularModuleMock.config).toHaveBeenCalledWith(router);
+    expect(stylesheetsOrderService.makeLestStylesheetAsFirst).toHaveBeenCalledWith(document.head);
+  });
+
+  it('should initialize analytics', () => {
+    appIndexTemplate.init();
+    expect(analyticsService.init).toHaveBeenCalled();
   });
 
   it('should configure application router', () => {
     appIndexTemplate.init();
-    expect(analyticsService.init).toHaveBeenCalled();
+    expect(angularModuleMock.config).toHaveBeenCalledWith(router);
   });
 });
