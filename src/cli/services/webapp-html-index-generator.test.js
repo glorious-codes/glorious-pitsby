@@ -49,6 +49,7 @@ describe('Webapp HTML Index Generator', () => {
     <link href="{{ faviconHref }}" rel="shortcut icon">
     <link href="https://some.lib.com/from/cdn.min.css?t=123" rel="stylesheet">
 <link href="external/dist/css/main.css?t=123" rel="stylesheet">
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
@@ -75,6 +76,7 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="pragma" content="no-cache">
     <link href="{{ faviconHref }}" rel="shortcut icon">
 
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
@@ -102,6 +104,7 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="pragma" content="no-cache">
     <link href="{{ faviconHref }}" rel="shortcut icon">
 
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
@@ -129,6 +132,7 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="pragma" content="no-cache">
     <link href="{{ faviconHref }}" rel="shortcut icon">
 
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
@@ -156,6 +160,7 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="pragma" content="no-cache">
     <link href="{{ faviconHref }}" rel="shortcut icon">
 
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
@@ -181,6 +186,7 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="pragma" content="no-cache">
     <link href="{{ faviconHref }}" rel="shortcut icon">
 
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
@@ -209,6 +215,7 @@ describe('Webapp HTML Index Generator', () => {
     <meta http-equiv="pragma" content="no-cache">
     <link href="{{ faviconHref }}" rel="shortcut icon">
 
+    <!-- inject:custom-styles -->
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
