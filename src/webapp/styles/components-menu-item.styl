@@ -1,0 +1,61 @@
+@require '_variables'
+@require '_mixins'
+
+$componets-menu-item-side-padding = 30px
+
+active()
+  background-color $color-grey-light
+
+.p-components-menu-item-container
+  .p-components-menu-item-container
+    margin-left 30px
+    .p-components-menu-item
+      font-weight 400
+  &.p-components-menu-item-has-children
+    > .p-components-menu-item
+      +highlight()
+        background-color transparent
+      &:after
+        content ''
+        position absolute
+        top 50%
+        right $componets-menu-item-side-padding
+        width 10px
+        height 10px
+        background-repeat no-repeat
+        background-position center
+        transform-origin: 75% 50%;
+        background-image('chevron.svg')
+        transform('translateY(-50%)')
+    > ng-transclude
+      > p-components-menu-item
+          display none
+    &.p-components-menu-item-children-visible
+      > .p-components-menu-item
+        &:after
+          transform('translateY(-50%) rotate(-90deg)')
+      > ng-transclude
+        > p-components-menu-item
+            display block
+
+
+.p-components-menu-item
+  position relative
+  padding 12px $componets-menu-item-side-padding
+  font-weight 600
+  cursor pointer
+  border-left-color $color-primary
+  border-left-style solid
+  border-left-width 0
+  box-sizing(border-box)
+  transition(all, 300ms)
+  unselectable()
+  +highlight()
+    active()
+  &.p-components-menu-item-active
+    active()
+    padding-left 27px
+    font-weight 600
+    border-left-width 3px
+    cursor default
+    pointer-events none

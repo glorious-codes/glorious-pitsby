@@ -1,0 +1,10 @@
+<div class="p-components-menu-item-container {{ [$ctrl.hasChildrenCssClass, $ctrl.childrenVisibilityCssClass].join(' ') }}">
+  <div
+    ng-bind="$ctrl.item.name"
+    class="p-components-menu-item"
+    ng-click="$ctrl.onItemClick()"
+    ng-class="{'p-components-menu-item-active': $ctrl.item.active}"
+    data-menu-item-name>
+  </div>
+  <ng-transclude></ng-transclude>
+</div>

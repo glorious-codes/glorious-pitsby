@@ -2,6 +2,7 @@ import angular from 'angular';
 import alert from '@scripts/components/alert/alert';
 import backTrigger from '@scripts/components/back-trigger/back-trigger';
 import btn from '@scripts/components/btn/btn';
+import componentsMenuItem from '@scripts/components/components-menu-item/components-menu-item';
 import credits from '@scripts/components/credits/credits';
 import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
@@ -39,6 +40,7 @@ export default angular.module('pitsby-components', [])
   .component('pAlert', alert)
   .component('pBackTrigger', backTrigger)
   .component('pBtn', btn)
+  .component('pComponentsMenuItem', componentsMenuItem)
   .component('pCredits', credits)
   .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
