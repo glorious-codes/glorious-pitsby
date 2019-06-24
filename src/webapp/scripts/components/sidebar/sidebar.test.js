@@ -28,9 +28,9 @@ describe('Sidebar', () => {
     expect(element.find('p-logo').length).toEqual(1);
   });
 
-  it('should contain an external componets list', () => {
+  it('should contain a componests menu', () => {
     const element = compile();
-    expect(element.find('p-external-components-list').length).toEqual(1);
+    expect(element.find('p-components-menu').length).toEqual(1);
   });
 
   it('should subscribe on menu trigger click topic on initialize', () => {
