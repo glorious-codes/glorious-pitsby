@@ -12,7 +12,6 @@ import externalComponentExamplesList from '@scripts/components/external-componen
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
 import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
-import externalComponentsList from '@scripts/components/external-components-list/external-components-list';
 import heading from '@scripts/components/heading/heading';
 import input from '@scripts/components/input/input';
 import link from '@scripts/components/link/link';
@@ -51,7 +50,6 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentCode', externalComponentCode)
   .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
   .component('pExternalComponentPreview', externalComponentPreview)
-  .component('pExternalComponentsList', externalComponentsList)
   .component('pHeading', heading)
   .component('pInput', input)
   .component('pLink', link)
