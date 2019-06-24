@@ -1,0 +1,19 @@
+<div class="p-components-menu">
+  <p-search-input
+    ng-if="$ctrl.items"
+    on-change="$ctrl.onSearchTermChange">
+  </p-search-input>
+  <p-requester
+    data-fetch="$ctrl.fetch"
+    data-fetch-success="$ctrl.fetchSuccess">
+    <p-components-menu-item
+      data-item="item"
+      ng-repeat="item in $ctrl.items">
+      <p-components-menu-item
+        ng-if="item.children"
+        data-item="subitem"
+        ng-repeat="subitem in item.children"">
+      </p-components-menu-item>
+    </p-components-menu-item>
+  </p-requester>
+</div>
