@@ -15,6 +15,12 @@ function routeService($window, $state, $stateParams){
     return _public.go('.', params, {location: 'replace'});
   };
 
+  _public.isCurrentRoute = (name, params) => {
+    if(params && !currentRouteContainsParams($stateParams, params))
+      return false;
+    return $state.current.name === name;
+  };
+
   _public.go = (routeName, params, options) => {
     if(options && options.resetUrlPath) {
       const routes = _public.getAllRoutes();
@@ -22,6 +28,13 @@ function routeService($window, $state, $stateParams){
     }
     return $state.go(routeName, params, options);
   };
+
+  function currentRouteContainsParams(routeParams, params){
+    const expectedParamsKeys = Object.keys(params);
+    return expectedParamsKeys.filter(param => {
+      return routeParams[param] === params[param];
+    }).length === expectedParamsKeys.length;
+  }
 
   function setUrlPath(path){
     $window.location.hash = `#!${path}`;

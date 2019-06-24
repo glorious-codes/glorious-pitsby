@@ -3,6 +3,12 @@ import routePathService from '@scripts/services/route-path';
 describe('Route Service', () => {
   let service, $window, $state, $stateParams;
 
+  function mockCurrentRouteParams(params){
+    Object.keys(params).forEach(param => {
+      $stateParams[param] = params[param];
+    });
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject($injector => {
@@ -48,8 +54,7 @@ describe('Route Service', () => {
   });
 
   it('should get all route params', () => {
-    $stateParams.name = 'rafael';
-    $stateParams.email = 'some@email.com';
+    mockCurrentRouteParams({name: 'rafael', email: 'some@email.com'});
     expect(service.getParams()).toEqual({
       name: 'rafael',
       email: 'some@email.com'
@@ -57,8 +62,27 @@ describe('Route Service', () => {
   });
 
   it('should get specific route param', () => {
-    $stateParams.name = 'rafael';
-    $stateParams.email = 'some@email.com';
+    mockCurrentRouteParams({name: 'rafael', email: 'some@email.com'});
     expect(service.getParams('name')).toEqual('rafael');
+  });
+
+  it('should identify some route as current route when route name and params match current route name and params', () => {
+    const routeName = 'inbox';
+    const name = 'rafael';
+    const email = 'some@email.com';
+    $state.current.name = routeName;
+    mockCurrentRouteParams({name, email});
+    expect(service.isCurrentRoute(routeName, {name, email})).toEqual(true);
+    expect(service.isCurrentRoute(routeName, {name, param: 'notPresent'})).toEqual(false);
+  });
+
+  it('should not identify some route as current route when either route name or route params don\'t match current route name and params', () => {
+    const routeName = 'inbox';
+    const name = 'rafael';
+    const email = 'some@email.com';
+    $state.current.name = routeName;
+    mockCurrentRouteParams({name, email});
+    expect(service.isCurrentRoute('outbox', {name, email})).toEqual(false);
+    expect(service.isCurrentRoute(routeName, {name, param: 'notPresent'})).toEqual(false);
   });
 });
