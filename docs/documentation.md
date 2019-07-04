@@ -13,12 +13,14 @@ The following is an example of button component documentation:
 module.exports = {
   name: 'Button',
   description: 'Trigger for actions in forms, dialogs, and more.',
+  deprecated: true // Shows a deprecation tag beside component's name
   properties: [
     {
       name: 'theme',
       type: 'String',
       values: 'primary, secondary',
-      required: 'No'
+      required: 'No',
+      deprecated: true // Shows a deprecation tag beside property's name
     },
     {
       name: 'size',

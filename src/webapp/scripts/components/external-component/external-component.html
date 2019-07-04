@@ -3,11 +3,18 @@
     data-fetch="$ctrl.fetch"
     data-fetch-success="$ctrl.fetchSuccess"
     data-should-hide-content-on-request="true">
-    <p-heading
-      ng-if="$ctrl.component.name"
-      data-text="{{ $ctrl.component.name }}"
-      data-size="2">
-    </p-heading>
+    <div class="p-external-component-heading-container">
+      <p-heading
+        ng-if="$ctrl.component.name"
+        data-text="{{ $ctrl.component.name }}"
+        data-size="2">
+      </p-heading>
+      <p-tag
+        ng-if="$ctrl.component.deprecated"
+        data-theme="danger">
+        Deprecated
+      </p-tag>
+    </div>
     <p-paragraph>
       {{ $ctrl.component.description }}
     </p-paragraph>
