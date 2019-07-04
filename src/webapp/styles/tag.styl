@@ -1,0 +1,22 @@
+@require '_variables'
+@require '_mixins'
+
+tag-color($color)
+  color $color
+  border-color alpha($color, .7)
+
+.p-tag
+  display inline-block
+  padding 1px 4px
+  font-size $font-size-xxxxs
+  text-transform uppercase
+  border-width 1px
+  border-style solid
+  border-radius(3px)
+  tag-color($color-grey)
+  &.p-tag-info
+    tag-color($color-blue)
+  &.p-tag-success
+    tag-color($color-green)
+  &.p-tag-danger
+    tag-color($color-red)
