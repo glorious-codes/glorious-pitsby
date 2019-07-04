@@ -1,6 +1,12 @@
 describe('External Component Properties List', () => {
   let compile;
 
+  function mockProperties(deprecated){
+    return [
+      {name: 'Prop Name', required: true, type: 'Prop Type', values: 'Prop Values', deprecated}
+    ];
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
@@ -28,14 +34,23 @@ describe('External Component Properties List', () => {
   });
 
   it('should render properties', () => {
-    const element = compile({
-      properties: [
-        {name: 'Prop Name', type: 'Prop Type', values: 'Prop Values'}
-      ]
-    });
-    const propertyListValueElements = element[0].querySelectorAll('[data-row-item-value]');
-    expect(propertyListValueElements[0].innerHTML).toEqual('Prop Name');
-    expect(propertyListValueElements[1].innerHTML).toEqual('Prop Type');
-    expect(propertyListValueElements[2].innerHTML).toEqual('Prop Values');
+    const element = compile({ properties: mockProperties() });
+    const propertyAttrs = element[0].querySelectorAll('p-row-item span');
+    expect(propertyAttrs[0].textContent).toEqual('Prop Name');
+    expect(propertyAttrs[1].textContent).toEqual('true');
+    expect(propertyAttrs[2].textContent).toEqual('Prop Type');
+    expect(propertyAttrs[3].textContent).toEqual('Prop Values');
+  });
+
+  it('should not show a deprecation tag by default', () => {
+    const element = compile({ properties: mockProperties() });
+    const propertyAttrs = element[0].querySelectorAll('p-row-item');
+    expect(propertyAttrs[0].querySelectorAll('p-tag').length).toEqual(0);
+  });
+
+  it('should optionally show a deprecation tag', () => {
+    const element = compile({ properties: mockProperties(true) });
+    const propertyAttrs = element[0].querySelectorAll('p-row-item');
+    expect(propertyAttrs[0].querySelectorAll('p-tag').length).toEqual(1);
   });
 });
