@@ -1,16 +1,35 @@
 import jsonService from '../../../../cli/services/json';
+import pageFoldService from '@scripts/services/page-fold';
 import vueComponentBuilder from '@scripts/services/vue-component-builder';
 import vanillaComponentBuilder from '@scripts/services/vanilla-component-builder';
 import template from './external-component-preview.html';
 
-function controller($scope, $element, angularComponentBuilder){
+function controller($scope, $timeout, $element, angularComponentBuilder){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    const exampleCopy = angular.copy($ctrl.example);
-    buildComponent($ctrl.engine, jsonService.parseFunctions(exampleCopy));
-    handleExampleStyles(getExampleStyles(exampleCopy));
+    $timeout(() => {
+      const id = pageFoldService.subscribe($element[0], onShowUp);
+      setPageFoldSubscriberId(id);
+    });
   };
+
+  $ctrl.$onDestroy = () => {
+    if($ctrl.pageFoldSubscriptionId)
+      unsubscribeFromPageFoldService($ctrl.pageFoldSubscriptionId);
+  };
+
+  function onShowUp(){
+    return !$ctrl.rendered ? render(angular.copy($ctrl.example)) : null;
+  }
+
+  function render(example){
+    buildComponent($ctrl.engine, jsonService.parseFunctions(example));
+    handleExampleStyles(getExampleStyles(example));
+    unsubscribeFromPageFoldService($ctrl.pageFoldSubscriptionId);
+    setPageFoldSubscriberId(null);
+    setRendered(true);
+  }
 
   function getExampleStyles(example){
     return example && example.styles;
@@ -54,9 +73,21 @@ function controller($scope, $element, angularComponentBuilder){
     tag.innerHTML = styles;
     return tag;
   }
+
+  function setPageFoldSubscriberId(id){
+    $ctrl.pageFoldSubscriptionId = id;
+  }
+
+  function unsubscribeFromPageFoldService(subscriberId){
+    pageFoldService.unsubscribe(subscriberId);
+  }
+
+  function setRendered(rendered){
+    $ctrl.rendered = rendered;
+  }
 }
 
-controller.$inject = ['$scope', '$element', 'angularComponentBuilder'];
+controller.$inject = ['$scope', '$timeout', '$element', 'angularComponentBuilder'];
 
 export default {
   bindings: {
