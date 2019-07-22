@@ -47,13 +47,11 @@ function addSubscriber({ eventName, callback }){
 }
 
 function removeSubscriber(subscriberId){
-  subscribers.splice(getSubscriberIndex(subscriberId), 1);
+  subscribers.splice(findSubscriberById(subscriberId), 1);
 }
 
-function getSubscriberIndex(subscriberId){
-  return subscribers.filter(subscriber => {
-    return subscriber.id === subscriberId;
-  });
+function findSubscriberById(id){
+  return subscribers.find(subscriber => subscriber.id === id);
 }
 
 function throwInvalidArgumentError(message){
