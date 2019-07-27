@@ -15,6 +15,11 @@ function buildMenuStructure(engine, components){
       id: 'components',
       name: 'Components',
       children: buildComponentsSubitems(engine, components)
+    },
+    {
+      id: 'playground',
+      name: 'Playground',
+      route: { name: routes[3].name, params: { engine } }
     }
   ];
 }
