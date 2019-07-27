@@ -5,6 +5,7 @@ function controller($timeout, $element, tabsRouteParamsService){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
+    setBarItemsPositionCssClass(buildPositionBarItemsCssClass($ctrl.barItemsPosition));
     $timeout(() => {
       setTabs(buildTabs());
       activateTab(getTab(getTabIndexQueryParam()));
@@ -16,12 +17,16 @@ function controller($timeout, $element, tabsRouteParamsService){
     setTabIndexQueryParam(tabIndex);
   };
 
+  function buildPositionBarItemsCssClass(position){
+    return position == 'center' ? 'p-tabs-bar-items-centered' : '';
+  }
+
+  function setBarItemsPositionCssClass(cssClass){
+    $ctrl.barItemsPositionCssClass = cssClass;
+  }
+
   function buildTabs(){
-    return getTabElements().map(tab => {
-      return {
-        name: tab.getAttribute('data-name')
-      };
-    });
+    return getTabElements().map(tab => ({ name: tab.getAttribute('data-name') }));
   }
 
   function activateTab(tab){
@@ -56,15 +61,12 @@ function controller($timeout, $element, tabsRouteParamsService){
   }
 
   function showTabContent(tab){
+    const cssClass = 'p-tab-active';
     getTabElements().forEach(tabElement => {
-      handleCssClass(tabElement, 'remove', 'p-tab-active');
+      tabElement.classList.remove(cssClass);
       if(tabElement.getAttribute('data-name') === tab.name)
-        handleCssClass(tabElement, 'add', 'p-tab-active');
+        tabElement.classList.add(cssClass);
     });
-  }
-
-  function handleCssClass(element, action, cssClass){
-    element.classList[action](cssClass);
   }
 
   function toggleActiveTab(tab){
@@ -73,9 +75,7 @@ function controller($timeout, $element, tabsRouteParamsService){
   }
 
   function deactivateAllTabs(){
-    $ctrl.tabs.forEach(tab => {
-      delete tab.isActive;
-    });
+    $ctrl.tabs.forEach(tab => delete tab.isActive);
   }
 
   function setActiveTab(tab){
@@ -89,7 +89,8 @@ export default {
   transclude: true,
   bindings: {
     queryParamGroupKey: '@',
-    queryParamKey: '@'
+    queryParamKey: '@',
+    barItemsPosition: '@'
   },
   controller,
   template
