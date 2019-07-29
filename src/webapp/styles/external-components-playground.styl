@@ -1,0 +1,30 @@
+@require '_variables'
+@require '_mixins'
+
+tabs-content-height()
+  min-height calc(100vh - 48px)
+
+.p-external-components-playground
+  .p-tabs-bar-item
+    padding 15px 0
+    min-width 100px
+    text-align center
+  .p-tabs-content
+    padding 0
+    background-color transparent
+    tabs-content-height()
+    .p-textarea
+      textarea
+        padding 20px
+        background-color alpha($color-grey-semi-light, 0.25)
+        border 0
+        outline 0
+        tabs-content-height()
+
++breakpoint('xs')
+  .p-external-components-playground
+    .p-tabs-bar-items-container
+      width 100%
+    .p-tabs-bar-item
+      min-width 0
+      width 25%

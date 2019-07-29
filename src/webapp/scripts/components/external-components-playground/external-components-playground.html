@@ -1,0 +1,20 @@
+<div class="p-external-components-playground">
+  <p-tabs data-query-param-key="tab" data-bar-items-position="center">
+    <p-tab data-name="Preview" data-on-select="$ctrl.renderPreview">
+      <p-external-component-preview
+        ng-if="$ctrl.shouldShowPreview"
+        data-engine="$ctrl.engine"
+        data-example="$ctrl.preview">
+      <p-external-component-preview>
+    </p-tab>
+    <p-tab data-name="Template" data-on-select="$ctrl.destroyPreview">
+      <p-textarea data-value="$ctrl.template" />
+    </p-tab>
+    <p-tab data-name="Controller" data-on-select="$ctrl.destroyPreview">
+      <p-textarea data-value="$ctrl.controller" />
+    </p-tab>
+    <p-tab data-name="Styles" data-on-select="$ctrl.destroyPreview">
+      <p-textarea data-value="$ctrl.styles" />
+    </p-tab>
+  </p-tabs>
+</div>

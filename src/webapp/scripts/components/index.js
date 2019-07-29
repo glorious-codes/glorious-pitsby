@@ -12,6 +12,7 @@ import externalComponentExamplesList from '@scripts/components/external-componen
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
 import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
+import externalComponentsPlayground from '@scripts/components/external-components-playground/external-components-playground';
 import heading from '@scripts/components/heading/heading';
 import input from '@scripts/components/input/input';
 import link from '@scripts/components/link/link';
@@ -31,6 +32,7 @@ import searchInput from '@scripts/components/search-input/search-input';
 import tabs from '@scripts/components/tabs/tabs';
 import tab from '@scripts/components/tab/tab';
 import tag from '@scripts/components/tag/tag';
+import textarea from '@scripts/components/textarea/textarea';
 import topbar from '@scripts/components/topbar/topbar';
 import trigger from '@scripts/components/trigger/trigger';
 import viewport from '@scripts/components/viewport/viewport';
@@ -50,6 +52,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentCode', externalComponentCode)
   .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
   .component('pExternalComponentPreview', externalComponentPreview)
+  .component('pExternalComponentsPlayground', externalComponentsPlayground)
   .component('pHeading', heading)
   .component('pInput', input)
   .component('pLink', link)
@@ -69,6 +72,7 @@ export default angular.module('pitsby-components', [])
   .component('pTabs', tabs)
   .component('pTab', tab)
   .component('pTag', tag)
+  .component('pTextarea', textarea)
   .component('pTopbar', topbar)
   .component('pTrigger', trigger)
   .component('pViewport', viewport)
