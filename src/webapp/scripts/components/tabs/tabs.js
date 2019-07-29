@@ -15,6 +15,7 @@ function controller($timeout, $element, tabsRouteParamsService){
   $ctrl.selectTab = (tab, tabIndex) => {
     activateTab(tab);
     setTabIndexQueryParam(tabIndex);
+    tab.select();
   };
 
   function buildPositionBarItemsCssClass(position){
@@ -26,7 +27,7 @@ function controller($timeout, $element, tabsRouteParamsService){
   }
 
   function buildTabs(){
-    return getTabElements().map(tab => ({ name: tab.getAttribute('data-name') }));
+    return getTabElements().map(tab => angular.element(tab).isolateScope().$ctrl);
   }
 
   function activateTab(tab){
