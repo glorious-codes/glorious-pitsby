@@ -1,24 +1,25 @@
 @require '_variables'
+@require 'code-editor-variables'
 
 .p-external-component-code
-  color alpha($color-darkest, .9)
+  color $code-editor-text
   line-height 1.5
   .token
     &.keyword
-      color $color-clay
-    &.function,
-    &.attr-value
-      color $color-blue-semi-dark
+      color $code-editor-keyword
     &.string,
+    &.attr-value
+      color $code-editor-string
+    &.function,
     &.attr-name
-      color $color-green
+      color $code-editor-function
     &.class-name
-      color $color-purple
+      color $code-editor-class-name
     &.tag
-      color $color-clay
+      color $code-editor-keyword
     &.number
-      color $color-orange
+      color $code-editor-number
     &.operator
-      color $color-clay
+      color $code-editor-keyword
     &.punctuation
-      color alpha($color-darkest, .7)
+      color $code-editor-text
