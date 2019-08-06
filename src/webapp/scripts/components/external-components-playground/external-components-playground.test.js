@@ -50,7 +50,7 @@ describe('External Components Playground', () => {
     expect(getPlaygroundController(element).engine).toEqual('vue');
   });
 
-  it('shoud render preview by default on initialize', () => {
+  it('should render preview by default on initialize', () => {
     stubExternalComponentsPlaygroundCodeBuilder(mockPlaygroundCode());
     console.log = jest.fn();
     const element = compile();
