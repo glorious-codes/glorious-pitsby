@@ -9,9 +9,7 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
 
   $ctrl.$onInit = () => {
     $timeout(() => {
-      const id = pageFoldService.subscribe($element[0], () => {
-        $scope.$apply(() => onShowUp());
-      });
+      const id = pageFoldService.subscribe($element[0], () => $scope.$apply(onShowUp));
       setPageFoldSubscriberId(id);
     });
   };
