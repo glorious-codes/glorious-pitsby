@@ -2,7 +2,7 @@ import '@styles/external-components-playground.styl';
 import externalComponentsPlaygroundCodeBuilder from '@scripts/services/external-components-playground-code-builder';
 import template from './external-components-playground.html';
 
-function controller(routeService){
+function controller($timeout, $element, routeService){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
@@ -21,14 +21,26 @@ function controller(routeService){
     setPreviewVisibility(false);
   };
 
+  $ctrl.setTemplate = template => {
+    $ctrl.template = template;
+  };
+
+  $ctrl.setController = controller => {
+    $ctrl.controller = controller;
+  };
+
+  $ctrl.setStyles = styles => {
+    $ctrl.styles = styles;
+  };
+
   function setEngine(engine){
     $ctrl.engine = engine;
   }
 
   function handlePreviewCodeParts({ controller, styles, template }){
-    setTemplate(template);
-    setController(controller);
-    setStyles(styles);
+    $ctrl.setTemplate(template);
+    $ctrl.setController(controller);
+    $ctrl.setStyles(styles);
   }
 
   function buildPreviewCode(){
@@ -44,18 +56,6 @@ function controller(routeService){
     };
   }
 
-  function setTemplate(template){
-    $ctrl.template = template;
-  }
-
-  function setController(controller){
-    $ctrl.controller = controller;
-  }
-
-  function setStyles(styles){
-    $ctrl.styles = styles;
-  }
-
   function setPreview(preview){
     $ctrl.preview = preview;
   }
@@ -65,7 +65,7 @@ function controller(routeService){
   }
 }
 
-controller.$inject = ['routeService'];
+controller.$inject = ['$timeout', '$element', 'routeService'];
 
 export default {
   controller,
