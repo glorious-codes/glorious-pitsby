@@ -1,0 +1,78 @@
+@require '_variables'
+@require '_mixins'
+@require 'code-editor-variables'
+
+$content-padding = 10px
+
+.p-code-editor
+  &.ace_editor
+    font $code-editor-font
+    font-weight 300
+  &.ace-tm
+    background-color transparent
+    color $code-editor-text
+    .ace_gutter
+      padding-top $content-padding
+      background transparent
+      color $color-grey
+      border-right 1px solid $color-grey-semi-light
+    .ace_gutter-active-line,
+    .ace_fold-widget,
+    .ace_print-margin,
+    .ace_active-line
+      display none
+    .ace_storage,
+    .ace_keyword
+      color $code-editor-keyword
+    .ace_entity.ace_name.ace_function
+      color $code-editor-function
+    .ace_string
+      color $code-editor-string
+    .ace_constant.ace_numeric
+      color $code-editor-number
+    .ace_variable
+      color $code-editor-text
+    .ace_identifier ~ .ace_identifier
+      color $code-editor-function
+    .ace_attribute-name
+      color $code-editor-function
+    .ace_meta.ace_tag
+      color $code-editor-keyword
+      &.ace_end-tag-open,
+      &.ace_tag-open,
+      &.ace_tag-close
+        color $code-editor-text
+    .ace_marker-layer
+      .ace_selection
+        background $code-editor-line-selection
+      .ace_bracket
+        position relative
+        bottom -2px
+        margin 0
+        border 0
+        border-bottom 1px solid $color-blue
+        border-radius(0)
+  .ace_content
+    padding $content-padding
+  .ace_gutter-cell
+    &.ace_info,
+    &.ace_warning,
+    &.ace_error
+      background-image('none')
+    &.ace_error
+      background-color $color-red-light
+      color $color-red
+      border-left 2px solid $color-red
+    &.ace_warning
+      background-color $color-yellow-light
+      color $color-yellow
+      border-left 2px solid $color-yellow
+  .ace_tooltip
+    padding 10px
+    background alpha($color-lightest, .8)
+    color $color-grey-dark
+    font-family $font-family-primary
+    border 0
+    box-shadow(0 0 30px 0 $color-grey)
+    border-radius(6px)
+    box-sizing(border-box)

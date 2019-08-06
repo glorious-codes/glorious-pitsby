@@ -1,7 +1,10 @@
 @require '_variables'
 
 background-image($filename, $path = $path-images)
-  background-image url($path + $filename)
+  if($filename == 'none')
+    background-image none
+  else
+    background-image url($path + $filename)
 
 backdrop-filter($filter)
   -webkit-backdrop-filter unquote($filter)
