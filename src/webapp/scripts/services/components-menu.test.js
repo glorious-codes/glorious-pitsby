@@ -1,11 +1,24 @@
 import componentsResource from '@scripts/resources/components';
 import componentsMenuService from './components-menu';
 
-describe('Menu Service', () => {
+describe('Components Menu Service', () => {
   function mockComponents(){
     return [
       {id: 'button', name: 'Button'},
       {id: 'card', name: 'Card'}
+    ];
+  }
+
+  function mockItems(){
+    return [
+      {
+        name: 'Components', children: [
+          {name: 'Card'}, {name: 'Page'}, {name: 'Box'}
+        ]
+      },
+      {
+        name: 'Playground'
+      }
     ];
   }
 
@@ -61,5 +74,26 @@ describe('Menu Service', () => {
       });
       done();
     });
+  });
+
+  it('should filter items', () => {
+    expect(componentsMenuService.filter(mockItems(), 'p')).toEqual([
+      {
+        name: 'Components', children: [
+          {name: 'Page'}
+        ]
+      },
+      {
+        name: 'Playground'
+      }
+    ]);
+  });
+
+  it('should remove parent items when none of its children matches searched term', () => {
+    expect(componentsMenuService.filter(mockItems(), 'pl')).toEqual([
+      {
+        name: 'Playground'
+      }
+    ]);
   });
 });
