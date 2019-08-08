@@ -17,7 +17,15 @@ function controller($transitions, routeService){
 
   $ctrl.fetchSuccess = items => {
     setItems(items);
+    setFilteredItems(items);
     configActiveItem(items);
+  };
+
+  $ctrl.onSearchTermChange = term => {
+    if(!term)
+      setFilteredItems($ctrl.items);
+    else
+      setFilteredItems(componentsMenuService.filter($ctrl.items, term));
   };
 
   function setTransitions(transitions){
@@ -32,6 +40,10 @@ function controller($transitions, routeService){
 
   function setItems(items){
     $ctrl.items = items;
+  }
+
+  function setFilteredItems(items){
+    $ctrl.filteredItems = items;
   }
 
   function configActiveItem(items = []){

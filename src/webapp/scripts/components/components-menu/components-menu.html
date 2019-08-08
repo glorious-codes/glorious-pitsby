@@ -6,9 +6,14 @@
   <p-requester
     data-fetch="$ctrl.fetch"
     data-fetch-success="$ctrl.fetchSuccess">
+    <div
+      ng-if="!$ctrl.filteredItems.length"
+      class="p-components-menu-no-results">
+      No results
+    </div>
     <p-components-menu-item
       data-item="item"
-      ng-repeat="item in $ctrl.items">
+      ng-repeat="item in $ctrl.filteredItems">
       <p-components-menu-item
         ng-if="item.children"
         data-item="subitem"

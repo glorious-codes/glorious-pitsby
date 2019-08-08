@@ -105,4 +105,24 @@ describe('Menu', () => {
     menuController.$onInit();
     expect(menuController.items[0].children[0].active).toEqual(true);
   });
+
+  it('should filter items on search term change', () => {
+    componentsMenuService.filter = jest.fn(() => ['p']);
+    const element = compile();
+    const menuController = getMenuController(element);
+    menuController.items = ['a','b','p'];
+    menuController.onSearchTermChange('p');
+    expect(componentsMenuService.filter).toHaveBeenCalledWith(menuController.items, 'p');
+    expect(menuController.filteredItems).toEqual(['p']);
+  });
+
+  it('should set items as filtered items when no term has been passed as search param', () => {
+    componentsMenuService.filter = jest.fn();
+    const element = compile();
+    const menuController = getMenuController(element);
+    menuController.items = ['a','b','p'];
+    menuController.onSearchTermChange();
+    expect(componentsMenuService.filter).not.toHaveBeenCalled();
+    expect(menuController.filteredItems).toEqual(menuController.items);
+  });
 });

@@ -1,6 +1,20 @@
+@require '_variables'
+@require '_mixins'
+
 .p-components-menu
   padding-top 30px
   .p-alert
     margin 0 30px
   .p-search-input
     margin 0 30px 50px
+
+.p-components-menu-no-results
+  margin 0 30px
+  padding 5px
+  color $color-grey-dark
+  font-size $font-size-xxs
+  text-align center
+  text-transform uppercase
+  border 1px solid $color-grey
+  border-radius(6px)
+  box-sizing(border-box)
