@@ -8,10 +8,11 @@ import router from '@scripts/router';
 describe('Router', () => {
   it('should register all routes', () => {
     router(stateProviderMock, urlRouterProviderMock, transitionsProviderMock);
-    expect(stateProviderMock.state.mock.calls.length).toEqual(3);
+    expect(stateProviderMock.state.mock.calls.length).toEqual(4);
     expect(stateProviderMock.state).toHaveBeenCalledWith(routes[0]);
     expect(stateProviderMock.state).toHaveBeenCalledWith(routes[1]);
     expect(stateProviderMock.state).toHaveBeenCalledWith(routes[2]);
+    expect(stateProviderMock.state).toHaveBeenCalledWith(routes[3]);
   });
 
   it('should redirect any unknown route to home', () => {

@@ -1,6 +1,7 @@
 import app from '@scripts/views/app.html';
 import externalComponents from '@scripts/views/external-components.html';
 import externalComponent from '@scripts/views/external-component.html';
+import externalComponentsPlayground from '@scripts/views/external-components-playground.html';
 
 export default [
   {
@@ -17,6 +18,12 @@ export default [
     name: 'app.external-components.component',
     url: '/:componentId?externalComponentExampleTabs',
     template: externalComponent,
+    reloadOnSearch: false
+  },
+  {
+    name: 'app.external-components.playground',
+    url: '/playground?tab&code',
+    template: externalComponentsPlayground,
     reloadOnSearch: false
   }
 ];

@@ -2,6 +2,9 @@ import angular from 'angular';
 import alert from '@scripts/components/alert/alert';
 import backTrigger from '@scripts/components/back-trigger/back-trigger';
 import btn from '@scripts/components/btn/btn';
+import codeEditor from '@scripts/components/code-editor/code-editor';
+import componentsMenu from '@scripts/components/components-menu/components-menu';
+import componentsMenuItem from '@scripts/components/components-menu-item/components-menu-item';
 import credits from '@scripts/components/credits/credits';
 import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
@@ -10,7 +13,7 @@ import externalComponentExamplesList from '@scripts/components/external-componen
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
 import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
-import externalComponentsList from '@scripts/components/external-components-list/external-components-list';
+import externalComponentsPlayground from '@scripts/components/external-components-playground/external-components-playground';
 import heading from '@scripts/components/heading/heading';
 import input from '@scripts/components/input/input';
 import link from '@scripts/components/link/link';
@@ -39,6 +42,9 @@ export default angular.module('pitsby-components', [])
   .component('pAlert', alert)
   .component('pBackTrigger', backTrigger)
   .component('pBtn', btn)
+  .component('pCodeEditor', codeEditor)
+  .component('pComponentsMenu', componentsMenu)
+  .component('pComponentsMenuItem', componentsMenuItem)
   .component('pCredits', credits)
   .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
@@ -47,7 +53,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentCode', externalComponentCode)
   .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
   .component('pExternalComponentPreview', externalComponentPreview)
-  .component('pExternalComponentsList', externalComponentsList)
+  .component('pExternalComponentsPlayground', externalComponentsPlayground)
   .component('pHeading', heading)
   .component('pInput', input)
   .component('pLink', link)

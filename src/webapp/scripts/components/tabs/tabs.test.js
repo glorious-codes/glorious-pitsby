@@ -1,6 +1,11 @@
 describe('Tabs', () => {
   let compile, tabsRouteParamsService;
 
+  function getBarItemsContainerElement(element){
+    const container = element[0].querySelector('[data-tabs-bar-items-container]');
+    return angular.element(container);
+  }
+
   function mockTabsContent(){
     return `
       <p-tab data-name="First">First</p-tab>
@@ -20,7 +25,8 @@ describe('Tabs', () => {
         const scope = $rootScope.$new(true);
         const template = `<p-tabs
                             data-query-param-group-key="{{ $ctrl.queryParamGroupKey }}"
-                            data-query-param-key="{{ $ctrl.queryParamKey }}">
+                            data-query-param-key="{{ $ctrl.queryParamKey }}"
+                            data-bar-items-position="{{ $ctrl.barItemsPosition }}">
                             ${content}
                           </p-tabs>`;
         scope.$ctrl = bindings;
@@ -35,12 +41,24 @@ describe('Tabs', () => {
 
   it('should have appropriate css class', () => {
     const element = compile(mockTabsContent());
-    expect(element.find('div').attr('class')).toEqual('p-tabs');
+    expect(element.find('div').hasClass('p-tabs')).toEqual(true);
   });
 
   it('should transclude some content', () => {
     const element = compile('<p-tab name="hello"><p>Hello</p></p-tab>');
     expect(element.find('p').text()).toEqual('Hello');
+  });
+
+  it('should align tabs bar items to left by default', () => {
+    const element = compile(mockTabsContent());
+    const barItemsContainer = getBarItemsContainerElement(element);
+    expect(barItemsContainer.hasClass('p-tabs-bar-items-centered')).toEqual(false);
+  });
+
+  it('should optionally align tabs bar items to center', () => {
+    const element = compile(mockTabsContent(), { barItemsPosition: 'center' });
+    const barItemsContainer = getBarItemsContainerElement(element);
+    expect(barItemsContainer.hasClass('p-tabs-bar-items-centered')).toEqual(true);
   });
 
   it('should build tabs based on transcluded content', () => {

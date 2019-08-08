@@ -1,0 +1,40 @@
+@require '_variables'
+@require '_mixins'
+
+tabs-content-height()
+  height calc(100vh - 48px)
+
+tabs-content-height-mobile()
+  height calc(100vh - 108px)
+
+.p-external-components-playground
+  .p-tabs-bar-item
+    padding 15px 0
+    min-width 100px
+    text-align center
+  .p-tabs-content
+    padding 0
+    tabs-content-height()
+  p-tab, .p-tab, ng-transclude, p-code-editor, .p-code-editor
+    tabs-content-height()
+  ng-transclude
+    display block
+
+.p-external-components-playground-editor
+  tabs-content-height()
+
++breakpoint('xs')
+  .p-external-components-playground
+    height calc(100vh - 60px)
+    .p-tabs-bar-items-container
+      width 100%
+    .p-tabs-bar-item
+      min-width 0
+      width 25%
+    .p-tabs-content
+      padding 0
+      tabs-content-height-mobile()
+    p-tab, .p-tab, ng-transclude, p-code-editor, .p-code-editor
+      tabs-content-height-mobile()
+  .p-external-components-playground-editor
+    tabs-content-height-mobile()

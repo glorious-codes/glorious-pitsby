@@ -5,9 +5,13 @@ describe('Tab', () => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
       const scope = $rootScope.$new(true);
-      compile = (content = '') => {
-        const template = `<p-tab>${content}</p-tab>`;
+      compile = (bindings = {}, content = '') => {
+        const template = `<p-tab
+                            data-on-select="$ctrl.onSelect">
+                            ${content}
+                          </p-tab>`;
         const element = $compile(template)(scope);
+        scope.$ctrl = bindings;
         scope.$digest();
         return element;
       };
@@ -20,7 +24,14 @@ describe('Tab', () => {
   });
 
   it('should transclude some component', () => {
-    const element = compile('<p>Hello</p>');
+    const element = compile({}, '<p>Hello</p>');
     expect(element.find('p').text()).toEqual('Hello');
+  });
+
+  it('should execute selection callback on select', () => {
+    const callback = jest.fn();
+    const element = compile({ onSelect: callback });
+    element.isolateScope().$ctrl.select();
+    expect(callback).toHaveBeenCalled();
   });
 });
