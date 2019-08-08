@@ -22,7 +22,7 @@ export default [
   },
   {
     name: 'app.external-components.playground',
-    url: '/playground?tab',
+    url: '/playground?tab&code',
     template: externalComponentsPlayground,
     reloadOnSearch: false
   }

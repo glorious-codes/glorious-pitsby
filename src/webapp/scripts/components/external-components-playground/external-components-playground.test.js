@@ -1,18 +1,31 @@
+import playgroundCodeSearchParamService from '@scripts/services/playground-code-search-param';
 import externalComponentsPlaygroundCodeBuilder from '@scripts/services/external-components-playground-code-builder';
 
 describe('External Components Playground', () => {
-  let compile, routeService;
+  let compile, routeService, $timeout;
 
   function getPlaygroundController(element){
     return element.isolateScope().$ctrl;
   }
 
-  function stubRouteService(paramsMock = {}){
+  function stubRouteServiceParamsGet(paramsMock = {}){
     routeService.getParams = jest.fn((param) => paramsMock[param]);
+  }
+
+  function stubRouteServiceParamsSet(){
+    routeService.setParam = jest.fn();
   }
 
   function stubExternalComponentsPlaygroundCodeBuilder(code = {}){
     externalComponentsPlaygroundCodeBuilder.build = jest.fn(() => code);
+  }
+
+  function stubPlaygroundCodeSearchParamParse(result){
+    playgroundCodeSearchParamService.parse = jest.fn(() => result);
+  }
+
+  function stubPlaygroundCodeSearchParamFormat(result){
+    playgroundCodeSearchParamService.format = jest.fn(() => result);
   }
 
   function mockPlaygroundCode(){
@@ -25,8 +38,9 @@ describe('External Components Playground', () => {
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
-    inject(($rootScope, $compile, $injector) => {
+    inject(($rootScope, $compile, $injector, _$timeout_) => {
       routeService = $injector.get('routeService');
+      $timeout = _$timeout_;
       compile = () => {
         const scope = $rootScope.$new(true);
         const template = '<p-external-components-playground />';
@@ -35,8 +49,11 @@ describe('External Components Playground', () => {
         return element;
       };
     });
-    stubRouteService();
+    stubRouteServiceParamsGet();
     stubExternalComponentsPlaygroundCodeBuilder();
+    stubPlaygroundCodeSearchParamParse();
+    stubPlaygroundCodeSearchParamFormat();
+    stubRouteServiceParamsSet();
   });
 
   it('should have appropriate css class', () => {
@@ -45,9 +62,23 @@ describe('External Components Playground', () => {
   });
 
   it('should set engine on initialize', () => {
-    stubRouteService({ engine: 'vue' });
+    stubRouteServiceParamsGet({ engine: 'vue' });
     const element = compile();
     expect(getPlaygroundController(element).engine).toEqual('vue');
+  });
+
+  it('should build preview code parts with code search param on initialize when code search param has been found', () => {
+    const template = '<div>Me</div>';
+    const controller = 'function controller(){} return controller;';
+    const styles = '.class { margin: 0; }';
+    stubRouteServiceParamsGet({engine: 'vue', code: 'xyz'});
+    stubPlaygroundCodeSearchParamParse({ template, controller, styles });
+    const element = compile();
+    const playgroundController = getPlaygroundController(element);
+    expect(playgroundCodeSearchParamService.parse).toHaveBeenCalledWith('xyz');
+    expect(playgroundController.template).toEqual(template);
+    expect(playgroundController.controller).toEqual(controller);
+    expect(playgroundController.styles).toEqual(styles);
   });
 
   it('should render preview by default on initialize', () => {
@@ -63,10 +94,21 @@ describe('External Components Playground', () => {
     expect(controller.shouldShowPreview).toEqual(true);
   });
 
+  it('should set code search param on preview render', () => {
+    stubPlaygroundCodeSearchParamFormat('xyz');
+    const element = compile();
+    const playgroundController = getPlaygroundController(element);
+    const { template, controller, styles } = playgroundController;
+    playgroundController.onPreviewRendering();
+    $timeout.flush();
+    expect(playgroundCodeSearchParamService.format).toHaveBeenCalledWith(template, controller, styles);
+    expect(routeService.setParam).toHaveBeenCalledWith('code', 'xyz');
+  });
+
   it('should be able to destroy render preview', () => {
     const element = compile();
     const controller = getPlaygroundController(element);
-    controller.destroyPreview();
+    controller.onPreviewDestroying();
     expect(controller.shouldShowPreview).toEqual(false);
   });
 });

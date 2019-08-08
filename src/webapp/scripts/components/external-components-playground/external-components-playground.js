@@ -1,4 +1,5 @@
 import '@styles/external-components-playground.styl';
+import playgroundCodeSearchParamService from '@scripts/services/playground-code-search-param';
 import externalComponentsPlaygroundCodeBuilder from '@scripts/services/external-components-playground-code-builder';
 import template from './external-components-playground.html';
 
@@ -7,17 +8,16 @@ function controller($timeout, $element, routeService){
 
   $ctrl.$onInit = () => {
     setEngine(routeService.getParams('engine'));
-    $ctrl.renderPreview();
+    handleCodeSearchParam(routeService.getParams('code'));
   };
 
-  $ctrl.renderPreview = () => {
+  $ctrl.onPreviewRendering = () => {
     const code = buildPreviewCode();
     handlePreviewCodeParts(code);
-    setPreview(buildPreview(code));
-    setPreviewVisibility(true);
+    renderPreview(code);
   };
 
-  $ctrl.destroyPreview = () => {
+  $ctrl.onPreviewDestroying = () => {
     setPreviewVisibility(false);
   };
 
@@ -37,6 +37,13 @@ function controller($timeout, $element, routeService){
     $ctrl.engine = engine;
   }
 
+  function handleCodeSearchParam(code){
+    const { parse } = playgroundCodeSearchParamService;
+    const previewCode = code ? parse(code) : buildPreviewCode();
+    handlePreviewCodeParts(previewCode);
+    renderPreview(previewCode);
+  }
+
   function handlePreviewCodeParts({ controller, styles, template }){
     $ctrl.setTemplate(template);
     $ctrl.setController(controller);
@@ -46,6 +53,14 @@ function controller($timeout, $element, routeService){
   function buildPreviewCode(){
     const { build } = externalComponentsPlaygroundCodeBuilder;
     return build($ctrl.engine, $ctrl.template, $ctrl.controller, $ctrl.styles);
+  }
+
+  function renderPreview(previewCode){
+    const { template, controller, styles } = previewCode;
+    setPreview(buildPreview(previewCode));
+    setPreviewVisibility(true);
+    const param = playgroundCodeSearchParamService.format(template, controller, styles);
+    $timeout(() => routeService.setParam('code', param));
   }
 
   function buildPreview(code){
