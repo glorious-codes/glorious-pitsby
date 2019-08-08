@@ -53,6 +53,18 @@ describe('Route Service', () => {
     });
   });
 
+  it('should set a single search param', () => {
+    const name = 'rafael';
+    const email = 'some@email.com';
+    mockCurrentRouteParams({name, email});
+    service.setParam('age', '35');
+    expect($state.go).toHaveBeenCalledWith('.', {
+      name, email, age: '35'
+    }, {
+      location: 'replace'
+    });
+  });
+
   it('should get all route params', () => {
     mockCurrentRouteParams({name: 'rafael', email: 'some@email.com'});
     expect(service.getParams()).toEqual({

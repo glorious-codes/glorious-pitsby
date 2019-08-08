@@ -11,6 +11,12 @@ function routeService($window, $state, $stateParams){
     return param ? $stateParams[param] : $stateParams;
   };
 
+  _public.setParam = (key, value) => {
+    const params = _public.getParams();
+    params[key] = value;
+    _public.setParams(params);
+  };
+
   _public.setParams = params => {
     return _public.go('.', params, {location: 'replace'});
   };
