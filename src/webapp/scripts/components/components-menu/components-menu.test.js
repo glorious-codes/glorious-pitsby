@@ -36,6 +36,10 @@ describe('Menu', () => {
     return element.isolateScope().$ctrl;
   }
 
+  function queryNoResultsMessage(element){
+    return element[0].querySelector('[data-no-results-message]');
+  }
+
   function stubMenuBuild(){
     componentsMenuService.build = jest.fn(() => Promise.resolve());
   }
@@ -124,5 +128,21 @@ describe('Menu', () => {
     menuController.onSearchTermChange();
     expect(componentsMenuService.filter).not.toHaveBeenCalled();
     expect(menuController.filteredItems).toEqual(menuController.items);
+  });
+
+  it('should not show no results message by default', () => {
+    const element = compile();
+    const message = queryNoResultsMessage(element);
+    expect(message).toEqual(null);
+  });
+
+  it('should show no results message if term matches no component', () => {
+    componentsMenuService.filter = jest.fn(() => []);
+    const element = compile();
+    const menuController = getMenuController(element);
+    menuController.onSearchTermChange('p');
+    element.isolateScope().$digest();
+    const message = queryNoResultsMessage(element);
+    expect(message.textContent.trim()).toEqual('No results');
   });
 });

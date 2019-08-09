@@ -20,8 +20,9 @@ function controller(){
     setSidebarVisibilityCssClass('');
   };
 
-  $ctrl.onExternalComponentsListItemClick = () => {
-    $ctrl.hideSidebar();
+  $ctrl.onComponentsMenuItemClick = item => {
+    if(!item.children)
+      $ctrl.hideSidebar();
   };
 
   function onMenuTriggerClick(){

@@ -9,12 +9,18 @@ function controller($timeout, $element, routeService){
     setChildrenVisibilityCssClass(buildChildrenVisibilityCssClass());
   };
 
-  $ctrl.onItemClick = () => {
-    const route = $ctrl.item.route;
+  $ctrl.handleItemClick = () => {
+    const item = $ctrl.item;
+    handleNavigation(item.route);
+    if($ctrl.onItemClick)
+      $ctrl.onItemClick(item);
+  };
+
+  function handleNavigation(route){
     return route ?
       goToRoute({ name: route.name, params: route.params }) :
       setChildrenVisibilityCssClass(buildChildrenVisibilityCssClass());
-  };
+  }
 
   function buildHasChildrenCssClass(){
     return $ctrl.item.children ? 'p-components-menu-item-has-children' : '';
@@ -42,7 +48,8 @@ controller.$inject = ['$timeout', '$element', 'routeService'];
 export default {
   transclude: true,
   bindings: {
-    item: '<'
+    item: '<',
+    onItemClick: '<'
   },
   controller,
   template
