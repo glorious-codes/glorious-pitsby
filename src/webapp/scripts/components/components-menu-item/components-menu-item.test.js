@@ -7,7 +7,9 @@ describe('Menu Item', () => {
       routeService = $injector.get('routeService');
       compile = (bindings = {}, content = '') => {
         const scope = $rootScope.$new(true);
-        const template = `<p-components-menu-item data-item="$ctrl.item">
+        const template = `<p-components-menu-item
+                            data-item="$ctrl.item"
+                            data-on-item-click="$ctrl.onItemClick">
                             ${content}
                           </p-components-menu-item>`;
         scope.$ctrl = bindings;
@@ -53,6 +55,15 @@ describe('Menu Item', () => {
     const nameElement = element[0].querySelector('[data-menu-item-name]');
     nameElement.click();
     expect(routeService.go).toHaveBeenCalledWith(name, params, { resetUrlPath: true });
+  });
+
+  it('should execute item click callback if callback has been given', () => {
+    const item = {};
+    const onItemClick = jest.fn();
+    const element = compile({ item, onItemClick });
+    const nameElement = element[0].querySelector('[data-menu-item-name]');
+    nameElement.click();
+    expect(onItemClick).toHaveBeenCalledWith(item);
   });
 
   it('should hide item children on item click if children are already visible', () => {

@@ -15,10 +15,15 @@ tabs-content-height-mobile()
   .p-tabs-content
     padding 0
     tabs-content-height()
-  p-tab, .p-tab, ng-transclude, p-code-editor, .p-code-editor
+  p-tab, .p-tab, p-code-editor, .p-code-editor
     tabs-content-height()
   ng-transclude
     display block
+    tabs-content-height()
+  .p-external-component-preview
+    ng-transclude
+      display inherit
+      height auto
 
 .p-external-components-playground-editor
   tabs-content-height()
@@ -34,7 +39,16 @@ tabs-content-height-mobile()
     .p-tabs-content
       padding 0
       tabs-content-height-mobile()
-    p-tab, .p-tab, ng-transclude, p-code-editor, .p-code-editor
+    p-tab, .p-tab, p-code-editor, .p-code-editor
       tabs-content-height-mobile()
+    ng-transclude
+      display block
+      tabs-content-height-mobile()
+    .p-external-component-preview)
+      ng-transclude
+      .p-external-component-preview
+        ng-transclude
+          display inherit
+          height auto
   .p-external-components-playground-editor
     tabs-content-height-mobile()

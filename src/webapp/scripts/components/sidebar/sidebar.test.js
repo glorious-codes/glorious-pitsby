@@ -3,6 +3,10 @@ import pubsubService from '@scripts/services/pubsub';
 describe('Sidebar', () => {
   let compile;
 
+  function getController(element){
+    return element.isolateScope().$ctrl;
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
@@ -14,13 +18,13 @@ describe('Sidebar', () => {
         return element;
       };
     });
-    pubsubService.subscribe = jest.fn();
+    pubsubService.subscribe = jest.fn((topic, callback) => callback());
     pubsubService.unsubscribe = jest.fn();
   });
 
   it('should have appropriate css class', () => {
     const element = compile();
-    expect(element.find('div').attr('class').trim()).toEqual('p-sidebar');
+    expect(element.find('div').hasClass('p-sidebar')).toEqual(true);
   });
 
   it('should contain a logo', () => {
@@ -41,18 +45,26 @@ describe('Sidebar', () => {
 
   it('should be able to hide sidebar', () => {
     const element = compile();
-    element.isolateScope().$ctrl.hideSidebar();
+    getController(element).hideSidebar();
+    element.isolateScope().$digest();
     expect(element.find('div').hasClass('p-sidebar-visible')).toEqual(false);
   });
 
-  it('should hide sidebar on external components list item click', () => {
+  it('should hide sidebar on components menu item click if item has no children', () => {
     const element = compile();
-    element.isolateScope().$ctrl.onExternalComponentsListItemClick();
+    getController(element).onComponentsMenuItemClick({});
+    element.isolateScope().$digest();
     expect(element.find('div').hasClass('p-sidebar-visible')).toEqual(false);
+  });
+
+  it('should not hide sidebar on components menu item click if item has children', () => {
+    const element = compile();
+    getController(element).onComponentsMenuItemClick({children: [{}]});
+    element.isolateScope().$digest();
+    expect(element.find('div').hasClass('p-sidebar-visible')).toEqual(true);
   });
 
   it('should show sidebar on menu trigger click', () => {
-    pubsubService.subscribe = jest.fn((topic, callback) => callback());
     const element = compile();
     expect(element.find('div').hasClass('p-sidebar-visible')).toEqual(true);
   });
@@ -60,7 +72,7 @@ describe('Sidebar', () => {
   it('should unsubscribe from menu trigger click on destroy', () => {
     pubsubService.subscribe = jest.fn(() => '123');
     const element = compile();
-    element.isolateScope().$ctrl.$onDestroy();
+    getController(element).$onDestroy();
     expect(pubsubService.unsubscribe).toHaveBeenCalledWith('123');
   });
 });
