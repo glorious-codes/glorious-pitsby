@@ -2,8 +2,6 @@
 @require '_mixins'
 @require 'code-editor-variables'
 
-$content-padding = 10px
-
 .p-code-editor
   &.ace_editor
     font $code-editor-font
@@ -12,7 +10,6 @@ $content-padding = 10px
     background-color transparent
     color $code-editor-text
     .ace_gutter
-      padding-top $content-padding
       background transparent
       color $color-grey
       border-right 1px solid $color-grey-semi-light
@@ -52,8 +49,6 @@ $content-padding = 10px
         border 0
         border-bottom 1px solid $color-blue
         border-radius(0)
-  .ace_content
-    padding $content-padding
   .ace_gutter-cell
     &.ace_info,
     &.ace_warning,

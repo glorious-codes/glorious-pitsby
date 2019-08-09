@@ -11,7 +11,6 @@ function controller($transitions, routeService){
   };
 
   $ctrl.fetch = () => {
-    routeService.getAllRoutes();
     return componentsMenuService.build(routeService.getParams('engine'));
   };
 
@@ -25,7 +24,7 @@ function controller($transitions, routeService){
     if(!term)
       setFilteredItems($ctrl.items);
     else
-      setFilteredItems(componentsMenuService.filter($ctrl.items, term));
+      setFilteredItems(componentsMenuService.filter(angular.copy($ctrl.items), term));
   };
 
   function setTransitions(transitions){
@@ -62,6 +61,9 @@ function controller($transitions, routeService){
 controller.$inject = ['$transitions', 'routeService'];
 
 export default {
+  bindings: {
+    onItemClick: '<'
+  },
   controller,
   template
 };
