@@ -60,7 +60,7 @@ function generateWebappFiles(config){
 function generateDocs(clientDirectory, config, isWatching){
   if(isWatching)
     return true;
-  return docsGenerator.init(clientDirectory, config.outputDirectory).then(() => {
+  return docsGenerator.init(clientDirectory, config).then(() => {
     return handleWatch(clientDirectory, getExternalAssets(config), argsService.getCliArgs('--watch'));
   });
 }
