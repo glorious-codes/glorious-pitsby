@@ -116,7 +116,7 @@ describe('Build Service', () => {
     buildService.init().then(() => {
       expect(docsGenerator.init).toHaveBeenCalledWith(
         process.cwd(),
-        './docs'
+        mockPitsbyConfig()
       );
       done();
     });

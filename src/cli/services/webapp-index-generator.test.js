@@ -89,11 +89,12 @@ export default _public;
   it('should import Vue components library if some Vue components library has been given', () => {
     webappIndexGenerator.init([{
       engine: 'vue',
-      importFrom: './dist/vue-components'
+      importFrom: './dist/my-vue-components',
+      libraryName: 'myVueComponents'
     }]);
     expect(fileService.write.mock.calls[0][1]).toEqual(`import Vue from 'vue';
-import vueComponents from '../external/dist/vue-components';
-Vue.use(vueComponents);
+import myVueComponents from '../external/dist/my-vue-components';
+Vue.use(myVueComponents);
 import '@styles/_native.styl';
 import angular from 'angular';
 import uirouter from '@uirouter/angularjs/release/angular-ui-router';
