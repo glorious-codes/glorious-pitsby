@@ -1,4 +1,5 @@
 const chokidar = require('chokidar');
+const argsService = require('./args');
 
 const _public = {};
 
@@ -7,9 +8,15 @@ _public.init = (files, onFileChange) => {
   const watcher = chokidar.watch(files);
   watcher.on('change', path => {
     watcher.close();
-    handleChange(path, files, onFileChange);
+    setTimeout(() => {
+      handleChange(path, files, onFileChange);
+    }, getAggregateTime());
   });
 };
+
+function getAggregateTime(){
+  return argsService.getCliArgs('--aggregateTimeout') || 0;
+}
 
 function handleChange(changedFile, files, onFileChange){
   console.log(`${changedFile} changed!`);

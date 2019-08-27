@@ -1,5 +1,8 @@
 const chokidar = require('chokidar');
 const watchService = require('./watch');
+const argsService = require('./args');
+
+jest.useFakeTimers();
 
 describe('Watch Service', () => {
   function buildWatcherInstanceMock(){
@@ -23,6 +26,7 @@ describe('Watch Service', () => {
 
   beforeEach(() => {
     stubWatch(buildWatcherInstanceMock());
+    argsService.getCliArgs = jest.fn();
     console.log = jest.fn();
   });
 
@@ -51,6 +55,7 @@ describe('Watch Service', () => {
     watcher.on = jest.fn((evt, callback) => callback(fileChanged));
     stubWatch(watcher);
     watchService.init('some/path/to/file', onChange);
+    jest.runOnlyPendingTimers();
     expect(console.log).toHaveBeenCalledWith(`${fileChanged} changed!`);
   });
 
@@ -58,6 +63,7 @@ describe('Watch Service', () => {
     const watcher = buildWatcherInstanceMock();
     simulateChangingFileOnce(watcher);
     watchService.init('some/path/to/file', jest.fn());
+    jest.runOnlyPendingTimers();
     expect(watcher.on.mock.calls.length).toEqual(2);
     expect(watcher.close.mock.calls.length).toEqual(1);
   });
@@ -69,7 +75,21 @@ describe('Watch Service', () => {
     const watcher = buildWatcherInstanceMock();
     simulateChangingFileOnce(watcher);
     watchService.init('some/path/to/file', onChange);
+    jest.runOnlyPendingTimers();
     expect(watcher.on.mock.calls.length).toEqual(2);
     expect(watcher.close.mock.calls.length).toEqual(1);
+  });
+
+  it('should optionally set a custom delay before re-watching files', () => {
+    const delay = 500;
+    const watcher = buildWatcherInstanceMock();
+    argsService.getCliArgs = jest.fn((arg) => (arg == '--aggregateTimeout' ? delay : null));
+    watcher.on = jest.fn((evt, callback) => callback());
+    stubWatch(watcher);
+    watchService.init('some/path/to/file', jest.fn);
+    jest.advanceTimersByTime(499);
+    expect(watcher.on.mock.calls.length).toEqual(1);
+    jest.advanceTimersByTime(1);
+    expect(watcher.on.mock.calls.length).toEqual(2);
   });
 });

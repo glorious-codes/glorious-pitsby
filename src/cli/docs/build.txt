@@ -7,6 +7,7 @@ Example:
 
 Command Flags:
   --watch                Watch for changes on any file listed on pitsby.config.js
+  --aggregateTimeout     Delay in milliseconds before rebuilding documentation
   --port                 Integer representing the port to listen on
 
 Options:
