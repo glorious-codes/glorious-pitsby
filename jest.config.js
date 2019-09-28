@@ -19,7 +19,7 @@ module.exports = {
     '@mocks\/(.*)$': `<rootDir>/${project.mocks.source.root}$1`,
     '^.+\\.css$': '<rootDir>/src/webapp/mocks/raw-files.js'
   },
-  'setupTestFrameworkScriptFile': '<rootDir>/src/webapp/mocks/global.js',
+  'setupFilesAfterEnv': ['<rootDir>/src/webapp/mocks/global.js'],
   'transform': {
     '^.+\\.(png|styl)$': '<rootDir>/src/webapp/mocks/raw-files.js',
     '^.+\\.js$': 'babel-jest',
