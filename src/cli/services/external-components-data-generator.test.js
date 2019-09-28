@@ -86,6 +86,7 @@ describe('External Components Data Generator', () => {
         controller: `function controller() {
               var $ctrl = this;
               $ctrl.type = 'success';
+
               $ctrl.greet = function (name) {
                 console.log(name);
               };
