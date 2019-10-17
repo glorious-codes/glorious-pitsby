@@ -12,7 +12,6 @@ const DEFAULT_SERVER_PORT = 7000;
 _public.init = (clientDirectory, config) => {
   const { outputDirectory } = config;
   return new Promise((resolve, reject) => {
-    console.log('Generating docs...');
     const directory = buildOutputDirectoryPath(clientDirectory, outputDirectory);
     generateDocs(directory, config, err => {
       onDocsGenerationComplete(clientDirectory, err, resolve, reject);
@@ -67,11 +66,7 @@ function compile(config, { shouldWatch, directory, onComplete }){
 }
 
 function serve(server, onSuccess){
-  const port = getServerPort();
-  server.listen(port, 'localhost', () => {
-    console.log(`Documentation successfully served on http://localhost:${port}`);
-    onSuccess();
-  });
+  server.listen(getServerPort(), 'localhost', onSuccess);
 }
 
 function getServerPort(){
@@ -84,16 +79,12 @@ function buildServerConfig(directory){
     clientLogLevel: 'none',
     compress: true,
     host: '0.0.0.0',
-    progress: true,
-    quiet: true
+    progress: true
   };
 }
 
 function onDocsGenerationComplete(clientDirectory, err, resolve, reject){
-  if(err)
-    return reject(err);
-  console.log('Docs successfully generated!');
-  return resolve();
+  return err ? reject(err) : resolve();
 }
 
 module.exports = _public;

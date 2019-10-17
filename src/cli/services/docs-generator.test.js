@@ -45,11 +45,6 @@ describe('Docs Generator Service', () => {
     processService.setNodeEnv = jest.fn();
   });
 
-  it('should log files generation start', () => {
-    docsGeneratorService.init('/client', mockConfig());
-    expect(console.log).toHaveBeenCalledWith('Generating docs...');
-  });
-
   it('should output compiled files to a custom directory', () => {
     const config = mockConfig();
     config.outputDirectory = './docs';
@@ -74,13 +69,6 @@ describe('Docs Generator Service', () => {
     });
   });
 
-  it('should log success on successfully generate files', () => {
-    console.log = jest.fn();
-    docsGeneratorService.init('/client', mockConfig()).then(() => {
-      expect(console.log).toHaveBeenCalledWith('Docs successfully generated!');
-    });
-  });
-
   it('should serve generated docs if "watch" flag has been provided', () => {
     argsService.getCliArgs = jest.fn(param => param == '--watch');
     docsGeneratorService.init('/client', mockConfig());
@@ -96,29 +84,17 @@ describe('Docs Generator Service', () => {
       clientLogLevel: 'none',
       compress: true,
       host: '0.0.0.0',
-      progress: true,
-      quiet: true
+      progress: true
     });
     expect(serverListenMock.mock.calls[0][0]).toEqual(7000);
     expect(serverListenMock.mock.calls[0][1]).toEqual('localhost');
     expect(typeof serverListenMock.mock.calls[0][2]).toEqual('function');
   });
 
-  it('should log succes on serve generated documentation on serve success', () => {
-    argsService.getCliArgs = jest.fn(param => param == '--watch');
-    docsGeneratorService.init('/client', mockConfig()).then(() => {
-      const message = 'Documentation successfully served on http://localhost:7000';
-      expect(console.log).toHaveBeenCalledWith(message);
-    });
-  });
-
   it('should serve files on custom server port if port has been given', () => {
     const params = { '--watch': true, '--port': 5000 };
     argsService.getCliArgs = jest.fn(param => params[param]);
-    docsGeneratorService.init('/client', mockConfig()).then(() => {
-      const message = 'Documentation successfully served on http://localhost:5000';
-      expect(console.log).toHaveBeenCalledWith(message);
-    });
+    docsGeneratorService.init('/client', mockConfig());
     expect(webpack.mock.calls[0][0]).toEqual({
       entry: ['webpack-dev-server/client?http://localhost:5000/'],
       output: {
