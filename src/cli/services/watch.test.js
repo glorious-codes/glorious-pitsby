@@ -41,6 +41,24 @@ describe('Watch Service', () => {
     expect(typeof watcher.on.mock.calls[0][1]).toEqual('function');
   });
 
+  it('should log files watch', () => {
+    watchService.init('some/file.js', jest.fn());
+    expect(console.log).toHaveBeenCalledWith('Watching for changes...');
+  });
+
+  it('should log changed file on file change', () => {
+    const watcher = buildWatcherInstanceMock();
+    const fileChanged = 'file.js';
+    const onChange = jest.fn(() => {
+      return { then: jest.fn() };
+    });
+    watcher.on = jest.fn((evt, callback) => callback(fileChanged));
+    stubWatch(watcher);
+    watchService.init('some/path/to/file', onChange);
+    jest.runOnlyPendingTimers();
+    expect(console.log).toHaveBeenCalledWith(`${fileChanged} changed!`);
+  });
+
   it('should re-watch files on file change', () => {
     const watcher = buildWatcherInstanceMock();
     simulateChangingFileOnce(watcher);

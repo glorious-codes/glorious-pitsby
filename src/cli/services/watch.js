@@ -4,6 +4,7 @@ const argsService = require('./args');
 const _public = {};
 
 _public.init = (files, onFileChange) => {
+  console.log('Watching for changes...');
   const watcher = chokidar.watch(files);
   watcher.on('change', path => {
     watcher.close();
