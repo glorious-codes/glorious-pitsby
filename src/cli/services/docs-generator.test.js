@@ -93,7 +93,6 @@ describe('Docs Generator Service', () => {
     });
     expect(Server).toHaveBeenCalledWith(compilerObjectMock, {
       contentBase: '/client/pitsby',
-      clientLogLevel: 'silent',
       compress: true,
       host: '0.0.0.0',
       quiet: true
