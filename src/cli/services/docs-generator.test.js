@@ -93,10 +93,9 @@ describe('Docs Generator Service', () => {
     });
     expect(Server).toHaveBeenCalledWith(compilerObjectMock, {
       contentBase: '/client/pitsby',
-      clientLogLevel: 'none',
+      clientLogLevel: 'silent',
       compress: true,
       host: '0.0.0.0',
-      progress: true,
       quiet: true
     });
     expect(serverListenMock.mock.calls[0][0]).toEqual(7000);
