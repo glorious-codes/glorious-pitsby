@@ -81,7 +81,6 @@ function getServerPort(){
 function buildServerConfig(directory){
   return {
     contentBase: directory,
-    clientLogLevel: 'silent',
     compress: true,
     host: '0.0.0.0',
     quiet: true
