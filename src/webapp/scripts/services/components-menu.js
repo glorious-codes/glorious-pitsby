@@ -9,20 +9,33 @@ _public.build = engine => {
   });
 };
 
-_public.filter = (items, term) => {
-  return items.filter(item => {
-    return item.children ?
-      filterSubitems(item, term) :
-      item.name.toLowerCase().includes(term);
-  });
+_public.configItemsVisibilityByTerm = (items, term = '') => {
+  return configItemsVisibility(items, term);
 };
 
-function filterSubitems(item, term){
-  const subitems = _public.filter(item.children, term);
-  if(subitems.length){
-    item.children = subitems;
-    return true;
-  }
+_public.getVisibleItems = (items, visibleItems = []) => {
+  items.forEach(item => {
+    const { children } = item;
+    if(children)
+      setParentItemVisibility(item, _public.getVisibleItems(children, visibleItems));
+    else if(item.isVisible)
+      visibleItems.push(item);
+  });
+  return visibleItems;
+};
+
+function setParentItemVisibility(parentItem, visibleChildren){
+  parentItem.isVisible = visibleChildren.length > 0;
+}
+
+function configItemsVisibility(items, term){
+  items.forEach(item => {
+    if(item.children)
+      configItemsVisibility(item.children, term);
+    else
+      item.isVisible = item.name.toLowerCase().includes(term.toLowerCase());
+  });
+  return items;
 }
 
 function buildMenuItems(engine, components){
@@ -30,12 +43,14 @@ function buildMenuItems(engine, components){
     {
       id: 'components',
       name: 'Components',
-      children: buildComponentsSubitems(engine, components)
+      children: buildComponentsSubitems(engine, components),
+      isVisible: true
     },
     {
       id: 'playground',
       name: 'Playground',
-      route: { name: routes[3].name, params: { engine } }
+      route: { name: routes[3].name, params: { engine } },
+      isVisible: true
     }
   ];
 }
@@ -46,6 +61,7 @@ function buildComponentsSubitems(engine, components) {
       name: routes[2].name,
       params: { engine, componentId: component.id }
     };
+    component.isVisible = true;
     return component;
   });
 }

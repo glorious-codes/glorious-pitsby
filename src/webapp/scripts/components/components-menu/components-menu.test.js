@@ -1,6 +1,6 @@
 import componentsMenuService from '@scripts/services/components-menu';
 
-describe('Menu', () => {
+describe('Components Menu', () => {
   let compile;
   let routeService;
 
@@ -111,23 +111,12 @@ describe('Menu', () => {
   });
 
   it('should filter items on search term change', () => {
-    componentsMenuService.filter = jest.fn(() => ['p']);
+    componentsMenuService.configItemsVisibilityByTerm = jest.fn();
     const element = compile();
     const menuController = getMenuController(element);
-    menuController.items = ['a','b','p'];
+    menuController.fetchSuccess(mockItems());
     menuController.onSearchTermChange('p');
-    expect(componentsMenuService.filter).toHaveBeenCalledWith(menuController.items, 'p');
-    expect(menuController.filteredItems).toEqual(['p']);
-  });
-
-  it('should set items as filtered items when no term has been passed as search param', () => {
-    componentsMenuService.filter = jest.fn();
-    const element = compile();
-    const menuController = getMenuController(element);
-    menuController.items = ['a','b','p'];
-    menuController.onSearchTermChange();
-    expect(componentsMenuService.filter).not.toHaveBeenCalled();
-    expect(menuController.filteredItems).toEqual(menuController.items);
+    expect(componentsMenuService.configItemsVisibilityByTerm).toHaveBeenCalledWith(menuController.items, 'p');
   });
 
   it('should not show no results message by default', () => {
@@ -137,9 +126,10 @@ describe('Menu', () => {
   });
 
   it('should show no results message if term matches no component', () => {
-    componentsMenuService.filter = jest.fn(() => []);
+    componentsMenuService.configItemsVisibilityByTerm = jest.fn(() => []);
     const element = compile();
     const menuController = getMenuController(element);
+    menuController.fetchSuccess(mockItems());
     menuController.onSearchTermChange('p');
     element.isolateScope().$digest();
     const message = queryNoResultsMessage(element);

@@ -1,4 +1,6 @@
-<div class="p-components-menu-item-container {{ [$ctrl.hasChildrenCssClass, $ctrl.childrenVisibilityCssClass].join(' ') }}">
+<div
+  class="p-components-menu-item-container {{ [$ctrl.hasChildrenCssClass, $ctrl.childrenVisibilityCssClass].join(' ') }}"
+  ng-show="$ctrl.item.isVisible">
   <div
     ng-bind="$ctrl.item.name"
     class="p-components-menu-item"

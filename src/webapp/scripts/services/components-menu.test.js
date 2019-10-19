@@ -13,7 +13,7 @@ describe('Components Menu Service', () => {
     return [
       {
         name: 'Components', children: [
-          {name: 'Card'}, {name: 'Page'}, {name: 'Box'}
+          {name: 'Box'}, {name: 'Card'}, {name: 'Page'}
         ]
       },
       {
@@ -39,6 +39,7 @@ describe('Components Menu Service', () => {
       expect(menu[0].children).toEqual([
         {
           id: 'button',
+          isVisible: true,
           name: 'Button',
           route: {
             name: 'app.external-components.component',
@@ -50,6 +51,7 @@ describe('Components Menu Service', () => {
         },
         {
           id: 'card',
+          isVisible: true,
           name: 'Card',
           route: {
             name: 'app.external-components.component',
@@ -76,24 +78,82 @@ describe('Components Menu Service', () => {
     });
   });
 
-  it('should filter items', () => {
-    expect(componentsMenuService.filter(mockItems(), 'p')).toEqual([
+  it('should config items visibility by term', () => {
+    expect(componentsMenuService.configItemsVisibilityByTerm(mockItems(), 'pa')).toEqual([
       {
         name: 'Components', children: [
-          {name: 'Page'}
+          {name: 'Box', isVisible: false},
+          {name: 'Card', isVisible: false},
+          {name: 'Page', isVisible: true}
         ]
       },
       {
-        name: 'Playground'
+        name: 'Playground',
+        isVisible: false
+      }
+    ]);
+  });
+
+  it('should visibility configuration be case insensitive', () => {
+    expect(componentsMenuService.configItemsVisibilityByTerm(mockItems(), 'BO')).toEqual([
+      {
+        name: 'Components', children: [
+          {name: 'Box', isVisible: true},
+          {name: 'Card', isVisible: false},
+          {name: 'Page', isVisible: false}
+        ]
+      },
+      {
+        name: 'Playground',
+        isVisible: false
+      }
+    ]);
+  });
+
+  it('should set all items as visible if no term has been given', () => {
+    expect(componentsMenuService.configItemsVisibilityByTerm(mockItems())).toEqual([
+      {
+        name: 'Components', children: [
+          {name: 'Box', isVisible: true},
+          {name: 'Card', isVisible: true},
+          {name: 'Page', isVisible: true}
+        ]
+      },
+      {
+        name: 'Playground',
+        isVisible: true
       }
     ]);
   });
 
   it('should remove parent items when none of its children matches searched term', () => {
-    expect(componentsMenuService.filter(mockItems(), 'pl')).toEqual([
+    expect(componentsMenuService.configItemsVisibilityByTerm(mockItems(), 'pl')).toEqual([
       {
-        name: 'Playground'
+        name: 'Components', children: [
+          {name: 'Box', isVisible: false},
+          {name: 'Card', isVisible: false},
+          {name: 'Page', isVisible: false}
+        ]
+      },
+      {
+        name: 'Playground',
+        isVisible: true
       }
+    ]);
+  });
+
+  it('should get visible items', () => {
+    const items = componentsMenuService.configItemsVisibilityByTerm(mockItems(), 'p');
+    expect(componentsMenuService.getVisibleItems(items)).toEqual([
+      { name: 'Page', isVisible: true },
+      { name: 'Playground', isVisible: true }
+    ]);
+  });
+
+  it('should hide parent items when no child is visible', () => {
+    const items = componentsMenuService.configItemsVisibilityByTerm(mockItems(), 'play');
+    expect(componentsMenuService.getVisibleItems(items)).toEqual([
+      { name: 'Playground', isVisible: true }
     ]);
   });
 });
