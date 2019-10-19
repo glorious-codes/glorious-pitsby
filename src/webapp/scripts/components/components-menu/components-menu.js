@@ -16,15 +16,12 @@ function controller($transitions, routeService){
 
   $ctrl.fetchSuccess = items => {
     setItems(items);
-    setFilteredItems(items);
     configActiveItem(items);
   };
 
   $ctrl.onSearchTermChange = term => {
-    if(!term)
-      setFilteredItems($ctrl.items);
-    else
-      setFilteredItems(componentsMenuService.filter(angular.copy($ctrl.items), term));
+    componentsMenuService.configItemsVisibilityByTerm($ctrl.items, term);
+    configNoResultsMessageVisibility(getVisibleItems($ctrl.items));
   };
 
   function setTransitions(transitions){
@@ -41,10 +38,6 @@ function controller($transitions, routeService){
     $ctrl.items = items;
   }
 
-  function setFilteredItems(items){
-    $ctrl.filteredItems = items;
-  }
-
   function configActiveItem(items = []){
     return items.forEach(item => {
       if(item.children)
@@ -55,6 +48,19 @@ function controller($transitions, routeService){
 
   function isCurrentRoute(route){
     return routeService.isCurrentRoute(route.name, route.params);
+  }
+
+  function getVisibleItems(items){
+    return componentsMenuService.getVisibleItems(items);
+  }
+
+  function configNoResultsMessageVisibility(visibleItems){
+    const shouldShowNoResultsMessage = visibleItems.length === 0;
+    setNoResultsMessageVisibility(shouldShowNoResultsMessage);
+  }
+
+  function setNoResultsMessageVisibility(shouldShow){
+    $ctrl.shouldShowNoResultsMessage = shouldShow;
   }
 }
 

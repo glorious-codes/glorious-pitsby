@@ -7,14 +7,14 @@
     data-fetch="$ctrl.fetch"
     data-fetch-success="$ctrl.fetchSuccess">
     <div
-      ng-if="$ctrl.filteredItems && !$ctrl.filteredItems.length"
+      ng-if="$ctrl.shouldShowNoResultsMessage"
       class="p-components-menu-no-results"
       data-no-results-message>
       No results
     </div>
     <p-components-menu-item
       data-item="item"
-      ng-repeat="item in $ctrl.filteredItems"
+      ng-repeat="item in $ctrl.items"
       data-on-item-click="$ctrl.onItemClick">
       <p-components-menu-item
         ng-if="item.children"
