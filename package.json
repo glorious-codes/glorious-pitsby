@@ -1,6 +1,6 @@
 {
   "name": "@glorious/pitsby",
-  "version": "1.24.7",
+  "version": "1.24.8",
   "description": "Docs generator for AngularJS, Vue and Vanilla components",
   "author": "Rafael Camargo <hello@rafaelcamargo.com>",
   "repository": {
