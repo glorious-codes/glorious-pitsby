@@ -8,10 +8,10 @@ import componentsMenuItem from '@scripts/components/components-menu-item/compone
 import credits from '@scripts/components/credits/credits';
 import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
+import externalComponentAttributesList from '@scripts/components/external-component-attributes-list/external-component-attributes-list';
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
 import externalComponentExamplesList from '@scripts/components/external-component-examples-list/external-component-examples-list';
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
-import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
 import externalComponentPropsList from '@scripts/components/external-component-props-list/external-component-props-list';
 import externalComponentPropsListItem from '@scripts/components/external-component-props-list-item/external-component-props-list-item';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
@@ -50,10 +50,10 @@ export default angular.module('pitsby-components', [])
   .component('pCredits', credits)
   .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
+  .component('pExternalComponentAttributesList', externalComponentAttributesList)
   .component('pExternalComponentExample', externalComponentExample)
   .component('pExternalComponentExamplesList', externalComponentExamplesList)
   .component('pExternalComponentCode', externalComponentCode)
-  .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
   .component('pExternalComponentPropsList', externalComponentPropsList)
   .component('pExternalComponentPropsListItem', externalComponentPropsListItem)
   .component('pExternalComponentPreview', externalComponentPreview)

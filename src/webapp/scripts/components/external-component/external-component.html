@@ -18,10 +18,11 @@
     <p-paragraph>
       {{ $ctrl.component.description }}
     </p-paragraph>
-    <p-external-component-properties-list
-      ng-if="$ctrl.component.properties"
-      data-properties="$ctrl.component.properties">
-    </p-external-component-properties-list>
+    <p-external-component-attributes-list
+      ng-if="$ctrl.attributes"
+      data-attributes="$ctrl.attributes"
+      data-title="{{ $ctrl.attributesListTitle }}">
+    </p-external-component-attributes-list>
     <p-external-component-examples-list
       ng-if="$ctrl.component.examples"
       data-examples="$ctrl.component.examples"
