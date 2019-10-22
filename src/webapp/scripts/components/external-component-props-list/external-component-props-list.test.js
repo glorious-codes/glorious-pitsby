@@ -28,6 +28,11 @@ describe('External Component Props List', () => {
     expect(element.find('h3').text()).toEqual('Attributes');
   });
 
+  it('should contain a required caption', () => {
+    const element = compile();
+    expect(element.find('p-required-caption').length).toEqual(1);
+  });
+
   it('should transclude some content', () => {
     const element = compile({ content: '<p>Hello!</p>' });
     expect(element.find('p').text()).toEqual('Hello!');
