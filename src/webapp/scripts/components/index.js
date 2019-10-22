@@ -28,6 +28,7 @@ import menuTrigger from '@scripts/components/menu-trigger/menu-trigger';
 import paragraph from '@scripts/components/paragraph/paragraph';
 import pre from '@scripts/components/pre/pre';
 import requester from '@scripts/components/requester/requester';
+import requiredCaption from '@scripts/components/required-caption/required-caption';
 import requiredSymbol from '@scripts/components/required-symbol/required-symbol';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
@@ -71,6 +72,7 @@ export default angular.module('pitsby-components', [])
   .component('pParagraph', paragraph)
   .component('pPre', pre)
   .component('pRequester', requester)
+  .component('pRequiredCaption', requiredCaption)
   .component('pRequiredSymbol', requiredSymbol)
   .component('pRow', row)
   .component('pRowItem', rowItem)
