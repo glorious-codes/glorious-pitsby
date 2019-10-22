@@ -5,27 +5,32 @@
       ng-repeat="attribute in $ctrl.attributes">
       <p-row>
         <p-row-item
-          data-size="4"
+          data-size="3"
           data-label="Name">
-          <span ng-bind="attribute.name"></span>
+          <span
+            ng-bind="attribute.name"
+            data-attribute-value>
+          </span>
+          <p-required-symbol ng-if="attribute.required"></p-required-symbol>
           <p-tag ng-if="attribute.deprecated" data-theme="danger">
             Deprecated
           </p-tag>
         </p-row-item>
         <p-row-item
-          data-size="2"
-          data-label="Required">
-          <span ng-bind="attribute.required"></span>
-        </p-row-item>
-        <p-row-item
-          data-size="2"
+          data-size="3"
           data-label="Type">
-          <span ng-bind="attribute.type"></span>
+          <span
+            ng-bind="attribute.type"
+            data-attribute-value>
+          </span>
         </p-row-item>
         <p-row-item
-          data-size="4"
+          data-size="6"
           data-label="Valid Values">
-          <span ng-bind="attribute.values"></span>
+          <span
+            ng-bind="attribute.values"
+            data-attribute-value>
+          </span>
         </p-row-item>
       </p-row>
     </p-external-component-props-list-item>
