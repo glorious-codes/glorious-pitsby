@@ -26,6 +26,6 @@ describe('Required Caption', () => {
   it('should contain a caption text', () => {
     const element = compile();
     const textElement = element[0].querySelector('[data-required-caption-text]');
-    expect(textElement.textContent).toEqual('Required');
+    expect(textElement.textContent.trim()).toEqual('Required');
   });
 });
