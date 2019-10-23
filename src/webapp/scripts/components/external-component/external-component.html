@@ -23,6 +23,10 @@
       data-attributes="$ctrl.attributes"
       data-title="{{ $ctrl.attributesListTitle }}">
     </p-external-component-attributes-list>
+    <p-external-component-methods-list
+      ng-if="$ctrl.component.methods"
+      data-methods="$ctrl.component.methods">
+    </p-external-component-methods-list>
     <p-external-component-examples-list
       ng-if="$ctrl.component.examples"
       data-examples="$ctrl.component.examples"
