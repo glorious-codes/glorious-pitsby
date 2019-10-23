@@ -1,0 +1,54 @@
+<div class="p-external-component-methods-list">
+  <p-external-component-props-list
+    data-title="Methods">
+    <p-external-component-props-list-item
+      ng-repeat="method in $ctrl.methods">
+      <p-row class="p-external-component-methods-list-method-row">
+        <p-row-item data-size="12">
+          <p-heading
+            data-size="4" data-text="{{ method.name }}"
+            data-external-component-methods-list-method-name>
+          </p-heading>
+          <p-tag
+            ng-if="method.deprecated"
+            data-theme="danger"
+            data-external-component-methods-list-deprecated-method-tag>
+            Deprecated
+          </p-tag>
+        </p-row-item>
+      </p-row>
+      <p-row
+        class="p-external-component-methods-list-param-row"
+        ng-repeat="param in method.params">
+        <p-row-item data-size="3" data-label="Param">
+          <span
+            ng-bind="param.name"
+            data-external-component-methods-list-param-name>
+          </span>
+          <p-required-symbol
+            ng-if="param.required"
+            data-external-component-methods-list-required-param-symbol>
+          </p-required-symbol>
+          <p-tag
+            ng-if="param.deprecated"
+            data-theme="danger"
+            data-external-component-methods-list-deprecated-param-tag>
+            Deprecated
+          </p-tag>
+        </p-row-item>
+        <p-row-item data-size="2" data-label="Type">
+          <span
+            ng-bind="param.type"
+            data-external-component-methods-list-param-type>
+          </span>
+        </p-row-item>
+        <p-row-item data-size="5" data-label="Description">
+          <span
+            ng-bind="param.description"
+            data-external-component-methods-list-param-description>
+          </span>
+        </p-row-item>
+      </p-row>
+    </p-external-component-props-list-item>
+  </p-external-component-props-list>
+</div>

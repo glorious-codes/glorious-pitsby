@@ -1,0 +1,21 @@
+@require '_variables'
+
+.p-external-component-methods-list
+  .p-heading
+    h4
+      float left
+  p-heading
+    & + p-tag
+      .p-tag
+        position relative
+        top 2px
+  p-external-component-props-list-item:not(:first-child)
+    border-top 0
+    .p-external-component-methods-list-method-row
+      margin-top 20px
+
+.p-external-component-methods-list-param-row
+  margin-top 0
+  padding 10px 0
+  & + .p-external-component-methods-list-param-row
+    border-top 1px solid $color-grey-semi-light

@@ -8,10 +8,13 @@ import componentsMenuItem from '@scripts/components/components-menu-item/compone
 import credits from '@scripts/components/credits/credits';
 import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
+import externalComponentAttributesList from '@scripts/components/external-component-attributes-list/external-component-attributes-list';
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
 import externalComponentExamplesList from '@scripts/components/external-component-examples-list/external-component-examples-list';
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
-import externalComponentPropertiesList from '@scripts/components/external-component-properties-list/external-component-properties-list';
+import externalComponentMethodsList from '@scripts/components/external-component-methods-list/external-component-methods-list';
+import externalComponentPropsList from '@scripts/components/external-component-props-list/external-component-props-list';
+import externalComponentPropsListItem from '@scripts/components/external-component-props-list-item/external-component-props-list-item';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
 import externalComponentsPlayground from '@scripts/components/external-components-playground/external-components-playground';
 import heading from '@scripts/components/heading/heading';
@@ -26,6 +29,8 @@ import menuTrigger from '@scripts/components/menu-trigger/menu-trigger';
 import paragraph from '@scripts/components/paragraph/paragraph';
 import pre from '@scripts/components/pre/pre';
 import requester from '@scripts/components/requester/requester';
+import requiredCaption from '@scripts/components/required-caption/required-caption';
+import requiredSymbol from '@scripts/components/required-symbol/required-symbol';
 import row from '@scripts/components/row/row';
 import rowItem from '@scripts/components/row-item/row-item';
 import sidebar from '@scripts/components/sidebar/sidebar';
@@ -48,10 +53,13 @@ export default angular.module('pitsby-components', [])
   .component('pCredits', credits)
   .component('pEngineMenu', engineMenu)
   .component('pExternalComponent', externalComponent)
+  .component('pExternalComponentAttributesList', externalComponentAttributesList)
   .component('pExternalComponentExample', externalComponentExample)
   .component('pExternalComponentExamplesList', externalComponentExamplesList)
   .component('pExternalComponentCode', externalComponentCode)
-  .component('pExternalComponentPropertiesList', externalComponentPropertiesList)
+  .component('pExternalComponentMethodsList', externalComponentMethodsList)
+  .component('pExternalComponentPropsList', externalComponentPropsList)
+  .component('pExternalComponentPropsListItem', externalComponentPropsListItem)
   .component('pExternalComponentPreview', externalComponentPreview)
   .component('pExternalComponentsPlayground', externalComponentsPlayground)
   .component('pHeading', heading)
@@ -66,6 +74,8 @@ export default angular.module('pitsby-components', [])
   .component('pParagraph', paragraph)
   .component('pPre', pre)
   .component('pRequester', requester)
+  .component('pRequiredCaption', requiredCaption)
+  .component('pRequiredSymbol', requiredSymbol)
   .component('pRow', row)
   .component('pRowItem', rowItem)
   .component('pSidebar', sidebar)

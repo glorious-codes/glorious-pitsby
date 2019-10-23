@@ -18,6 +18,7 @@ function controller(routeService) {
 
   $ctrl.fetchSuccess = component => {
     setComponent(component);
+    configAttributes(component);
   };
 
   function setEngine(engine){
@@ -26,6 +27,26 @@ function controller(routeService) {
 
   function setComponent(component){
     $ctrl.component = component;
+  }
+
+  function configAttributes({ attributes, properties }){
+    const attrs = attributes || properties;
+    if(attrs) {
+      setAttributes(attrs);
+      setAttributesListTitle(buildAttributesListTitle(attributes));
+    }
+  }
+
+  function setAttributes(attributes){
+    $ctrl.attributes = attributes;
+  }
+
+  function buildAttributesListTitle(attributes){
+    return attributes ? 'Attributes' : 'Properties';
+  }
+
+  function setAttributesListTitle(title){
+    $ctrl.attributesListTitle = title;
   }
 }
 

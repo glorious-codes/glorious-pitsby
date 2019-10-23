@@ -1,0 +1,41 @@
+<div class="p-external-component-attributes-list">
+  <p-external-component-props-list
+    data-title="{{ $ctrl.title }}">
+    <p-external-component-props-list-item
+      ng-repeat="attribute in $ctrl.attributes">
+      <p-row>
+        <p-row-item
+          data-size="3"
+          data-label="Name">
+          <span
+            ng-bind="attribute.name"
+            data-attribute-value>
+          </span>
+          <p-required-symbol
+            ng-if="attribute.required"
+            data-external-component-attributes-list-param-required-symbol>
+          </p-required-symbol>
+          <p-tag ng-if="attribute.deprecated" data-theme="danger">
+            Deprecated
+          </p-tag>
+        </p-row-item>
+        <p-row-item
+          data-size="2"
+          data-label="Type">
+          <span
+            ng-bind="attribute.type"
+            data-attribute-value>
+          </span>
+        </p-row-item>
+        <p-row-item
+          data-size="7"
+          data-label="Valid Values">
+          <span
+            ng-bind="attribute.values"
+            data-attribute-value>
+          </span>
+        </p-row-item>
+      </p-row>
+    </p-external-component-props-list-item>
+  </p-external-component-props-list>
+</div>
