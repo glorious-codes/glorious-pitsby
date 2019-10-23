@@ -13,27 +13,43 @@ The following is an example of button component documentation:
 module.exports = {
   name: 'Button',
   description: 'Trigger for actions in forms, dialogs, and more.',
-  deprecated: true // Shows a deprecation tag beside component's name
-  properties: [
+  deprecated: true, // Shows a deprecation tag beside component's name
+  properties: [ // Can optionally be named "attributes"
     {
       name: 'theme',
       type: 'String',
       values: 'primary, secondary',
-      required: 'No',
+      required: true, // You can optionally indicate a property as required
       deprecated: true // Shows a deprecation tag beside property's name
     },
     {
       name: 'size',
       type: 'String',
-      values: 'small, large',
-      required: 'No'
+      values: 'small, large'
+    }
+  ],
+  // When documenting vanilla components, you can use "methods" to document
+  // your component's public methods.
+  methods: [
+    {
+      name: 'onClick (clickFn)',
+      deprecated: true, // Shows a deprecation tag beside method's name
+      params: [
+        {
+          name: 'clickFn',
+          type: 'Function',
+          description: 'Function to be called on button click.',
+          required: true, // You can optionally indicate a param as required
+          deprecated: true // Shows a deprecation tag beside param's name
+        }
+      ]
     }
   ],
   // Angular Examples should be written like below:
   examples: [
     {
       title: 'My Button Example',
-      description: 'This is my custom Angular button.'
+      description: 'This is my custom Angular button.',
       controller: function($window){
         const $ctrl = this;
         $ctrl.label = 'Greet';
@@ -55,7 +71,7 @@ module.exports = {
   examples: [
     {
       title: 'My Button Example',
-      description: 'This is my custom Vue button.'
+      description: 'This is my custom Vue button.',
       controller: {
         data(){
           return {
@@ -82,7 +98,7 @@ module.exports = {
   examples: [
     {
       title: 'My Button Example',
-      description: 'This is an example using just vanilla javascript.'
+      description: 'This is an example using just vanilla javascript.',
       controller: function(element){
         const input = element.querySelector('input');
         const button = element.querySelector('button');

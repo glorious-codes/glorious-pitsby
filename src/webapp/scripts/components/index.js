@@ -12,6 +12,7 @@ import externalComponentAttributesList from '@scripts/components/external-compon
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
 import externalComponentExamplesList from '@scripts/components/external-component-examples-list/external-component-examples-list';
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
+import externalComponentMethodsList from '@scripts/components/external-component-methods-list/external-component-methods-list';
 import externalComponentPropsList from '@scripts/components/external-component-props-list/external-component-props-list';
 import externalComponentPropsListItem from '@scripts/components/external-component-props-list-item/external-component-props-list-item';
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
@@ -56,6 +57,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentExample', externalComponentExample)
   .component('pExternalComponentExamplesList', externalComponentExamplesList)
   .component('pExternalComponentCode', externalComponentCode)
+  .component('pExternalComponentMethodsList', externalComponentMethodsList)
   .component('pExternalComponentPropsList', externalComponentPropsList)
   .component('pExternalComponentPropsListItem', externalComponentPropsListItem)
   .component('pExternalComponentPreview', externalComponentPreview)
