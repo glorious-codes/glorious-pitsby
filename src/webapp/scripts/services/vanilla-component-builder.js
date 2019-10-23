@@ -5,7 +5,7 @@ const _public = {};
 _public.build = ({controller, template = ''} = {}) => {
   const exampleElement = domService.parseHtml(`<div>${template}</div>`);
   if(controller)
-    controller(exampleElement);
+    setTimeout(() => controller(exampleElement));
   return exampleElement;
 };
 

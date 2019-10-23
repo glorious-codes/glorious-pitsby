@@ -10,6 +10,7 @@ describe('Vanilla Component Builder', () => {
   });
 
   it('should build component containing a controller', () => {
+    jest.useFakeTimers();
     window.alert = jest.fn();
     const component = {
       controller: function(element) {
@@ -19,6 +20,7 @@ describe('Vanilla Component Builder', () => {
       template: '<button>Greet</button>'
     };
     const element = vanillaComponentBuilder.build(component);
+    jest.runOnlyPendingTimers();
     element.querySelector('button').click();
     expect(window.alert).toHaveBeenCalledWith('Rafael');
   });
