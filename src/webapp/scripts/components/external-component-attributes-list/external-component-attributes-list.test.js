@@ -11,6 +11,10 @@ describe('External Component Attributes List', () => {
     ];
   }
 
+  function getParamRequriedSymbolElement(element){
+    return element[0].querySelector('[data-external-component-attributes-list-param-required-symbol]');
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
@@ -61,27 +65,31 @@ describe('External Component Attributes List', () => {
 
   it('should not show required symbol by default', () => {
     const element = compile({ attributes: mockAttributes() });
-    expect(element.find('p-required-symbol').length).toEqual(0);
+    const requiredSymbolElement = getParamRequriedSymbolElement(element);
+    expect(requiredSymbolElement).toBeFalsy();
   });
 
   it('should show required symbol if attribute has set required as "yes"', () => {
     const attributes = mockAttributes();
     attributes[0].required = 'yes';
     const element = compile({ attributes });
-    expect(element.find('p-required-symbol').length).toEqual(1);
+    const requiredSymbolElement = getParamRequriedSymbolElement(element);
+    expect(requiredSymbolElement).toBeTruthy();
   });
 
   it('should show required symbol if attribute has set required as "Yes"', () => {
     const attributes = mockAttributes();
     attributes[0].required = 'Yes';
     const element = compile({ attributes });
-    expect(element.find('p-required-symbol').length).toEqual(1);
+    const requiredSymbolElement = getParamRequriedSymbolElement(element);
+    expect(requiredSymbolElement).toBeTruthy();
   });
 
   it('should show required symbol if attribute has set required as "true"', () => {
     const attributes = mockAttributes();
     attributes[0].required = true;
     const element = compile({ attributes });
-    expect(element.find('p-required-symbol').length).toEqual(1);
+    const requiredSymbolElement = getParamRequriedSymbolElement(element);
+    expect(requiredSymbolElement).toBeTruthy();
   });
 });

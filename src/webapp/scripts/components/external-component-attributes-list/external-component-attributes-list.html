@@ -11,7 +11,10 @@
             ng-bind="attribute.name"
             data-attribute-value>
           </span>
-          <p-required-symbol ng-if="attribute.required"></p-required-symbol>
+          <p-required-symbol
+            ng-if="attribute.required"
+            data-external-component-attributes-list-param-required-symbol>
+          </p-required-symbol>
           <p-tag ng-if="attribute.deprecated" data-theme="danger">
             Deprecated
           </p-tag>
