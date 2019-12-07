@@ -26,10 +26,11 @@ describe('Webapp Logo Generator', () => {
   });
 
   it('should write logo template with style attribute if a custom logo has been passed', () => {
+    Date.now = jest.fn(() => '123');
     webappLogoGenerator.init({
       logo: { filepath: './dist/images/logo.svg', width: '190px', height: '30px' }
     });
-    const styles = 'background-image: url(\'external/dist/images/logo.svg\'); width: 190px; height: 30px';
+    const styles = 'background-image: url(\'external/dist/images/logo.svg?t=123\'); width: 190px; height: 30px';
     const logoMarkup = `<div class="p-logo" style="${styles}"></div>`;
     expect(fileService.write.mock.calls[0][1].trim()).toEqual(logoMarkup);
   });

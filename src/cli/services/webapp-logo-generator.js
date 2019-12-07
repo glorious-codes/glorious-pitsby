@@ -33,10 +33,15 @@ function buildLogoStyle(customLogo){
 
 function stringifyLogoStyle(customLogo){
   const style = [];
-  style.push(`background-image: url('${path.join('external', customLogo.filepath)}')`);
+  style.push(`background-image: url('${buildLogoImageUrl(customLogo)}')`);
   style.push(`width: ${customLogo.width}`);
   style.push(`height: ${customLogo.height}`);
   return style.join('; ');
+}
+
+function buildLogoImageUrl(customLogo){
+  const fingerprint = Date.now();
+  return path.join('external', `${customLogo.filepath}?t=${fingerprint}`);
 }
 
 function hasAllLogoAttributes(customLogo){
