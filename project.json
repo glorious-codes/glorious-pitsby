@@ -64,6 +64,7 @@
     "source": {
       "files": [
         "src/cli/**/*.js",
+        "!src/cli/**/mocks/**/*.js",
         "src/webapp/scripts/**/*.js",
         "!src/webapp/scripts/index.js"
       ]
