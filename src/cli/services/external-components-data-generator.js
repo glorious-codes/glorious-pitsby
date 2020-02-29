@@ -1,5 +1,7 @@
 const path = require('path');
 const jsonService = require('./json');
+const jsxJsonService = require('./jsx-json');
+const moduleService = require('./module');
 const webappDataService = require('./webapp-data');
 const { fileService } = require('./file');
 
@@ -10,7 +12,7 @@ _public.init = (clientDirectory, projects = []) => {
     const fulfillments = [];
     projects.forEach(project => {
       const pattern = buildCollectFromGlob(clientDirectory, project.collectDocsFrom);
-      collectComponents(pattern, components => {
+      collectComponents(pattern, project, components => {
         writeComponentsFile(project.engine, components, () => {
           fulfillments.push(project);
           if(fulfillments.length === projects.length)
@@ -25,18 +27,24 @@ function buildCollectFromGlob(clientDirectory, collectDocsFrom){
   return `${path.join(clientDirectory, collectDocsFrom, './**/*.doc.js')}`;
 }
 
-function collectComponents(collectDocsFromPattern, onSuccess, onError){
-  fileService.collect(collectDocsFromPattern, files => {
-    onSuccess(buildComponentsData(files));
+function collectComponents(collectDocsFromPattern, project, onSuccess, onError){
+  fileService.collect(collectDocsFromPattern, filepaths => {
+    onSuccess(buildComponentsData(project, filepaths));
   }, onError);
 }
 
-function buildComponentsData(files){
-  return files.map(file => {
-    delete require.cache[file];
-    const component = jsonService.stringifyFunctions(fileService.require(file));
+function buildComponentsData(project, filepaths){
+  return filepaths.map(filepath => {
+    delete require.cache[filepath];
+    const component = parseComponentFile(project, filepath);
     return appendComponentId(component);
   });
+}
+
+function parseComponentFile(project, filepath){
+  return project.engine == 'react' ?
+    moduleService.compileInMemoryModule(jsxJsonService.stringifyFunctions(filepath)) :
+    jsonService.stringifyFunctions(fileService.require(filepath));
 }
 
 function appendComponentId(component){
