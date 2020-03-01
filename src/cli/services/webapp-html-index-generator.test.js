@@ -191,7 +191,8 @@ describe('Webapp HTML Index Generator', () => {
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
-
+    <script crossorigin src="https://unpkg.com/react@16.13.0/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.development.js"></script>
   </body>
 </html>
 `);
@@ -219,8 +220,9 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.0/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16.8.0/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16.8.0/umd/react-dom.development.js"></script>
   </body>
 </html>
 `);
