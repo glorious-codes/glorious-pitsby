@@ -12,11 +12,6 @@ _public.render = (engine, component, { container, scope, angularComponentBuilder
     getComponentRenderer(engine)(component, container);
 };
 
-_public.onDestroy = (engine, container) => {
-  if(engine == 'react')
-    unmountReactComponent(container);
-};
-
 function getComponentRenderer(engine){
   return getAvailableComponentRenderes()[engine];
 }
@@ -47,10 +42,6 @@ function renderVueComponent(component, container){
 function renderVanillaComponent(component, container){
   const element = vanillaComponentBuilder.build(component);
   container.append(element);
-}
-
-function unmountReactComponent(container){
-  ReactDOM.unmountComponentAtNode(container);
 }
 
 export default _public;

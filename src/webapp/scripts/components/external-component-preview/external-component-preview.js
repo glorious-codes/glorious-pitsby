@@ -16,7 +16,6 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
   $ctrl.$onDestroy = () => {
     if($ctrl.pageFoldSubscriptionId)
       unsubscribeFromPageFoldService($ctrl.pageFoldSubscriptionId);
-    externalComponentsPreviewRenderer.onDestroy($ctrl.engine, getContainer());
   };
 
   function onShowUp(){

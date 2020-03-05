@@ -61,17 +61,4 @@ describe('External Component Preview Renderer Service', () => {
     expect(vueComponentBuilder.build).toHaveBeenCalledWith(component);
     expect(container.querySelector('h1').textContent).toEqual('Hello!');
   });
-
-  it('should unmount component on destroy if engine is React', () => {
-    const container = buildContainer();
-    ReactDOM.unmountComponentAtNode = jest.fn();
-    externalComponentsPreviewRenderer.onDestroy('react', container);
-    expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledWith(container);
-  });
-
-  it('should do nothing on destroy if engine is not React', () => {
-    ReactDOM.unmountComponentAtNode = jest.fn();
-    externalComponentsPreviewRenderer.onDestroy('vue', buildContainer());
-    expect(ReactDOM.unmountComponentAtNode).not.toHaveBeenCalled();
-  });
 });

@@ -99,15 +99,4 @@ describe('External Component Preview', () => {
     element.isolateScope().$ctrl.$onDestroy();
     expect(pageFoldService.unsubscribe).toHaveBeenCalledWith('123');
   });
-
-  it('should destroy rendered component on destroy', () => {
-    pageFoldService.unsubscribe = jest.fn();
-    pageFoldService.subscribe = jest.fn();
-    const element = compile({engine: 'react', example: mockExample()});
-    element.isolateScope().$ctrl.$onDestroy();
-    expect(externalComponentsPreviewRenderer.onDestroy).toHaveBeenCalledWith(
-      'react',
-      findContainerChild(element)
-    );
-  });
 });
