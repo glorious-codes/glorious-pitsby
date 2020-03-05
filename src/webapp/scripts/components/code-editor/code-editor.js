@@ -1,5 +1,6 @@
 import * as ace from 'brace';
 import 'brace/mode/javascript';
+import 'brace/mode/jsx';
 import 'brace/mode/html';
 import 'brace/mode/css';
 import '@styles/code-editor.styl';
