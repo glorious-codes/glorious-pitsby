@@ -5,10 +5,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const project = require('./project.json');
 
 module.exports = {
-  entry: [`${__dirname}/${project.scripts.source.index}`],
+  entry: [`${__dirname}/${project.scripts.webapp.source.index}`],
   externals: {
-    angular: 'angular',
-    vue: 'Vue'
+    'angular': 'angular',
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+    'vue': 'Vue'
   },
   module: {
     rules: [{
@@ -20,7 +22,7 @@ module.exports = {
       ]
     }, {
       test: /\.html$/,
-      include: [`${__dirname}/${project.scripts.source.root}`],
+      include: [`${__dirname}/${project.scripts.webapp.source.root}`],
       use: 'html-loader'
     }, {
       test: /\.js$/,
@@ -30,8 +32,9 @@ module.exports = {
   },
   resolve: {
     alias: {
+      '@cli': `${__dirname}/${project.scripts.cli.source.root}`,
       '@data': `${__dirname}/${project.data.source.root}`,
-      '@scripts': `${__dirname}/${project.scripts.source.root}`,
+      '@scripts': `${__dirname}/${project.scripts.webapp.source.root}`,
       '@styles': `${__dirname}/${project.styles.source.root}`
     }
   },

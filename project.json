@@ -5,15 +5,22 @@
     }
   },
   "scripts": {
-    "source": {
-      "root": "src/webapp/scripts/",
-      "index": "src/webapp/scripts/index.js",
-      "indexTemplate": "src/webapp/scripts/index-template.js"
+    "webapp": {
+      "source": {
+        "root": "src/webapp/scripts/",
+        "index": "src/webapp/scripts/index.js",
+        "indexTemplate": "src/webapp/scripts/index-template.js"
+      },
+      "dist": {
+        "filename": {
+          "prod": "[name]-[hash].js",
+          "dev": "[name].js"
+        }
+      }
     },
-    "dist": {
-      "filename": {
-        "prod": "[name]-[hash].js",
-        "dev": "[name].js"
+    "cli": {
+      "source": {
+        "root": "src/cli/"
       }
     }
   },
