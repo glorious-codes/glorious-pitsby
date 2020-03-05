@@ -38,6 +38,8 @@
   "dependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/standalone": "^7.8.6",
     "@uirouter/angularjs": "^1.0.20",
     "axios": "^0.18.1",
     "babel-jest": "^25.0.0",
@@ -74,6 +76,8 @@
     "codecov": "^3.1.0",
     "eslint": "^5.7.0",
     "jest": "^25.0.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "vue": "^2.6.3"
   }
 }
