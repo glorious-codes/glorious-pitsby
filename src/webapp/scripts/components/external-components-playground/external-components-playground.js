@@ -8,16 +8,18 @@ function controller($timeout, $element, routeService){
 
   $ctrl.$onInit = () => {
     setEngine(routeService.getParams('engine'));
+    setTemplateTabVisibility(getTemplateTabVisibility());
+    setControllerCodeEditorLanguage(($ctrl.engine == 'react' ? 'jsx' : 'javascript'));
     handleCodeSearchParam(routeService.getParams('code'));
   };
 
-  $ctrl.onPreviewRendering = () => {
-    const code = buildPreviewCode();
+  $ctrl.onPreviewRender = () => {
+    const code = buildPreviewCode($ctrl);
     handlePreviewCodeParts(code);
-    renderPreview(code);
+    renderPreview($ctrl.engine, code);
   };
 
-  $ctrl.onPreviewDestroying = () => {
+  $ctrl.onPreviewDestroy = () => {
     setPreviewVisibility(false);
   };
 
@@ -37,11 +39,23 @@ function controller($timeout, $element, routeService){
     $ctrl.engine = engine;
   }
 
+  function setTemplateTabVisibility(shouldShow){
+    $ctrl.shouldShowTemplateTab = shouldShow;
+  }
+
+  function getTemplateTabVisibility(){
+    return $ctrl.engine != 'react';
+  }
+
+  function setControllerCodeEditorLanguage(language){
+    $ctrl.controllerCodeLanguage = language;
+  }
+
   function handleCodeSearchParam(code){
     const { parse } = playgroundCodeSearchParamService;
-    const previewCode = code ? parse(code) : buildPreviewCode();
+    const previewCode = code ? parse(code) : buildPreviewCode($ctrl);
     handlePreviewCodeParts(previewCode);
-    renderPreview(previewCode);
+    renderPreview($ctrl.engine, previewCode);
   }
 
   function handlePreviewCodeParts({ controller, styles, template }){
@@ -50,24 +64,21 @@ function controller($timeout, $element, routeService){
     $ctrl.setStyles(styles);
   }
 
-  function buildPreviewCode(){
-    const { build } = externalComponentsPlaygroundCodeBuilder;
-    return build($ctrl.engine, $ctrl.template, $ctrl.controller, $ctrl.styles);
+  function buildPreviewCode({ engine, template, controller, styles }){
+    return externalComponentsPlaygroundCodeBuilder.build(engine, template, controller, styles);
   }
 
-  function renderPreview(previewCode){
-    const { template, controller, styles } = previewCode;
-    setPreview(buildPreview(previewCode));
+  function renderPreview(engine, { template, controller, styles }){
+    setPreview(buildPreview(engine, { template, controller, styles }));
     setPreviewVisibility(true);
-    const param = playgroundCodeSearchParamService.format(template, controller, styles);
-    $timeout(() => routeService.setParam('code', param));
+    $timeout(() => routeService.setParam('code', playgroundCodeSearchParamService.format(template, controller, styles)));
   }
 
-  function buildPreview(code){
+  function buildPreview(engine, { controller, template, styles }){
     return {
-      controller: eval(`(function(){ ${code.controller} }())`),
-      styles: code.styles,
-      template: code.template
+      controller: engine == 'react' ? controller : eval(`(function(){ ${controller} }())`),
+      styles,
+      template
     };
   }
 

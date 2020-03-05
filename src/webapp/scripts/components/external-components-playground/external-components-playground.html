@@ -1,27 +1,35 @@
 <div class="p-external-components-playground">
   <p-tabs data-query-param-key="tab" data-bar-items-position="center">
-    <p-tab data-name="Preview" data-on-select="$ctrl.onPreviewRendering">
+    <p-tab data-name="Preview" data-on-select="$ctrl.onPreviewRender">
       <p-external-component-preview
         ng-if="$ctrl.shouldShowPreview"
         data-engine="$ctrl.engine"
         data-example="$ctrl.preview">
       <p-external-component-preview>
     </p-tab>
-    <p-tab data-name="Template" data-on-select="$ctrl.onPreviewDestroying">
+    <p-tab
+      ng-if="$ctrl.shouldShowTemplateTab"
+      data-name="Template"
+      data-on-select="$ctrl.onPreviewDestroy"
+      data-external-components-playground-template-tab>
       <p-code-editor
         ng-if="$ctrl.template"
         data-mode="html"
         data-code="$ctrl.template"
         data-on-change="$ctrl.setTemplate" />
     </p-tab>
-    <p-tab data-name="Controller" data-on-select="$ctrl.onPreviewDestroying">
+    <p-tab
+      data-name="Controller"
+      data-on-select="$ctrl.onPreviewDestroy">
       <p-code-editor
         ng-if="$ctrl.controller"
-        data-mode="javascript"
+        data-mode="{{ $ctrl.controllerCodeLanguage }}"
         data-code="$ctrl.controller"
         data-on-change="$ctrl.setController" />
     </p-tab>
-    <p-tab data-name="Styles" data-on-select="$ctrl.onPreviewDestroying">
+    <p-tab
+      data-name="Styles"
+      data-on-select="$ctrl.onPreviewDestroy">
       <p-code-editor
         ng-if="$ctrl.styles"
         data-mode="css"

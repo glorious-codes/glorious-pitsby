@@ -67,6 +67,24 @@ describe('External Components Playground', () => {
     expect(getPlaygroundController(element).engine).toEqual('vue');
   });
 
+  it('should render template tab by default', () => {
+    stubRouteServiceParamsGet({ engine: 'vue' });
+    const element = compile();
+    const templateTabElement = element[0].querySelector(
+      '[data-external-components-playground-template-tab]'
+    );
+    expect(templateTabElement).toBeDefined();
+  });
+
+  it('should not render template tab if engine is React', () => {
+    stubRouteServiceParamsGet({ engine: 'react' });
+    const element = compile();
+    const templateTabElement = element[0].querySelector(
+      '[data-external-components-playground-template-tab]'
+    );
+    expect(templateTabElement).toEqual(null);
+  });
+
   it('should build preview code parts with code search param on initialize when code search param has been found', () => {
     const template = '<div>Me</div>';
     const controller = 'function controller(){} return controller;';
@@ -94,12 +112,24 @@ describe('External Components Playground', () => {
     expect(controller.shouldShowPreview).toEqual(true);
   });
 
+  it('should set JavaScript as controller code language by default', () => {
+    stubRouteServiceParamsGet({ engine: 'vue' });
+    const element = compile();
+    expect(element.isolateScope().$ctrl.controllerCodeLanguage).toEqual('javascript');
+  });
+
+  it('should set JSX as controller code language if engine is React', () => {
+    stubRouteServiceParamsGet({ engine: 'react' });
+    const element = compile();
+    expect(element.isolateScope().$ctrl.controllerCodeLanguage).toEqual('jsx');
+  });
+
   it('should set code search param on preview render', () => {
     stubPlaygroundCodeSearchParamFormat('xyz');
     const element = compile();
     const playgroundController = getPlaygroundController(element);
     const { template, controller, styles } = playgroundController;
-    playgroundController.onPreviewRendering();
+    playgroundController.onPreviewRender();
     $timeout.flush();
     expect(playgroundCodeSearchParamService.format).toHaveBeenCalledWith(template, controller, styles);
     expect(routeService.setParam).toHaveBeenCalledWith('code', 'xyz');
@@ -108,7 +138,7 @@ describe('External Components Playground', () => {
   it('should be able to destroy render preview', () => {
     const element = compile();
     const controller = getPlaygroundController(element);
-    controller.onPreviewDestroying();
+    controller.onPreviewDestroy();
     expect(controller.shouldShowPreview).toEqual(false);
   });
 });
