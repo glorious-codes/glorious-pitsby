@@ -11,6 +11,11 @@ describe('External Component Example', () => {
     };
   }
 
+  function findTemplateTabInElement(element){
+    const selector = '[data-external-component-example-template-tab]';
+    return element[0].querySelector(selector);
+  }
+
   beforeEach(() => {
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
@@ -59,5 +64,15 @@ describe('External Component Example', () => {
   it('should not render a title if no example title has been given', () => {
     const element = compile();
     expect(element.find('h4')[0]).toEqual(undefined);
+  });
+
+  it('should show template tab by default', () => {
+    const element = compile();
+    expect(findTemplateTabInElement(element)).toBeDefined();
+  });
+
+  it('should not show template tab if engine is React', () => {
+    const element = compile({ engine: 'react' });
+    expect(findTemplateTabInElement(element)).toEqual(null);
   });
 });

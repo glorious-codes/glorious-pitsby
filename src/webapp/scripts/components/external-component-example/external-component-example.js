@@ -8,6 +8,7 @@ function controller(){
   $ctrl.$onInit = () => {
     setTabQueryParamGroupKey(EXTERNAL_COMPONENT_QUERY_PARAMS.EXAMPLE_TABS_GROUP);
     setTabQueryParamKey(buildTabsQueryParamKey($ctrl.exampleIndex));
+    setTemplateTabVisibility(getTemplateTabVisibility($ctrl.engine));
   };
 
   function setTabQueryParamGroupKey(key){
@@ -20,6 +21,14 @@ function controller(){
 
   function setTabQueryParamKey(key){
     $ctrl.tabQueryParamKey = key;
+  }
+
+  function getTemplateTabVisibility(engine){
+    return engine != 'react';
+  }
+
+  function setTemplateTabVisibility(shouldShow){
+    $ctrl.shouldShowTemplateTab = shouldShow;
   }
 }
 
