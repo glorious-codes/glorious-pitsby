@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import reactComponentBuilder from '@scripts/services/react-component-builder';
 import vanillaComponentBuilder from '@scripts/services/vanilla-component-builder';
 import vueComponentBuilder from '@scripts/services/vue-component-builder';

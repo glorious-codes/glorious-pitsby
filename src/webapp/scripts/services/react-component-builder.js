@@ -1,4 +1,3 @@
-import React from 'react';
 import { transform } from '@babel/standalone';
 
 const _public = {};
