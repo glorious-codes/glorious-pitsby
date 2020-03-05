@@ -20,6 +20,26 @@ return controller;`,
     });
   });
 
+  it('should build React default code', () => {
+    const code = externalComponentsPlaygroundDefaultCodeBuilder.build('react');
+    expect(code).toEqual({
+      controller: `function() {
+  const { useState } = React;
+
+  return function(){
+    const [greeting, setGreeting] = useState('Hello world!');
+
+    return (
+      <div className="playground-preview-container">
+        { greeting }
+      </div>
+    );
+  }
+}`,
+      styles: '.playground-preview-container { padding: 30px; }'
+    });
+  });
+
   it('should build Vanilla default code', () => {
     const code = externalComponentsPlaygroundDefaultCodeBuilder.build('vanilla');
     expect(code).toEqual({

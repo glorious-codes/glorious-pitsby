@@ -3,6 +3,7 @@ const _public = {};
 _public.build = engine => {
   const codes = {
     angular: buildAngularDefaultCode(),
+    react: buildReactDefaultCode(),
     vanilla: buildVanillaDefaultCode(),
     vue: buildVueDefaultCode()
   };
@@ -22,6 +23,25 @@ controller.$inject = [];
 return controller;`,
     styles: buildStyles(),
     template: buildTemplate('<div ng-bind="$ctrl.greet"></div>')
+  };
+}
+
+function buildReactDefaultCode(){
+  return {
+    controller: `function() {
+  const { useState } = React;
+
+  return function(){
+    const [greeting, setGreeting] = useState('Hello world!');
+
+    return (
+      <div className="playground-preview-container">
+        { greeting }
+      </div>
+    );
+  }
+}`,
+    styles: buildStyles()
   };
 }
 
