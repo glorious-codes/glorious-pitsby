@@ -13,12 +13,18 @@ module.exports = {
       moduleName: "my-angular-components"
     },
     {
+      engine: "react",
+      collectDocsFrom: "./src/react",
+      // You may optionally declare some specific React version (Default: 16.13.0)
+      version: "16.8.0"
+    },
+    {
       engine: "vue",
       collectDocsFrom: "./src/vue",
       importFrom: "./dist/my-vue-components",
       // The name of your library according UMD (Universal Module Definition).
       // Pitsby will look for this name as a global variable.
-      libraryName: 'myVueComponents'
+      libraryName: "myVueComponents"
       // You may optionally declare some specific Vue version (Default: 2.5.13)
       version: "2.6.0"
     },
@@ -43,18 +49,18 @@ module.exports = {
     "./dist/etc/"
   ],
   metrics: {
-    googleAnalyticsId: 'UA-XXXXXXXXX-X'
+    googleAnalyticsId: "UA-XXXXXXXXX-X"
   },
   custom: {
     favicon: {
       // This image should be included in the "other" attribute above
-      filepath: './some/path/to/favicon.png'
+      filepath: "./some/path/to/favicon.png"
     },
     logo: {
       // This image should be included in the "other" attribute above
-      filepath: './some/path/to/image.svg',
-      width: '100px',
-      height: '100px'
+      filepath: "./some/path/to/image.svg",
+      width: "100px",
+      height: "100px"
     },
     // Styles to be applied globally.
     // This is perfect when you need to do just a few overrides, otherwise,
@@ -63,7 +69,7 @@ module.exports = {
     styles: `
       p-main { color: red; }
     `,
-    windowTitle: 'My project'
+    windowTitle: "My project"
   },
   outputDirectory: "./docs"
 }
@@ -74,9 +80,9 @@ module.exports = {
 A list of projects with their specifications:
 
 ##### `engine`
-Components' engine. Support for AngularJS (angular) and Vue (vue);
+Components' engine. Support for AngularJS (angular), React (react), Vue (vue) and Vanilla (vanilla) components;
 
-##### `collectFrom`
+##### `collectDocsFrom`
 The directory where Pitsby should look for .doc.js files regardless of the engine used.
 
 ##### `moduleName`
@@ -84,6 +90,9 @@ Angular module's name that contains the components you are writing `*.doc.js` fo
 
 ##### `importFrom`
 The path Pitsby should use to import your Vue components. Your Vue components should be written using the [Vue plugin strategy](https://vuejs.org/v2/guide/plugins.html): `Vue.use(yourVueComponents)`.
+
+##### `version`
+You can optionally set a version for React (default: 16.13.0) or Vue (default: 2.5.13) projects.
 
 ### Styles
 List of stylesheets that should be included in the documentation
@@ -98,7 +107,7 @@ List of any other *file/directory* that should be included in the documentation.
 IDs to be used on third party metrics services integration. For now, Pitsby support Google Analytics only.
 
 ### Custom
-UI Elements attributes that should be customised.
+UI Elements attributes that should be customized.
 
 ### Output directory
-The directory where docs should be outputted to. If not informed, documentation will be outputted to a directory called *pitsby*.
+Directory where the documentation should be outputted to. If not informed, documentation will be outputted to a directory called *pitsby*.

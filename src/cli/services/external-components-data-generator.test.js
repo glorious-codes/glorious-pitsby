@@ -1,4 +1,6 @@
 const externalComponentsDataGenerator = require('./external-components-data-generator');
+const jsxJsonService = require('./jsx-json');
+const moduleService = require('./module');
 const webappDataService = require('./webapp-data');
 const { fileService } = require('./file');
 
@@ -6,7 +8,8 @@ describe('External Components Data Generator', () => {
   function mockProjects(){
     return [
       {engine: 'angular', collectDocsFrom: './src/angular'},
-      {engine: 'vue', collectDocsFrom: './src/vue'}
+      {engine: 'vue', collectDocsFrom: './src/vue'},
+      {engine: 'react', collectDocsFrom: './src/react'},
     ];
   }
   function mockFilesData(){
@@ -39,6 +42,11 @@ describe('External Components Data Generator', () => {
         'badge.doc.js': {
           name: 'Badge'
         }
+      },
+      '/client/src/react/**/*.doc.js': {
+        'tag.doc.js': {
+          name: 'Tag'
+        }
       }
     };
   }
@@ -53,6 +61,10 @@ describe('External Components Data Generator', () => {
       return  data['/client/src/angular/**/*.doc.js'][filepath] ||
               data['/client/src/vue/**/*.doc.js'][filepath];
     });
+    jsxJsonService.stringifyFunctions = jest.fn(filepath => {
+      return mockFilesData()['/client/src/react/**/*.doc.js'][filepath];
+    });
+    moduleService.compileInMemoryModule = jest.fn(data => data);
     webappDataService.save = jest.fn((filename, data, onSuccess) => onSuccess());
   });
 
@@ -80,7 +92,7 @@ describe('External Components Data Generator', () => {
     expect(typeof fileService.collect.mock.calls[1][2]).toEqual('function');
   });
 
-  it('should write a JSON containing angular external components data', () => {
+  it('should write a JSON containing Angular external components data', () => {
     const data = [
       {name: 'Button', examples: [{
         controller: `function controller() {
@@ -103,10 +115,17 @@ describe('External Components Data Generator', () => {
     expect(typeof webappDataService.save.mock.calls[0][3]).toEqual('function');
   });
 
-  it('should write a JSON containing vue external components data', () => {
+  it('should write a JSON containing Vue external components data', () => {
     const data = [ {name: 'Badge', id: 'badge'} ];
     externalComponentsDataGenerator.init('/client', mockProjects());
     expect(webappDataService.save.mock.calls[1][1]).toEqual(data);
+  });
+
+  it('should write a JSON containing React external components data', () => {
+    externalComponentsDataGenerator.init('/client', mockProjects());
+    expect(webappDataService.save.mock.calls[2][1]).toEqual([
+      { id: 'tag', name: 'Tag' }
+    ]);
   });
 
   it('should not write any JSON if no projects have been given', () => {

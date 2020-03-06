@@ -1,7 +1,6 @@
-import jsonService from '../../../../cli/services/json';
+import externalComponentsPreviewRenderer from '@scripts/services/external-components-preview-renderer';
+import jsonService from '@scripts/services/json';
 import pageFoldService from '@scripts/services/page-fold';
-import vueComponentBuilder from '@scripts/services/vue-component-builder';
-import vanillaComponentBuilder from '@scripts/services/vanilla-component-builder';
 import template from './external-component-preview.html';
 
 function controller($scope, $timeout, $element, angularComponentBuilder){
@@ -20,45 +19,21 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
   };
 
   function onShowUp(){
-    return !$ctrl.rendered ? render(angular.copy($ctrl.example)) : null;
+    const { rendered, engine, example, pageFoldSubscriptionId } = $ctrl;
+    if(!rendered)
+      render(engine, angular.copy(example), pageFoldSubscriptionId);
   }
 
-  function render(example){
-    buildComponent($ctrl.engine, jsonService.parseFunctions(example));
+  function render(engine, example, pageFoldSubscriptionId){
     handleExampleStyles(getExampleStyles(example));
-    unsubscribeFromPageFoldService($ctrl.pageFoldSubscriptionId);
+    buildComponent(engine, jsonService.handleFunctions(example, { engine: engine }));
+    unsubscribeFromPageFoldService(pageFoldSubscriptionId);
     setPageFoldSubscriberId(null);
     setRendered(true);
   }
 
   function getExampleStyles(example){
     return example && example.styles;
-  }
-
-  /* eslint-disable complexity */
-  function buildComponent(engine, component){
-    switch (engine) {
-    case 'angular':
-      return handleAngularComponent(component);
-    case 'vue':
-      return handleVueComponent(component);
-    case 'vanilla':
-      return handleVanillaComponent(component);
-    }
-  }
-
-  function handleAngularComponent(component){
-    const element = angularComponentBuilder.build(component, $scope);
-    $element.find('div').append(element);
-  }
-
-  function handleVueComponent(component){
-    vueComponentBuilder.build(component, $element.find('div')[0]);
-  }
-
-  function handleVanillaComponent(component){
-    const element = vanillaComponentBuilder.build(component);
-    $element.find('div').append(element);
   }
 
   function handleExampleStyles(styles){
@@ -72,6 +47,19 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
     const tag = document.createElement('style');
     tag.innerHTML = styles;
     return tag;
+  }
+
+  function buildComponent(engine, component){
+    externalComponentsPreviewRenderer.render(engine, component, {
+      container: getContainer()[0],
+      scope: $scope,
+      angularContainer: getContainer(),
+      angularComponentBuilder
+    });
+  }
+
+  function getContainer(){
+    return $element.find('div');
   }
 
   function setPageFoldSubscriberId(id){

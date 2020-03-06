@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const pkg = require('../../../package.json');
-const processService = require('./process');
 const { fileService } = require('./file');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappHtmlIndexCustomisation = require('./webapp-html-index-customisation');
@@ -23,7 +22,6 @@ describe('Webapp HTML Index Generator', () => {
   beforeEach(() => {
     fileService.readSync = jest.fn(() => indexTemplate);
     fileService.write = jest.fn();
-    processService.getNodeEnv = jest.fn(() => 'development');
     webappHtmlIndexCustomisation.init = jest.fn(param => param);
     Date.now = jest.fn(() => 123);
   });
@@ -87,7 +85,7 @@ describe('Webapp HTML Index Generator', () => {
 `);
   });
 
-  it('should include vue script tag if a vue project has been given', () => {
+  it('should include Vue script tag if a vue project has been given', () => {
     const config = mockConfig();
     config.projects.push({engine: 'vue'});
     webappHtmlIndexGenerator.init({ projects: config.projects });
@@ -115,7 +113,7 @@ describe('Webapp HTML Index Generator', () => {
 `);
   });
 
-  it('should use vue version 2.5.13 if no custom vue version has been given', () => {
+  it('should use Vue version 2.5.13 if no custom version has been given', () => {
     const config = mockConfig();
     config.projects.push({engine: 'vue'});
     webappHtmlIndexGenerator.init({ projects: config.projects });
@@ -143,7 +141,7 @@ describe('Webapp HTML Index Generator', () => {
 `);
   });
 
-  it('should use custom vue version if custom vue version has been given', () => {
+  it('should use custom Vue version if custom version has been given', () => {
     const config = mockConfig();
     config.projects.push({engine: 'vue', version: '2.6.0'});
     webappHtmlIndexGenerator.init({ projects: config.projects });
@@ -171,8 +169,8 @@ describe('Webapp HTML Index Generator', () => {
 `);
   });
 
-  it('should not include vue script tag if no projects have been given', () => {
-    webappHtmlIndexGenerator.init();
+  it('should use React version 16.13.0 if no custom version has been given', () => {
+    webappHtmlIndexGenerator.init({ projects: [{engine: 'react'}] });
     expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
@@ -191,17 +189,15 @@ describe('Webapp HTML Index Generator', () => {
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
-
+    <script crossorigin src="https://unpkg.com/react@16.13.0/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.development.js"></script>
   </body>
 </html>
 `);
   });
 
-  it('should include minified component engine script tags if environment is production', () => {
-    const config = mockConfig();
-    config.projects.push({engine: 'vue', version: '2.6.0'});
-    processService.getNodeEnv = jest.fn(() => 'production');
-    webappHtmlIndexGenerator.init({ projects: config.projects });
+  it('should use custom React version if custom version has been given', () => {
+    webappHtmlIndexGenerator.init({ projects: [{engine: 'react', version: '16.8.0'}] });
     expect(fileService.write.mock.calls[0][1]).toEqual(`<!DOCTYPE html>
 <html>
   <head>
@@ -219,8 +215,9 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.0/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script crossorigin src="https://unpkg.com/react@16.8.0/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16.8.0/umd/react-dom.development.js"></script>
   </body>
 </html>
 `);

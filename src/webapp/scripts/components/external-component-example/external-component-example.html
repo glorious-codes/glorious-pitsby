@@ -13,7 +13,10 @@
         data-example="$ctrl.example">
       <p-external-component-preview>
     </p-tab>
-    <p-tab data-name="Template">
+    <p-tab
+      ng-if="$ctrl.shouldShowTemplateTab"
+      data-name="Template"
+      data-external-component-example-template-tab>
       <p-external-component-code
         data-code="$ctrl.example.template"
         data-language="html">

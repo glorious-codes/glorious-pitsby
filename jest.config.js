@@ -12,8 +12,9 @@ module.exports = {
     }
   },
   'moduleNameMapper': {
+    '@cli\/(.*)$': `<rootDir>/${project.scripts.cli.source.root}$1`,
     '@data\/(.*)$': `<rootDir>/${project.data.source.root}$1`,
-    '@scripts\/(.*)$': `<rootDir>/${project.scripts.source.root}$1`,
+    '@scripts\/(.*)$': `<rootDir>/${project.scripts.webapp.source.root}$1`,
     '@styles\/(.*)$': `<rootDir>/${project.styles.source.root}$1`,
     '@images\/(.*)$': `<rootDir>/${project.images.source.root}$1`,
     '@mocks\/(.*)$': `<rootDir>/${project.mocks.source.root}$1`,

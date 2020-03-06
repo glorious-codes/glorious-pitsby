@@ -58,6 +58,7 @@ module.exports = {
       dependencies: ['$window'],
       template: `
       <my-button
+        class="my-button"
         ng-click="$ctrl.greet()"
         ng-bind="$ctrl.label">
       </my-button>`,
@@ -66,7 +67,7 @@ module.exports = {
       styles: `
       .my-button { color: red; }`
     }
-  ]
+  ],
   // Vue Examples should be written like below:
   examples: [
     {
@@ -85,7 +86,7 @@ module.exports = {
         }
       },
       template: `
-      <my-button @click="greet">
+      <my-button class="my-button" @click="greet">
         {{ label }}
       </my-button>`,
       // Sometimes you need to customize styles for documentation purpose only.
@@ -93,7 +94,40 @@ module.exports = {
       styles: `
       .my-button { color: red; }`
     }
-  ]
+  ],
+  // React Examples should be written like below:
+  examples: [
+    {
+      title: 'My Button Example',
+      description: 'This is my custom React button.',
+      controller: function(){
+        // React API is available globally
+        const { useState } = React;
+        // Your library should be exported as UMD (Universal Module Definition)
+        // and will be available through the name you have defined.
+        const { Button } = yourReactComponentLibraryName;
+
+        // Controller must return a function or class representing the
+        // example to be rendered.
+        return function(){
+          const [ label, setLabel ] = useState('Send');
+          const onButtonClick = () => window.alert('Button clicked!');
+
+          return (
+            <div className="my-button-wrapper">
+              <Button onClick={onButtonClick}>
+                { label }
+              </Button>
+            </div>
+          );
+        }
+      },
+      // Sometimes you need to customize styles for documentation purpose only.
+      // Use this attribute to target some styles for your example:
+      styles: `
+      .my-button-wrapper { margin-top: 10px }`
+    }
+  ],
   // Vanilla Examples should be written like below:
   examples: [
     {

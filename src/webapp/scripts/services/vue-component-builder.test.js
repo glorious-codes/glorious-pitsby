@@ -13,11 +13,9 @@ describe('Vue Component Builder', () => {
 
   it('should render a component with no controller', () => {
     const container = createContainer();
-    const component = {
-      template: '<p>Hello</p>'
-    };
+    const component = { template: '<p>Hello!</p>' };
     const vm = vueComponentBuilder.build(component, container);
-    expect(vm.$el.innerHTML).toEqual('Hello');
+    expect(vm.$el.innerHTML).toEqual('Hello!');
   });
 
   it('should render a component containing a controller', () => {

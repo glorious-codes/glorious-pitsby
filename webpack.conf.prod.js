@@ -8,7 +8,7 @@ module.exports = {
   mode: 'production',
   devtool: 'source-map',
   output: {
-    filename: project.scripts.dist.filename.prod
+    filename: project.scripts.webapp.dist.filename.prod
   },
   optimization: {
     minimizer: [

@@ -1,6 +1,5 @@
 const path = require('path');
-const pkg = require('../../../package.json');
-const processService = require('./process');
+const cdnService = require('./cdn');
 const { fileService } = require('./file');
 const assetsFilepathFilter = require('./assets-filepath-filter');
 const webappHtmlIndexCustomisation = require('./webapp-html-index-customisation');
@@ -13,8 +12,8 @@ _public.init = ({ scripts, styles, custom, projects = [] } = {}) => {
     const scriptTags = buildAssetTags(scripts, buildScriptTag);
     const indexHtml = webappHtmlIndexCustomisation.init(buildIndexHtml(
       linkTags,
-      handleVueScriptsTag(scriptTags, projects),
-      buildComponentEngineScriptTag('angular.js', pkg.devDependencies.angular.replace('^', ''))
+      cdnService.buildAngularScriptTag(),
+      handleExternalScriptTags(scriptTags, projects)
     ), custom);
     fileService.write(path.join(__dirname, '../../webapp/index.html'), indexHtml, resolve, reject);
   });
@@ -36,31 +35,18 @@ function buildScriptTag(path){
   return `<script src="${buildExternalAssetPath(path)}?t=${Date.now()}"></script>`;
 }
 
-function handleVueScriptsTag(scriptTags, projects){
-  const vueProject = getVueProject(projects);
-  return vueProject ? prependVueScriptTag(scriptTags, vueProject) : scriptTags;
-}
-
-function getVueProject(projects){
-  for (var i = 0; i < projects.length; i++)
-    if(projects[i].engine == 'vue')
-      return projects[i];
-}
-
-function prependVueScriptTag(scriptTags, vueProject){
-  scriptTags.unshift(buildComponentEngineScriptTag('vue', (vueProject.version || '2.5.13')));
+function handleExternalScriptTags(scriptTags, projects){
+  const vueConfig = getProjectEngineConfig(projects, 'vue');
+  const reactConfig = getProjectEngineConfig(projects, 'react');
+  if(vueConfig)
+    scriptTags.unshift(cdnService.buildVueScriptTag(vueConfig.version));
+  if(reactConfig)
+    scriptTags.unshift(cdnService.buildReactScriptTag(reactConfig.version));
   return scriptTags;
 }
 
-function buildComponentEngineScriptTag(engine, version){
-  const cdnUrl = `https://cdnjs.cloudflare.com/ajax/libs/${engine}`;
-  const file = buildComponentEngineFileName(engine);
-  return `<script src="${cdnUrl}/${version}/${file}"></script>`;
-}
-
-function buildComponentEngineFileName(engine){
-  const suffix = processService.getNodeEnv() == 'production' ? '.min.js' : '.js';
-  return `${engine.replace('.js', '')}${suffix}`;
+function getProjectEngineConfig(projects, engine){
+  return projects.find(project => project.engine == engine);
 }
 
 function buildExternalAssetPath(path){
@@ -73,11 +59,11 @@ function parseRelativePath(path){
   return path.indexOf('./') === 0 ? path.replace('./','') : path;
 }
 
-function buildIndexHtml(linkTags, scriptTags, angularScriptTag){
+function buildIndexHtml(linkTags, angularScriptTag, externalScriptTags){
   const template = getIndexHtmlTemplate();
   let html = injectExternalTagsOnIndex(template, 'external-links', linkTags);
   html = injectExternalTagsOnIndex(html, 'angular', angularScriptTag);
-  html = injectExternalTagsOnIndex(html, 'external-scripts', scriptTags);
+  html = injectExternalTagsOnIndex(html, 'external-scripts', externalScriptTags);
   return clearBlankLines(html);
 }
 

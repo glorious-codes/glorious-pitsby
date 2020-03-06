@@ -1,7 +1,7 @@
 {
   "name": "@glorious/pitsby",
-  "version": "1.25.3",
-  "description": "Docs generator for AngularJS, Vue and Vanilla components",
+  "version": "1.26.0",
+  "description": "Docs generator for AngularJS, React, Vue and Vanilla components",
   "author": "Rafael Camargo <hello@rafaelcamargo.com>",
   "repository": {
     "type": "git",
@@ -38,6 +38,8 @@
   "dependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/standalone": "^7.8.6",
     "@uirouter/angularjs": "^1.0.20",
     "axios": "^0.18.1",
     "babel-jest": "^25.0.0",
@@ -56,6 +58,7 @@
     "mini-css-extract-plugin": "^0.5.0",
     "nanoid": "^2.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "prettier": "^1.19.1",
     "prismjs": "^1.15.0",
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
@@ -73,6 +76,8 @@
     "codecov": "^3.1.0",
     "eslint": "^5.7.0",
     "jest": "^25.0.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "vue": "^2.6.3"
   }
 }
