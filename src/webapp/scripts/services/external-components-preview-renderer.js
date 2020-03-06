@@ -4,9 +4,9 @@ import vueComponentBuilder from '@scripts/services/vue-component-builder';
 
 const _public = {};
 
-_public.render = (engine, component, { container, scope, angularComponentBuilder }) => {
+_public.render = (engine, component, { container, scope, angularComponentBuilder, angularContainer }) => {
   if(engine == 'angular')
-    renderAngularComponent(angularComponentBuilder, scope, component, container);
+    renderAngularComponent(angularComponentBuilder, angularContainer, scope, component);
   else
     getComponentRenderer(engine)(component, container);
 };
@@ -23,7 +23,7 @@ function getAvailableComponentRenderes(){
   };
 }
 
-function renderAngularComponent(builder, scope, component, container){
+function renderAngularComponent(builder, container, scope, component){
   const element = builder.build(component, scope);
   container.append(element);
 }
@@ -34,8 +34,7 @@ function renderReactComponent({ controller }, container){
 }
 
 function renderVueComponent(component, container){
-  const element = vueComponentBuilder.build(component);
-  container.append(element);
+  vueComponentBuilder.build(component, container);
 }
 
 function renderVanillaComponent(component, container){

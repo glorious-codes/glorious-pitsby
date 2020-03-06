@@ -20,17 +20,17 @@ describe('External Component Preview Renderer Service', () => {
   }
 
   it('should render an external Angular component', () => {
-    const container = buildContainer();
+    const container = angular.element(buildContainer());
     const component = buildComponentMock();
     const scope = {some: 'scope'};
     const builder = { build: jest.fn(() => mockBuiltComponent()) };
     externalComponentsPreviewRenderer.render('angular', component, {
       angularComponentBuilder: builder,
-      container,
+      angularContainer: container,
       scope
     });
     expect(builder.build).toHaveBeenCalledWith(component, scope);
-    expect(container.querySelector('h1').textContent).toEqual('Hello!');
+    expect(container.find('h1').text()).toEqual('Hello!');
   });
 
   it('should render an external React component', () => {
@@ -58,7 +58,6 @@ describe('External Component Preview Renderer Service', () => {
     const component = buildComponentMock();
     vueComponentBuilder.build = jest.fn(() => mockBuiltComponent());
     externalComponentsPreviewRenderer.render('vue', component, { container });
-    expect(vueComponentBuilder.build).toHaveBeenCalledWith(component);
-    expect(container.querySelector('h1').textContent).toEqual('Hello!');
+    expect(vueComponentBuilder.build).toHaveBeenCalledWith(component, container);
   });
 });

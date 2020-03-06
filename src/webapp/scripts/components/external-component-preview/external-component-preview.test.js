@@ -12,10 +12,6 @@ describe('External Component Preview', () => {
     };
   }
 
-  function findContainerChild(element){
-    return element.find('div')[0];
-  }
-
   function getElementChildScope(element){
     return element.isolateScope();
   }
@@ -62,8 +58,9 @@ describe('External Component Preview', () => {
     expect(externalComponentsPreviewRenderer.render).toHaveBeenCalledWith(
       engine,
       component, {
-        container: findContainerChild(element),
+        container: element.find('div')[0],
         scope: getElementChildScope(element),
+        angularContainer: element.find('div'),
         angularComponentBuilder
       }
     );

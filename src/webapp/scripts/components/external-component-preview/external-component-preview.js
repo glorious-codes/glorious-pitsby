@@ -51,14 +51,15 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
 
   function buildComponent(engine, component){
     externalComponentsPreviewRenderer.render(engine, component, {
-      container: getContainer(),
+      container: getContainer()[0],
       scope: $scope,
+      angularContainer: getContainer(),
       angularComponentBuilder
     });
   }
 
   function getContainer(){
-    return $element.find('div')[0];
+    return $element.find('div');
   }
 
   function setPageFoldSubscriberId(id){
