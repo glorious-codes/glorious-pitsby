@@ -42,7 +42,13 @@
             data-external-component-methods-list-param-type>
           </span>
         </p-row-item>
-        <p-row-item data-size="5" data-label="Description">
+        <p-row-item data-size="3" data-label="Valid Values">
+          <span
+            ng-bind="param.values"
+            data-external-component-methods-list-param-values>
+          </span>
+        </p-row-item>
+        <p-row-item data-size="4" data-label="Description">
           <span
             ng-bind="param.description"
             data-external-component-methods-list-param-description>
