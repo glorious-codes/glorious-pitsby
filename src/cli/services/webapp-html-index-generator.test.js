@@ -51,7 +51,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script src="https://some.lib.com/from/cdn.min.js?t=123"></script>
 <script src="external/dist/scripts/main.js?t=123"></script>
   </body>
@@ -78,7 +78,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
 
   </body>
 </html>
@@ -106,7 +106,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
   </body>
 </html>
@@ -134,7 +134,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
   </body>
 </html>
@@ -162,7 +162,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.0/vue.js"></script>
   </body>
 </html>
@@ -188,7 +188,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script crossorigin src="https://unpkg.com/react@16.13.0/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.development.js"></script>
   </body>
@@ -215,7 +215,7 @@ describe('Webapp HTML Index Generator', () => {
   </head>
   <body ng-app="pitsby-app">
     <ui-view></ui-view>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/${getAngularVersion()}/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script crossorigin src="https://unpkg.com/react@16.8.0/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16.8.0/umd/react-dom.development.js"></script>
   </body>

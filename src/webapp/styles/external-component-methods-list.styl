@@ -1,9 +1,18 @@
 @require '_variables'
+@require '_mixins'
 
 .p-external-component-methods-list
   .p-heading
     h4
       float left
+      position relative
+      left -10px
+      margin-bottom 10px
+      padding 5px 10px
+      background-color $color-grey-semi-light
+      font-family $font-family-secondary
+      font-size $font-size-xs
+      border-radius(4px)
   p-heading
     & + p-tag
       .p-tag

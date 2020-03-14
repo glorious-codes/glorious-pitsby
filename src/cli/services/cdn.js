@@ -4,7 +4,7 @@ const processService = require('./process');
 const _public = {};
 
 _public.buildAngularScriptTag = () => {
-  return buildEngineScriptTag('angular.js', getAngularVersion());
+  return buildEngineScriptTag(getAngularCdnUrl(), 'angular', getAngularVersion());
 };
 
 _public.buildReactScriptTag = (version = '16.13.0') => {
@@ -15,17 +15,24 @@ _public.buildReactScriptTag = (version = '16.13.0') => {
 };
 
 _public.buildVueScriptTag = (version = '2.5.13') => {
-  return buildEngineScriptTag('vue', version);
+  return buildEngineScriptTag(getVueCdnUrl(), 'vue', version);
 };
+
+function buildEngineScriptTag(cdnUrl, engine, version){
+  const filename = buildEngineFileName(engine);
+  return `<script src="${cdnUrl}/${version}/${filename}"></script>`;
+}
+
+function getAngularCdnUrl(){
+  return 'https://ajax.googleapis.com/ajax/libs/angularjs';
+}
+
+function getVueCdnUrl(){
+  return 'https://cdnjs.cloudflare.com/ajax/libs/vue';
+}
 
 function getAngularVersion(){
   return pkg.devDependencies.angular.replace('^', '');
-}
-
-function buildEngineScriptTag(engine, version){
-  const cdnUrl = `https://cdnjs.cloudflare.com/ajax/libs/${engine}`;
-  const file = buildEngineFileName(engine);
-  return `<script src="${cdnUrl}/${version}/${file}"></script>`;
 }
 
 function buildEngineFileName(engine){
