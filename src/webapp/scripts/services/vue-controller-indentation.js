@@ -18,7 +18,7 @@ function getNumerOfLeadingSpacesToRemove(lines){
 }
 
 function getReferenceLine(lines){
-  const dataMethodLine = getLineContainingText(lines, 'data() {');
+  const dataMethodLine = getDataMethodLine(lines);
   const methodsAttributeLine = getLineContainingText(lines, '"methods":');
   return dataMethodLine ? {
     text: dataMethodLine.text,
@@ -29,6 +29,11 @@ function getReferenceLine(lines){
     subsequentLineIndex: methodsAttributeLine.index + 2,
     spacesToRemove: codeIndentationService.TAB_SIZE * 2
   };
+}
+
+function getDataMethodLine(lines){
+  return  getLineContainingText(lines, 'data() {') ||
+          getLineContainingText(lines, 'data(){');
 }
 
 function getLineContainingText(lines, text){
