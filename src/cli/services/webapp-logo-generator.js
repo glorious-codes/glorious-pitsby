@@ -3,7 +3,7 @@ const { fileService } = require('./file');
 
 const _public = {};
 
-_public.init = customConfig => {
+_public.init = (customConfig = {}) => {
   const customLogo = customConfig.logo;
   const styleAttribute = buildStyleAttribute(customLogo);
   return writeCustomStylesOnLogoTemplate(getLogoComponentTemplate(), styleAttribute);
