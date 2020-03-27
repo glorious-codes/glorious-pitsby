@@ -58,6 +58,30 @@ describe('Vue Controller Indentation Service', () => {
 }`);
   });
 
+  it('should normalize indentation when data method has no space between parenthesis and curly brace', () => {
+    const raw = `{
+  data(){
+          return {
+            email: '',
+            password: '',
+            gender: '',
+            successMessage: null,
+          };
+        },
+}`;
+    const code = vueControllerIndentationService.normalize(raw);
+    expect(code).toEqual(`{
+  data(){
+    return {
+      email: '',
+      password: '',
+      gender: '',
+      successMessage: null,
+    };
+  },
+}`);
+  });
+
   it('should return an empty string if no controller has been provided', () => {
     const code = vueControllerIndentationService.normalize();
     expect(code).toEqual('');

@@ -1,6 +1,6 @@
 {
   "name": "@glorious/pitsby",
-  "version": "1.27.0",
+  "version": "1.27.1",
   "description": "Docs generator for AngularJS, React, Vue and Vanilla components",
   "author": "Rafael Camargo <hello@rafaelcamargo.com>",
   "repository": {
@@ -45,8 +45,8 @@
     "babel-jest": "^25.0.0",
     "babel-loader": "^8.0.6",
     "brace": "^0.11.1",
-    "chokidar": "^2.1.2",
-    "copy-webpack-plugin": "^4.5.4",
+    "chokidar": "^3.3.1",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^1.0.0",
     "file-loader": "^2.0.0",
     "file-system": "^2.2.2",

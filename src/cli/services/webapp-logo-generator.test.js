@@ -16,12 +16,12 @@ describe('Webapp Logo Generator', () => {
   });
 
   it('should write logo component template with the appropriate filepath', () => {
-    webappLogoGenerator.init({});
+    webappLogoGenerator.init();
     expect(fileService.write.mock.calls[0][0]).toEqual(getLogoComponentTemplateFullPath());
   });
 
   it('should write logo template without style attribute if no custom logo has been passed', () => {
-    webappLogoGenerator.init({});
+    webappLogoGenerator.init();
     expect(fileService.write.mock.calls[0][1].trim()).toEqual('<div class="p-logo" ></div>');
   });
 
