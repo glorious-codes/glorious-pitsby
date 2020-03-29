@@ -52,15 +52,23 @@ module.exports = {
       description: 'This is my custom Angular button.',
       controller: function($window){
         const $ctrl = this;
-        $ctrl.label = 'Greet';
-        $ctrl.greet = () => $window.alert('Hello!');
+
+        $ctrl.$onInit = () => {
+          setGreeting('Hello!');
+        };
+
+        $ctrl.greet = () => $window.alert($ctrl.greeting);
+
+        function setGreeting(greeting){
+          $ctrl.greeting = greeting;
+        }
+
+        $ctrl.$onInit();
       },
       dependencies: ['$window'],
       template: `
-      <my-button
-        class="my-button"
-        ng-click="$ctrl.greet()"
-        ng-bind="$ctrl.label">
+      <my-button class="my-button" ng-click="$ctrl.greet()">
+        Greet
       </my-button>`,
       // Sometimes you need to customize styles for documentation purpose only.
       // Use this attribute to target some styles for your example:
