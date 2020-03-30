@@ -35,11 +35,13 @@ module.exports = {
   ],
   styles: [
     "./dist/my-angular-components.css",
+    "./dist/my-react-components.css",
     "./dist/my-vue-components.css",
     "./dist/my-vanilla-components.css"
   ],
   scripts: [
     "./dist/my-angular-components.js",
+    "./dist/my-react-components.js",
     "./dist/my-vue-components.js",
     "./dist/my-vanilla-components.js"
   ],
