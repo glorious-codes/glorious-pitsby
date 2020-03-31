@@ -55,6 +55,15 @@ describe('External Component Example', () => {
 
   it('should render a title if example title has been given', () => {
     const exampleMock = buildExampleMock();
+    const description = 'Example description.';
+    exampleMock.description = description;
+    const element = compile({example: exampleMock});
+    const descriptionElement = element[0].querySelector('[data-external-component-example-description] p');
+    expect(descriptionElement.textContent.trim()).toEqual(description);
+  });
+
+  it('should render a description if example description has been given', () => {
+    const exampleMock = buildExampleMock();
     const title = 'Example Title';
     exampleMock.title = title;
     const element = compile({example: exampleMock});

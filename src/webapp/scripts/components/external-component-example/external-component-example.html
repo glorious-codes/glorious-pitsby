@@ -4,6 +4,11 @@
     data-text="{{ $ctrl.example.title }}"
     data-size="4">
   </p-heading>
+  <p-paragraph
+    ng-if="$ctrl.example.description"
+    data-external-component-example-description>
+    {{ $ctrl.example.description }}
+  </p-paragraph>
   <p-tabs
     data-query-param-group-key="{{ $ctrl.tabQueryParamGroupKey }}"
     data-query-param-key="{{ $ctrl.tabQueryParamKey }}">
