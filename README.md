@@ -2,7 +2,7 @@
 > Docs generator for AngularJS, React, Vue and Vanilla components.
 
 [![CircleCI](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master.svg?style=svg)](https://circleci.com/gh/glorious-codes/glorious-pitsby/tree/master)
-[![codecov](https://codecov.io/gh/glorious-codes/glorious-pitsby/branch/master/graph/badge.svg)](https://codecov.io/gh/glorious-codes/glorious-pitsby)
+[![Coverage Status](https://coveralls.io/repos/github/glorious-codes/glorious-pitsby/badge.svg?branch=master)](https://coveralls.io/github/glorious-codes/glorious-pitsby?branch=master)
 
 ## Installation
 
