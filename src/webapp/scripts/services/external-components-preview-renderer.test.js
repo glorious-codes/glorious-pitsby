@@ -60,4 +60,18 @@ describe('External Component Preview Renderer Service', () => {
     externalComponentsPreviewRenderer.render('vue', component, { container });
     expect(vueComponentBuilder.build).toHaveBeenCalledWith(component, container);
   });
+
+  it('should unbuild a React component on destroy if engine passed is React', () => {
+    const instanceMock = {};
+    reactComponentBuilder.unbuild = jest.fn();
+    externalComponentsPreviewRenderer.destroy('react', instanceMock);
+    expect(reactComponentBuilder.unbuild).toHaveBeenCalledWith(instanceMock);
+  });
+
+  it('should unbuild a Vue component on destroy if engine passed is Vue', () => {
+    const instanceMock = {};
+    vueComponentBuilder.unbuild = jest.fn();
+    externalComponentsPreviewRenderer.destroy('vue', instanceMock);
+    expect(vueComponentBuilder.unbuild).toHaveBeenCalledWith(instanceMock);
+  });
 });

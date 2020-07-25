@@ -32,7 +32,7 @@ describe('External Component Preview', () => {
         scope.$digest();
         return element;
       };
-      externalComponentsPreviewRenderer.onDestroy = jest.fn();
+      externalComponentsPreviewRenderer.destroy = jest.fn();
       externalComponentsPreviewRenderer.render = jest.fn();
       jsonService.handleFunctions = jest.fn((component) => component);
       pageFoldService.subscribe = jest.fn((element, onShowUp) => onShowUp());
@@ -89,11 +89,21 @@ describe('External Component Preview', () => {
     expect(element.find('style')[0].innerHTML).toEqual(stylesMock);
   });
 
-  it('should unregistered itself from page fold service on destroy if example has not been build', () => {
+  it('should unregister itself from page fold service on destroy if example has been built', () => {
     pageFoldService.unsubscribe = jest.fn();
     pageFoldService.subscribe = jest.fn(() => '123');
     const element = compile({engine: 'angular', example: mockExample()});
     element.isolateScope().$ctrl.$onDestroy();
     expect(pageFoldService.unsubscribe).toHaveBeenCalledWith('123');
+  });
+
+  it('should unbuild example if it has been built', () => {
+    const instanceMock = {};
+    externalComponentsPreviewRenderer.render = jest.fn(() => instanceMock);
+    pageFoldService.subscribe = jest.fn((element, onShowUp) => onShowUp());
+    const element = compile({engine: 'react', example: mockExample()});
+    const $ctrl = element.isolateScope().$ctrl;
+    $ctrl.$onDestroy();
+    expect(externalComponentsPreviewRenderer.destroy).toHaveBeenCalledWith('react', instanceMock);
   });
 });

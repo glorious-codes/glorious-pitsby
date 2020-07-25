@@ -22,4 +22,11 @@ describe('React Component Builder', () => {
     ReactDOM.render(builtComponent, container);
     expect(container.querySelector('h1').textContent).toEqual('Hello!');
   });
+
+  it('should unbuild a react component', () => {
+    const containerMock = document.createElement('div');
+    ReactDOM.unmountComponentAtNode = jest.fn();
+    reactComponentBuilder.unbuild(containerMock);
+    expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalledWith(containerMock);
+  });
 });
