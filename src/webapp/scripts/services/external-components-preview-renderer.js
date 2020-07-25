@@ -8,7 +8,16 @@ _public.render = (engine, component, { container, scope, angularComponentBuilder
   if(engine == 'angular')
     renderAngularComponent(angularComponentBuilder, angularContainer, scope, component);
   else
-    getComponentRenderer(engine)(component, container);
+    return getComponentRenderer(engine)(component, container);
+};
+
+_public.destroy = (engine, instance) => {
+  switch (engine) {
+  case 'react':
+    return reactComponentBuilder.unbuild(instance);
+  case 'vue':
+    return vueComponentBuilder.unbuild(instance);
+  }
 };
 
 function getComponentRenderer(engine){
@@ -31,10 +40,12 @@ function renderAngularComponent(builder, container, scope, component){
 function renderReactComponent({ controller }, container){
   const element = reactComponentBuilder.build(controller);
   ReactDOM.render(element, container);
+  return container;
 }
 
 function renderVueComponent(component, container){
-  vueComponentBuilder.build(component, container);
+  const vm = vueComponentBuilder.build(component, container);
+  return vm;
 }
 
 function renderVanillaComponent(component, container){

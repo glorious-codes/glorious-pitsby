@@ -7,6 +7,10 @@ _public.build = controller => {
   return React.createElement(Component);
 };
 
+_public.unbuild = container => {
+  ReactDOM.unmountComponentAtNode(container);
+};
+
 function transpileController(controller){
   const transpiledCode = transform(wrapControllerInModuleExports(controller), {
     presets: ['env', 'react']

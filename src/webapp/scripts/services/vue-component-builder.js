@@ -6,4 +6,8 @@ _public.build = ({controller = {}, template = ''} = {}, container) => {
   return vm;
 };
 
+_public.unbuild = vm => {
+  vm.$destroy();
+};
+
 export default _public;

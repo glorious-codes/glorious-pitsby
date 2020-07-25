@@ -14,8 +14,11 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
   };
 
   $ctrl.$onDestroy = () => {
-    if($ctrl.pageFoldSubscriptionId)
-      unsubscribeFromPageFoldService($ctrl.pageFoldSubscriptionId);
+    const { engine, instance, pageFoldSubscriptionId } = $ctrl;
+    if(pageFoldSubscriptionId)
+      unsubscribeFromPageFoldService(pageFoldSubscriptionId);
+    if(instance)
+      externalComponentsPreviewRenderer.destroy(engine, instance);
   };
 
   function onShowUp(){
@@ -50,12 +53,13 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
   }
 
   function buildComponent(engine, component){
-    externalComponentsPreviewRenderer.render(engine, component, {
+    const instance = externalComponentsPreviewRenderer.render(engine, component, {
       container: getContainer()[0],
       scope: $scope,
       angularContainer: getContainer(),
       angularComponentBuilder
     });
+    setInstance(instance);
   }
 
   function getContainer(){
@@ -72,6 +76,10 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
 
   function setRendered(rendered){
     $ctrl.rendered = rendered;
+  }
+
+  function setInstance(instance){
+    $ctrl.instance = instance;
   }
 }
 

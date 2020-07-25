@@ -52,4 +52,10 @@ describe('Vue Component Builder', () => {
     vueComponentBuilder.build(undefined, container);
     expect(container.innerHTML).toEqual('');
   });
+
+  it('should unbuild a Vue component', () => {
+    const vmMock = { $destroy: jest.fn() };
+    vueComponentBuilder.unbuild(vmMock);
+    expect(vmMock.$destroy).toHaveBeenCalled();
+  });
 });
