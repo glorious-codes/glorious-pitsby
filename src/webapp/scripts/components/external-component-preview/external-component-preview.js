@@ -1,6 +1,6 @@
+import fyzer from '@glorious/fyzer';
 import externalComponentsPreviewRenderer from '@scripts/services/external-components-preview-renderer';
 import jsonService from '@scripts/services/json';
-import pageFoldService from '@scripts/services/page-fold';
 import template from './external-component-preview.html';
 
 function controller($scope, $timeout, $element, angularComponentBuilder){
@@ -8,7 +8,7 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
 
   $ctrl.$onInit = () => {
     $timeout(() => {
-      const id = pageFoldService.subscribe($element[0], () => $scope.$apply(onShowUp));
+      const id = fyzer.subscribe($element[0], () => $scope.$apply(onShowUp));
       setPageFoldSubscriberId(id);
     });
   };
@@ -71,7 +71,7 @@ function controller($scope, $timeout, $element, angularComponentBuilder){
   }
 
   function unsubscribeFromPageFoldService(subscriberId){
-    pageFoldService.unsubscribe(subscriberId);
+    fyzer.unsubscribe(subscriberId);
   }
 
   function setRendered(rendered){
