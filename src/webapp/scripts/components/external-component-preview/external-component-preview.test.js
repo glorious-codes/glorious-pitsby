@@ -1,6 +1,6 @@
+import fyzer from '@glorious/fyzer';
 import externalComponentsPreviewRenderer from '@scripts/services/external-components-preview-renderer';
 import jsonService from '@scripts/services/json';
-import pageFoldService from '@scripts/services/page-fold';
 
 describe('External Component Preview', () => {
   let compile, angularComponentBuilder;
@@ -35,7 +35,7 @@ describe('External Component Preview', () => {
       externalComponentsPreviewRenderer.destroy = jest.fn();
       externalComponentsPreviewRenderer.render = jest.fn();
       jsonService.handleFunctions = jest.fn((component) => component);
-      pageFoldService.subscribe = jest.fn((element, onShowUp) => onShowUp());
+      fyzer.subscribe = jest.fn((element, onShowUp) => onShowUp());
     });
   });
 
@@ -67,13 +67,13 @@ describe('External Component Preview', () => {
   });
 
   it('should not render a component if it is below the page fold', () => {
-    pageFoldService.subscribe = jest.fn();
+    fyzer.subscribe = jest.fn();
     compile({engine: 'angular', example: mockExample()});
     expect(externalComponentsPreviewRenderer.render).not.toHaveBeenCalled();
   });
 
   it('should not render a component more than once', () => {
-    pageFoldService.subscribe = jest.fn((element, onShowUp) => {
+    fyzer.subscribe = jest.fn((element, onShowUp) => {
       onShowUp();
       onShowUp();
     });
@@ -90,17 +90,17 @@ describe('External Component Preview', () => {
   });
 
   it('should unregister itself from page fold service on destroy if example has been built', () => {
-    pageFoldService.unsubscribe = jest.fn();
-    pageFoldService.subscribe = jest.fn(() => '123');
+    fyzer.unsubscribe = jest.fn();
+    fyzer.subscribe = jest.fn(() => '123');
     const element = compile({engine: 'angular', example: mockExample()});
     element.isolateScope().$ctrl.$onDestroy();
-    expect(pageFoldService.unsubscribe).toHaveBeenCalledWith('123');
+    expect(fyzer.unsubscribe).toHaveBeenCalledWith('123');
   });
 
   it('should unbuild example if it has been built', () => {
     const instanceMock = {};
     externalComponentsPreviewRenderer.render = jest.fn(() => instanceMock);
-    pageFoldService.subscribe = jest.fn((element, onShowUp) => onShowUp());
+    fyzer.subscribe = jest.fn((element, onShowUp) => onShowUp());
     const element = compile({engine: 'react', example: mockExample()});
     const $ctrl = element.isolateScope().$ctrl;
     $ctrl.$onDestroy();
