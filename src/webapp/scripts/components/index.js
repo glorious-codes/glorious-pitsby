@@ -10,6 +10,7 @@ import engineMenu from '@scripts/components/engine-menu/engine-menu';
 import externalComponent from '@scripts/components/external-component/external-component';
 import externalComponentAttributesList from '@scripts/components/external-component-attributes-list/external-component-attributes-list';
 import externalComponentExample from '@scripts/components/external-component-example/external-component-example';
+import externalComponentExampleEditLink from '@scripts/components/external-component-example-edit-link/external-component-example-edit-link';
 import externalComponentExamplesList from '@scripts/components/external-component-examples-list/external-component-examples-list';
 import externalComponentCode from '@scripts/components/external-component-code/external-component-code';
 import externalComponentMethodsList from '@scripts/components/external-component-methods-list/external-component-methods-list';
@@ -55,6 +56,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponent', externalComponent)
   .component('pExternalComponentAttributesList', externalComponentAttributesList)
   .component('pExternalComponentExample', externalComponentExample)
+  .component('pExternalComponentExampleEditLink', externalComponentExampleEditLink)
   .component('pExternalComponentExamplesList', externalComponentExamplesList)
   .component('pExternalComponentCode', externalComponentCode)
   .component('pExternalComponentMethodsList', externalComponentMethodsList)

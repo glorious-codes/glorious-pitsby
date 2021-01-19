@@ -1,12 +1,15 @@
 const _public = {};
 
 _public.parse = code => {
-  if(code)
-    return JSON.parse(atob(code));
+  if(code) {
+    const decodedCode = decodeURIComponent(code);
+    return JSON.parse(atob(decodedCode));
+  }
 };
 
-_public.format = (template, controller, styles) => {
-  return btoa(JSON.stringify({ template, controller, styles }));
+_public.stringify = (template, controller, styles) => {
+  const stringifiedCode = JSON.stringify({ template, controller, styles });
+  return encodeURIComponent(btoa(stringifiedCode));
 };
 
 export default _public;

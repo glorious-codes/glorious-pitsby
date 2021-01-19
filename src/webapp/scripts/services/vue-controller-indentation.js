@@ -3,8 +3,7 @@ import codeIndentationService from '@scripts/services/code-indentation';
 const _public = {};
 
 _public.normalize = stringifiedController => {
-  if(!stringifiedController)
-    return '';
+  if(!stringifiedController) return '';
   const spacesToRemove = getNumerOfLeadingSpacesToRemove(stringifiedController.split('\n'));
   return codeIndentationService.normalize(stringifiedController, spacesToRemove);
 };

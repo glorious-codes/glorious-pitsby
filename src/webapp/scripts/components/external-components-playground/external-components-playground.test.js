@@ -25,7 +25,7 @@ describe('External Components Playground', () => {
   }
 
   function stubPlaygroundCodeSearchParamFormat(result){
-    playgroundCodeSearchParamService.format = jest.fn(() => result);
+    playgroundCodeSearchParamService.stringify = jest.fn(() => result);
   }
 
   function mockPlaygroundCode(){
@@ -59,6 +59,12 @@ describe('External Components Playground', () => {
   it('should have appropriate css class', () => {
     const element = compile();
     expect(element.find('div').attr('class')).toEqual('p-external-components-playground');
+  });
+
+  it('should have padding css class if source search url param is edit-link', () => {
+    stubRouteServiceParamsGet({source: 'edit-link'});
+    const element = compile();
+    expect(element.find('div').attr('class').includes('p-external-components-playground-padding')).toEqual(true);
   });
 
   it('should set engine on initialize', () => {
@@ -131,7 +137,7 @@ describe('External Components Playground', () => {
     const { template, controller, styles } = playgroundController;
     playgroundController.onPreviewRender();
     $timeout.flush();
-    expect(playgroundCodeSearchParamService.format).toHaveBeenCalledWith(template, controller, styles);
+    expect(playgroundCodeSearchParamService.stringify).toHaveBeenCalledWith(template, controller, styles);
     expect(routeService.setParam).toHaveBeenCalledWith('code', 'xyz');
   });
 
