@@ -10,6 +10,7 @@ function controller($timeout, $element, routeService){
     setEngine(routeService.getParams('engine'));
     setTemplateTabVisibility(getTemplateTabVisibility());
     setControllerCodeEditorLanguage(($ctrl.engine == 'react' ? 'jsx' : 'javascript'));
+    setCssClasses(buildCssClasses());
     handleCodeSearchParam(routeService.getParams('code'));
   };
 
@@ -43,6 +44,16 @@ function controller($timeout, $element, routeService){
     $ctrl.shouldShowTemplateTab = shouldShow;
   }
 
+  function buildCssClasses(){
+    const cssClasses = ['p-external-components-playground'];
+    if(routeService.getParams('source') == 'edit-link') cssClasses.push('p-external-components-playground-padding');
+    return cssClasses.join(' ');
+  }
+
+  function setCssClasses(cssClasses){
+    $ctrl.cssClasses = cssClasses;
+  }
+
   function getTemplateTabVisibility(){
     return $ctrl.engine != 'react';
   }
@@ -71,7 +82,7 @@ function controller($timeout, $element, routeService){
   function renderPreview(engine, { template, controller, styles }){
     setPreview(buildPreview(engine, { template, controller, styles }));
     setPreviewVisibility(true);
-    $timeout(() => routeService.setParam('code', playgroundCodeSearchParamService.format(template, controller, styles)));
+    $timeout(() => routeService.setParam('code', playgroundCodeSearchParamService.stringify(template, controller, styles)));
   }
 
   function buildPreview(engine, { controller, template, styles }){

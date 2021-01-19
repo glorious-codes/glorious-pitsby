@@ -1,5 +1,4 @@
 import vueComponentBuilder from '@scripts/services/vue-component-builder';
-vueComponentBuilder.build = jest.fn();
 
 describe('External Component Example', () => {
   let compile;
@@ -17,6 +16,7 @@ describe('External Component Example', () => {
   }
 
   beforeEach(() => {
+    vueComponentBuilder.build = jest.fn();
     angular.mock.module('pitsby-app');
     inject(($rootScope, $compile) => {
       const scope = $rootScope.$new(true);

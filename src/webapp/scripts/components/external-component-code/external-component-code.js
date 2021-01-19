@@ -2,7 +2,6 @@ import '@styles/external-component-code.styl';
 import 'prismjs/themes/prism.css';
 import Prism from 'prismjs';
 import codeIndentationService from '@scripts/services/code-indentation';
-import vueControllerIndentationService from '@scripts/services/vue-controller-indentation';
 import vueControllerSyntaxService from '@scripts/services/vue-controller-syntax';
 import template from './external-component-code.html';
 
@@ -14,14 +13,8 @@ function controller($element){
   };
 
   function formatCode(code){
-    return typeof code == 'object' ?
-      normalizeVueControllerSyntax(JSON.stringify(code, null, 2)) :
-      codeIndentationService.normalize(code);
-  }
-
-  function normalizeVueControllerSyntax(stringifiedController){
-    const code = vueControllerSyntaxService.improve(stringifiedController);
-    return vueControllerIndentationService.normalize(code);
+    if(typeof code == 'object') return vueControllerSyntaxService.stringify(code);
+    return codeIndentationService.normalize(code);
   }
 
   function injectCodeIntoPreElement(code){

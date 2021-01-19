@@ -4,7 +4,7 @@ const project = require('./project.json');
 
 module.exports = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   output: {
     filename: project.scripts.webapp.dist.filename.dev
   },

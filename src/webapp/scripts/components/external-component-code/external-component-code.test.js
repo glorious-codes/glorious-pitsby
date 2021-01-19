@@ -26,7 +26,7 @@ describe('External Component Code', () => {
       };
     });
     codeIndentationService.normalize = jest.fn(code => code);
-    vueControllerSyntaxService.improve = jest.fn(code => code);
+    vueControllerSyntaxService.stringify = jest.fn(code => code);
     vueControllerIndentationService.normalize = jest.fn(code => code);
   });
 
@@ -59,17 +59,10 @@ describe('External Component Code', () => {
     expect(element.find('pre')[0].innerHTML).toEqual(code);
   });
 
-  it('should improve Vue controller syntax', () => {
+  it('should stringify Vue controller syntax', () => {
     const code = { data(){ return { user: 'Rafael' }; } };
     stubPrism(code);
     compile({ code });
-    expect(vueControllerSyntaxService.improve).toHaveBeenCalledWith(JSON.stringify(code, null, 2));
-  });
-
-  it('should normalize Vue controller indentation', () => {
-    const code = { data(){ return { user: 'Rafael' }; } };
-    stubPrism(code);
-    compile({ code });
-    expect(vueControllerIndentationService.normalize).toHaveBeenCalledWith(JSON.stringify(code, null, 2));
+    expect(vueControllerSyntaxService.stringify).toHaveBeenCalledWith(code);
   });
 });
