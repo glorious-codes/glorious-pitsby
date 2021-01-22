@@ -76,7 +76,7 @@ function controller(){
   }
 
   function formatCode(code){
-    return code && codeIndentationService.normalize(code);
+    return code && codeIndentationService.normalize(code) || '\n';
   }
 
   function setPlaygroundLinkHref(href){

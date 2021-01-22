@@ -63,11 +63,11 @@ describe('External Component Example Edit Link', () => {
     };
     const element = compile({engine, example});
     const expectedCodeSearchParam = [
-      'eyJjb250cm9sbGVyIjoiZnVuY3Rpb24oKXtcbiAgcmV0dXJuIGZ1bmN0aW9uKCl7XG4gICA',
-      'gY29uc3Qgb25DbGljayA9ICgpID0%2BIHdpbmRvdy5hbGVydChcIkhleSFcIik7XG4gICAg',
-      'cmV0dXJuIChcbiAgICAgIDxidXR0b24gY2xhc3NOYW1lPVwidGVzdC1idG5cIiBvbkNsaWN',
-      'rPXtvbkNsaWNrfT5DbGljayBIZXJlPC9idXR0b24%2BXG4gICAgKVxuICB9XG59Iiwic3R5',
-      'bGVzIjoiLnRlc3QtYnRuIHsgY29sb3I6IHJlZDsgfSJ9'
+      'eyJ0ZW1wbGF0ZSI6IlxuIiwiY29udHJvbGxlciI6ImZ1bmN0aW9uKCl7XG4gIHJldHVybiB',
+      'mdW5jdGlvbigpe1xuICAgIGNvbnN0IG9uQ2xpY2sgPSAoKSA9PiB3aW5kb3cuYWxlcnQoXC',
+      'JIZXkhXCIpO1xuICAgIHJldHVybiAoXG4gICAgICA8YnV0dG9uIGNsYXNzTmFtZT1cInRlc',
+      '3QtYnRuXCIgb25DbGljaz17b25DbGlja30%2BQ2xpY2sgSGVyZTwvYnV0dG9uPlxuICAgIC',
+      'lcbiAgfVxufSIsInN0eWxlcyI6Ii50ZXN0LWJ0biB7IGNvbG9yOiByZWQ7IH0ifQ%3D%3D'
     ].join('');
     const expectedHref = `#!/components/react/playground?code=${expectedCodeSearchParam}&source=edit-link`;
     expect(element.find('a').attr('href')).toEqual(expectedHref);
