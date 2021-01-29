@@ -1,13 +1,14 @@
 describe('External Component Example Edit Link', () => {
-  let compile;
+  let compile, routeService;
 
   beforeEach(() => {
     angular.mock.module('pitsby-app');
-    inject(($rootScope, $compile) => {
+    inject(($rootScope, $compile, $injector) => {
+      routeService = $injector.get('routeService');
       const scope = $rootScope.$new(true);
       compile = (bindings = {}) => {
         const template = `<p-external-component-example-edit-link
-                            data-engine="$ctrl.engine"
+                            data-engine="{{ $ctrl.engine }}"
                             data-example="$ctrl.example">
                           </p-external-component-example-edit-link>`;
         scope.$ctrl = bindings;
@@ -16,6 +17,7 @@ describe('External Component Example Edit Link', () => {
         return element;
       };
     });
+    routeService.go = jest.fn();
   });
 
   it('should have appropriate css class', () => {
@@ -23,7 +25,7 @@ describe('External Component Example Edit Link', () => {
     expect(element.find('span').attr('class')).toEqual('p-external-component-example-edit-link');
   });
 
-  it('should contain a link to playground with proper Vue code search param value', () => {
+  it('should go to Vue playground on button click', () => {
     const engine = 'vue';
     const example = {
       controller: {
@@ -44,11 +46,34 @@ describe('External Component Example Edit Link', () => {
       '3LmFsZXJ0KFwiSGV5IVwiKTtcbiAgICB9XG4gIH1cbn07Iiwic3R5bGVzIjoiLnRlc3QtYn',
       'RuIHsgY29sb3I6IHJlZDsgfSJ9'
     ].join('');
-    const expectedHref = `#!/components/vue/playground?code=${expectedCodeSearchParam}&source=edit-link`;
-    expect(element.find('a').attr('href')).toEqual(expectedHref);
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
   });
 
-  it('should contain a link to playground with proper React code search param value', () => {
+  it('should go to Vue-template-only playground on button click', () => {
+    const engine = 'vue';
+    const example = {
+      template: '<pd-banner class="test-btn">Success!</pd-banner>',
+      styles: '.test-btn { color: red; }'
+    };
+    const element = compile({engine, example});
+    const expectedCodeSearchParam = [
+      'eyJ0ZW1wbGF0ZSI6IjxwZC1iYW5uZXIgY2xhc3M9XCJ0ZXN0LWJ0blwiPlN1Y2Nlc3MhPC9',
+      'wZC1iYW5uZXI%2BIiwiY29udHJvbGxlciI6InJldHVybiB7XG4gIGRhdGEoKXtcbiAgICBy',
+      'ZXR1cm4ge307XG4gIH0sXG4gIFwibWV0aG9kc1wiOnt9XG59OyIsInN0eWxlcyI6Ii50ZXN',
+      '0LWJ0biB7IGNvbG9yOiByZWQ7IH0ifQ%3D%3D'
+    ].join('');
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
+  });
+
+  it('should go to React playground on button click', () => {
     const engine = 'react';
     const example = {
       controller: `function(){
@@ -69,11 +94,14 @@ describe('External Component Example Edit Link', () => {
       '3QtYnRuXCIgb25DbGljaz17b25DbGlja30%2BQ2xpY2sgSGVyZTwvYnV0dG9uPlxuICAgIC',
       'lcbiAgfVxufSIsInN0eWxlcyI6Ii50ZXN0LWJ0biB7IGNvbG9yOiByZWQ7IH0ifQ%3D%3D'
     ].join('');
-    const expectedHref = `#!/components/react/playground?code=${expectedCodeSearchParam}&source=edit-link`;
-    expect(element.find('a').attr('href')).toEqual(expectedHref);
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
   });
 
-  it('should contain a link to playground with proper AngularJS with depedencies code search param value', () => {
+  it('should go to Angular-with-dependencies playground on button click', () => {
     const engine = 'angular';
     const example = {
       controller: `function($window){
@@ -92,11 +120,14 @@ describe('External Component Example Edit Link', () => {
       'bnRyb2xsZXIuJGluamVjdCA9IFsnJHdpbmRvdyddO1xuXG5yZXR1cm4gY29udHJvbGxlcjs',
       'iLCJzdHlsZXMiOiIudGVzdC1idG4geyBjb2xvcjogcmVkOyB9In0%3D'
     ].join('');
-    const expectedHref = `#!/components/angular/playground?code=${expectedCodeSearchParam}&source=edit-link`;
-    expect(element.find('a').attr('href')).toEqual(expectedHref);
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
   });
 
-  it('should contain a link to playground with proper AngularJS template-only code search param value', () => {
+  it('should go to Angular-template-only playground on button click', () => {
     const engine = 'angular';
     const example = {
       template: '<p class="test-p">Hello!</button>',
@@ -109,11 +140,14 @@ describe('External Component Example Edit Link', () => {
       'B0aGlzO1xufVxuXG5jb250cm9sbGVyLiRpbmplY3QgPSBbXTtcblxucmV0dXJuIGNvbnRyb',
       '2xsZXI7Iiwic3R5bGVzIjoiLnRlc3QtYnRuIHsgY29sb3I6IHJlZDsgfSJ9'
     ].join('');
-    const expectedHref = `#!/components/angular/playground?code=${expectedCodeSearchParam}&source=edit-link`;
-    expect(element.find('a').attr('href')).toEqual(expectedHref);
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
   });
 
-  it('should contain a link to playground with proper Vanilla code search param value', () => {
+  it('should go to Vanilla playground on button click', () => {
     const engine = 'vanilla';
     const example = {
       controller: `function(element){
@@ -130,11 +164,14 @@ describe('External Component Example Edit Link', () => {
       'ydChcIkhleSFcIikpO1xufVxuXG5yZXR1cm4gY29udHJvbGxlcjsiLCJzdHlsZXMiOiIudG',
       'VzdC1idG4geyBjb2xvcjogcmVkOyB9In0%3D'
     ].join('');
-    const expectedHref = `#!/components/vanilla/playground?code=${expectedCodeSearchParam}&source=edit-link`;
-    expect(element.find('a').attr('href')).toEqual(expectedHref);
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
   });
 
-  it('should contain a link to playground with proper Vanilla template-only code search param value', () => {
+  it('should go to Vanilla-template-only playground on button click', () => {
     const engine = 'vanilla';
     const example = {
       template: '<button class="test-btn">Click Here</button>',
@@ -147,7 +184,10 @@ describe('External Component Example Edit Link', () => {
       '5cbnJldHVybiBjb250cm9sbGVyOyIsInN0eWxlcyI6Ii50ZXN0LWJ0biB7IGNvbG9yOiByZ',
       'WQ7IH0ifQ%3D%3D'
     ].join('');
-    const expectedHref = `#!/components/vanilla/playground?code=${expectedCodeSearchParam}&source=edit-link`;
-    expect(element.find('a').attr('href')).toEqual(expectedHref);
+    element.find('button').triggerHandler('click');
+    expect(routeService.go).toHaveBeenCalledWith('app.external-components.playground', {
+      code: expectedCodeSearchParam,
+      source: 'edit-link'
+    });
   });
 });
