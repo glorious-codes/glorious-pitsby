@@ -4,21 +4,22 @@ import codeIndentationService from '@scripts/services/code-indentation';
 import vueControllerSyntaxService from '@scripts/services/vue-controller-syntax';
 import template from './external-component-example-edit-link.html';
 
-function controller(){
+function controller(routeService){
   const $ctrl = this;
 
-  $ctrl.$onInit = () => {
-    setPlaygroundLinkHref(buildPlaygroundLinkHref($ctrl.engine, $ctrl.example));
+  $ctrl.goToPlayground = () => {
+    routeService.go('app.external-components.playground', {
+      code: buildPlaygroundCode($ctrl.engine, $ctrl.example),
+      source: 'edit-link'
+    });
   };
 
-  function buildPlaygroundLinkHref(engine, { template, controller, styles } = {}){
-    const baseHref = `#!/components/${engine}/playground`;
-    const code = playgroundCodeSearchParamService.stringify(
+  function buildPlaygroundCode(engine, { template, controller, styles }){
+    return playgroundCodeSearchParamService.stringify(
       formatCode(template),
       getControllerFormatter(engine)(controller),
       formatCode(styles)
     );
-    return `${baseHref}?code=${code}&source=edit-link`;
   }
 
   function getControllerFormatter(engine){
@@ -78,15 +79,13 @@ function controller(){
   function formatCode(code){
     return code && codeIndentationService.normalize(code) || '\n';
   }
-
-  function setPlaygroundLinkHref(href){
-    $ctrl.playgroundLinkHref = href;
-  }
 }
+
+controller.$inject = ['routeService'];
 
 export default {
   bindings: {
-    engine: '<',
+    engine: '@',
     example: '<'
   },
   controller,

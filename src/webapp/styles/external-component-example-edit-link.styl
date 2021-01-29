@@ -2,14 +2,20 @@
 @require '_variables'
 
 .p-external-component-example-edit-link
-  a
+  button
     padding-right 20px
     color $color-blue
     font-size $font-size-xxs
     font-weight 600
     text-decoration none
+    background-color transparent
     background-position right center
     background-repeat no-repeat
     background-image('open.svg')
-    &:hover
+    border 0
+    cursor pointer
+    webkit-appearance(none)
+    &:hover,
+    &:active,
+    &:focus
       text-decoration underline
