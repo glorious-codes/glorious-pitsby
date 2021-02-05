@@ -1,6 +1,6 @@
 {
   "name": "@glorious/pitsby",
-  "version": "1.30.2",
+  "version": "1.30.3",
   "description": "Docs generator for AngularJS, React, Vue and Vanilla components",
   "author": "Rafael Camargo <hello@rafaelcamargo.com>",
   "repository": {
@@ -27,7 +27,9 @@
     "SPA"
   ],
   "license": "MIT",
-  "bin": "./src/cli/index.js",
+  "bin": {
+    "pitsby": "src/cli/index.js"
+  },
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js",
     "build:ci": "node ./.circleci/prepare && ./node_modules/webpack/bin/webpack.js --output-path=./dist",
