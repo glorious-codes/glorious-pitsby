@@ -1,12 +1,14 @@
-import generateNanoId from 'nanoid/generate';
+import { customAlphabet } from 'nanoid';
 
 class IdService {
-  constructor(dependencies = {}){
-    this.generateNanoId = dependencies.generateNanoId || generateNanoId;
+  constructor(){
+    const chars = getValidChars();
+    const size = 12;
+    this.generateNanoId = customAlphabet(chars, size);
   }
 
   generate(){
-    return this.generateNanoId(getValidChars(), 12);
+    return this.generateNanoId();
   }
 }
 
@@ -17,6 +19,5 @@ function getValidChars(){
 const idService = new IdService();
 
 export {
-  idService,
-  IdService
+  idService
 };
