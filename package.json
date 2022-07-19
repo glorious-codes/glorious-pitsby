@@ -31,11 +31,11 @@
     "pitsby": "src/cli/index.js"
   },
   "scripts": {
-    "build": "./node_modules/webpack/bin/webpack.js",
-    "build:ci": "node ./.circleci/prepare && ./node_modules/webpack/bin/webpack.js --output-path=./dist",
-    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "format": "./node_modules/eslint/bin/eslint.js './src/**/*.js'",
-    "test": "./node_modules/jest/bin/jest.js"
+    "build": "webpack",
+    "build:ci": "node ./.circleci/prepare && npm run build --output-path=./dist",
+    "start": "webpack-dev-server",
+    "format": "eslint './src/**/*.js'",
+    "test": "jest"
   },
   "dependencies": {
     "@babel/core": "^7.6.2",

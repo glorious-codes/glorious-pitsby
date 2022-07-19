@@ -1,41 +1,91 @@
-# Javascript Node CircleCI 2.0 configuration file
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
 version: 2.1
+
 orbs:
   coveralls: coveralls/coveralls@1.0.6
-jobs:
-  build:
-    docker:
-      - image: circleci/node:12-browsers
 
+defaults: &defaults
+  docker:
+    - image: cimg/node:16.13.2-browsers
+  working_directory: ~/glorious-pitsby
+
+jobs:
+  install:
+    <<: *defaults
     steps:
       - checkout
-      # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-{{ checksum "package-lock.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
       - run:
           name: Install
           command: npm install
-
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - persist_to_workspace:
+          root: "."
+          paths:
+            - "package.json"
+            - "package-lock.json"
+            - "project.json"
+            - "jest.*.js"
+            - "webpack.*.js"
+            - ".babelrc"
+            - ".eslintrc"
+            - "node_modules"
+            - ".git/*"
+            - ".circleci/*"
+            - "src/*"
 
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/glorious-pitsby
+      - run:
+          name: Build
+          command: NODE_ENV=production npm run build:ci
+      - persist_to_workspace:
+          root: "."
+          paths:
+            - "dist/*"
+            - "src/webapp/*"
+
+  format:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/glorious-pitsby
       - run:
           name: Format
           command: npm run format
 
-      - run:
-          name: Build
-          command: npm run build:ci
-
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/glorious-pitsby
       - run:
           name: Test
-          command: npm run test -- --maxWorkers=2 --coverage --coverageReporters=lcov && ./node_modules/codecov/bin/codecov
+          command: npm run test -- --maxWorkers=2 --coverage --coverageReporters=lcov
+      - coveralls/upload:
+          verbose: true
 
-      - coveralls/upload
+workflows:
+  version: 2
+  branch-workflow:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - format:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+            - build
