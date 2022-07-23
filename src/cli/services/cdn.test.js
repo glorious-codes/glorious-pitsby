@@ -12,14 +12,14 @@ describe('CDN Service', () => {
 
   it('should build scripts tag for Angular 1.8.0 by default', () => {
     expect(service.buildAngularScriptTag()).toEqual(
-      '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.js"></script>'
+      '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.js"></script>'
     );
   });
 
   it('should build Angular scripts tag for production when node env is production', () => {
     mockNodeEnv('production');
     expect(service.buildAngularScriptTag()).toEqual(
-      '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>'
+      '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>'
     );
   });
 

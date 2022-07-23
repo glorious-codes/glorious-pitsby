@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const project = require('./project.json');
 
@@ -12,6 +12,7 @@ module.exports = {
   },
   optimization: {
     minimizer: [
+      new CssMinimizerPlugin(),
       new TerserPlugin({
         terserOptions: {
           mangle: true,
@@ -20,8 +21,7 @@ module.exports = {
           },
           sourceMap: true
         }
-      }),
-      new OptimizeCSSAssetsPlugin()
+      })
     ]
   },
   plugins: [

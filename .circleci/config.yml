@@ -35,6 +35,7 @@ jobs:
             - "webpack.*.js"
             - ".babelrc"
             - ".eslintrc"
+            - "build-prepare.js"
             - "node_modules"
             - ".git/*"
             - ".circleci/*"
@@ -47,7 +48,7 @@ jobs:
           at: ~/glorious-pitsby
       - run:
           name: Build
-          command: NODE_ENV=production npm run build:ci
+          command: NODE_ENV=production npm run build
       - persist_to_workspace:
           root: "."
           paths:
