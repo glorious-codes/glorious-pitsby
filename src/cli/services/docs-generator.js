@@ -14,8 +14,9 @@ _public.init = (clientDirectory, config) => {
   return new Promise((resolve, reject) => {
     console.log('Generating docs...');
     const directory = buildOutputDirectoryPath(clientDirectory, outputDirectory);
-    generateDocs(directory, config, err => {
-      onDocsGenerationComplete(clientDirectory, err, resolve, reject);
+    generateDocs(directory, {
+      config,
+      onComplete: err => onDocsGenerationComplete(clientDirectory, err, resolve, reject)
     });
   });
 };
@@ -24,21 +25,15 @@ function buildOutputDirectoryPath(clientDirectory, outputDirectory = './pitsby')
   return path.join(clientDirectory, outputDirectory);
 }
 
-function generateDocs(directory, config, onComplete){
-  const fullConfig = getCompilationConfig(directory, config);
-  if(argsService.getCliArgs('--watch'))
-    return compile(fullConfig, { shouldWatch: true, directory, onComplete });
-  return compile(fullConfig, { onComplete });
+function generateDocs(directory, { config, onComplete }){
+  const fullConfig = getCompilationFullConfig(directory, config);
+  const shouldWatch = argsService.getCliArgs('--watch');
+  const baseOptions = { onComplete };
+  const customOptions = shouldWatch ? { shouldWatch, directory } : {};
+  return compile(fullConfig, { ...baseOptions, ...customOptions });
 }
 
-function getCompilationConfig(directory, config){
-  let defaultConfig = getCompilationDefaultConfig(directory, config);
-  if(argsService.getCliArgs('--watch'))
-    defaultConfig = appendWebsocketConfig(defaultConfig, directory);
-  return defaultConfig;
-}
-
-function getCompilationDefaultConfig(directory, config){
+function getCompilationFullConfig(directory, config){
   const vueProject = findVueProject(config);
   const baseConfig = fileService.require('../../../webpack.config');
   baseConfig.output.path = directory;
@@ -55,41 +50,34 @@ function buildExternalVueComponentsPath(importFrom){
   return webappIndexGenerator.buildVueExternalModuleImportPath(importFrom);
 }
 
-function appendWebsocketConfig(defaultConfig){
-  defaultConfig.entry.unshift(`webpack-dev-server/client?http://localhost:${getServerPort()}/`);
-  return defaultConfig;
-}
-
 function compile(config, { shouldWatch, directory, onComplete }){
-  if(!shouldWatch)
-    return webpack(config, onComplete);
-  return serve(new Server(webpack(config), buildServerConfig(directory)), onComplete);
+  if(!shouldWatch) return webpack(config, onComplete);
+  return serve(new Server(buildServerConfig(directory), webpack(config)), onComplete);
 }
 
 function serve(server, onSuccess){
-  const port = getServerPort();
-  server.listen(port, 'localhost', () => {
-    console.log(`Documentation successfully served on http://localhost:${port}`);
+  server.startCallback(() => {
+    console.log(`Documentation successfully served on http://localhost:${getServerPort()}`);
     onSuccess();
   });
+}
+
+function buildServerConfig(directory){
+  return {
+    static: { directory },
+    host: '0.0.0.0',
+    compress: true,
+    port: getServerPort(),
+    hot: false
+  };
 }
 
 function getServerPort(){
   return argsService.getCliArgs('--port') || DEFAULT_SERVER_PORT;
 }
 
-function buildServerConfig(directory){
-  return {
-    contentBase: directory,
-    compress: true,
-    host: '0.0.0.0',
-    quiet: true
-  };
-}
-
 function onDocsGenerationComplete(clientDirectory, err, resolve, reject){
-  if(err)
-    return reject(err);
+  if(err) return reject(err);
   console.log('Docs successfully generated!');
   return resolve();
 }

@@ -13,22 +13,29 @@ module.exports = {
     'vue': 'Vue'
   },
   module: {
-    rules: [{
-      test: /\.(styl|css)$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        { loader: 'css-loader', options: { minimize: true } },
-        'stylus-loader'
-      ]
-    }, {
-      test: /\.html$/,
-      include: [`${__dirname}/${project.scripts.webapp.source.root}`],
-      use: 'html-loader'
-    }, {
-      test: /\.js$/,
-      exclude: /(node_modules|external)/,
-      use: 'babel-loader'
-    }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|external)/,
+        use: 'babel-loader'
+      },
+      {
+        test: /\.html$/,
+        include: [`${__dirname}/${project.scripts.webapp.source.root}`],
+        use: 'html-loader'
+      },
+      {
+        test: /\.(styl|css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { url: false }
+          },
+          'stylus-loader'
+        ]
+      }
+    ]
   },
   resolve: {
     alias: {
@@ -45,17 +52,23 @@ module.exports = {
         collapseWhitespace: true
       }
     }),
-    new CopyWebpackPlugin([{
-      from: project.images.source.files,
-      to: project.images.dist.root
-    }, {
-      from: project.data.source.files,
-      to: project.data.dist.root
-    },
-    {
-      from: project.external.source.root,
-      to: project.external.dist.root
-    }])
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: project.images.source.files,
+          to: project.images.dist.root
+        },
+        {
+          from: project.data.source.files,
+          to: project.data.dist.root
+        },
+        {
+          from: project.external.source.root,
+          to: project.external.dist.root
+        }
+      ]
+    })
   ],
-  context: path.resolve(__dirname)
+  context: path.resolve(__dirname),
+  stats: 'none'
 }

@@ -4,23 +4,11 @@ const argsService = require('./args');
 const processService = require('./process');
 const { fileService } = require('./file');
 const docsGeneratorService = require('./docs-generator');
-const serverListenMock = jest.fn((port, host, onSuccess) => onSuccess());
 const compilerObjectMock = {};
-const webpackMock = {
-  response: ''
-};
+const webpackMock = { response: '' };
 
 jest.mock('webpack');
-webpack.mockImplementation((config, onComplete) => {
-  if(onComplete)
-    onComplete(webpackMock.response);
-  return compilerObjectMock;
-});
-
 jest.mock('webpack-dev-server');
-Server.mockImplementation(() => {
-  return { listen: serverListenMock };
-});
 
 describe('Docs Generator Service', () => {
   function mockConfig(){
@@ -32,16 +20,22 @@ describe('Docs Generator Service', () => {
   beforeEach(() => {
     console.log = jest.fn();
     fileService.require = jest.fn(() => {
-      return { entry: [], output: {}, externals: {} };
+      return { output: {}, externals: {} };
     });
     fileService.remove = jest.fn();
     argsService.getCliArgs = jest.fn();
+    webpack.mockImplementation((config, onComplete) => {
+      if(onComplete) onComplete(webpackMock.response);
+      return compilerObjectMock;
+    });
+    Server.mockImplementation(() => {
+      return { startCallback: jest.fn(callback => callback()) };
+    });
   });
 
   afterEach(() => {
     webpackMock.response = null;
     webpack.mockClear();
-    serverListenMock.mockClear();
     processService.setNodeEnv = jest.fn();
   });
 
@@ -55,7 +49,6 @@ describe('Docs Generator Service', () => {
     config.outputDirectory = './docs';
     docsGeneratorService.init('/client', config);
     expect(webpack.mock.calls[0][0]).toEqual({
-      entry: [],
       output: {
         path: '/client/docs'
       },
@@ -66,7 +59,6 @@ describe('Docs Generator Service', () => {
   it('should output compiled files to pitsby directory if no output directory has been given', () => {
     docsGeneratorService.init('/client', mockConfig());
     expect(webpack.mock.calls[0][0]).toEqual({
-      entry: [],
       output: {
         path: '/client/pitsby'
       },
@@ -84,22 +76,21 @@ describe('Docs Generator Service', () => {
   it('should serve generated docs if "watch" flag has been provided', () => {
     argsService.getCliArgs = jest.fn(param => param == '--watch');
     docsGeneratorService.init('/client', mockConfig());
-    expect(webpack.mock.calls[0][0]).toEqual({
-      entry: ['webpack-dev-server/client?http://localhost:7000/'],
+    expect(webpack).toHaveBeenCalledWith({
       output: {
         path: '/client/pitsby'
       },
       externals: {}
     });
-    expect(Server).toHaveBeenCalledWith(compilerObjectMock, {
-      contentBase: '/client/pitsby',
+    expect(Server).toHaveBeenCalledWith({
       compress: true,
+      hot: false,
       host: '0.0.0.0',
-      quiet: true
-    });
-    expect(serverListenMock.mock.calls[0][0]).toEqual(7000);
-    expect(serverListenMock.mock.calls[0][1]).toEqual('localhost');
-    expect(typeof serverListenMock.mock.calls[0][2]).toEqual('function');
+      port: 7000,
+      static: {
+        directory: '/client/pitsby'
+      }
+    }, compilerObjectMock);
   });
 
   it('should log succes on serve generated documentation on serve success', () => {
@@ -117,14 +108,9 @@ describe('Docs Generator Service', () => {
       const message = 'Documentation successfully served on http://localhost:5000';
       expect(console.log).toHaveBeenCalledWith(message);
     });
-    expect(webpack.mock.calls[0][0]).toEqual({
-      entry: ['webpack-dev-server/client?http://localhost:5000/'],
-      output: {
-        path: '/client/pitsby'
-      },
-      externals: {}
-    });
-    expect(serverListenMock.mock.calls[0][0]).toEqual(5000);
+    expect(Server).toHaveBeenCalledWith(expect.objectContaining({
+      port: 7000
+    }), compilerObjectMock);
   });
 
   it('should define externals in webpack\' configuration', () => {
@@ -136,7 +122,6 @@ describe('Docs Generator Service', () => {
     }];
     docsGeneratorService.init('/client', config);
     expect(webpack.mock.calls[0][0]).toEqual({
-      entry: [],
       output: {
         path: '/client/pitsby'
       },

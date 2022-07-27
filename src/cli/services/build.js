@@ -13,8 +13,7 @@ const configService = require('./config');
 const _public = {};
 
 _public.init = ({ isWatching } = {}) => {
-  if(isWatching)
-    console.log('Updating docs...');
+  if(isWatching) console.log('Updating docs...');
   const clientDirectory = process.cwd();
   const config = configService.get(clientDirectory);
   return generateExternalFiles(clientDirectory, config).then(() => {
@@ -58,19 +57,11 @@ function generateWebappFiles(config){
 }
 
 function generateDocs(clientDirectory, config, isWatching){
-  if(isWatching)
-    return true;
+  if(isWatching) return true;
   return docsGenerator.init(clientDirectory, config).then(() => {
-    return handleWatch(clientDirectory, getExternalAssets(config), argsService.getCliArgs('--watch'));
+    const shouldWatch = argsService.getCliArgs('--watch');
+    return shouldWatch && watch(getFilesToWatch(clientDirectory, getExternalAssets(config)));
   });
-}
-
-function handleWatch(clientDirectory, externalAssets, shouldWatch){
-  if(shouldWatch)
-    watchService.init(getFilesToWatch(clientDirectory, externalAssets), () => {
-      return _public.init({ isWatching: true });
-    });
-  return true;
 }
 
 function getFilesToWatch(clientDirectory, assets){
@@ -88,6 +79,10 @@ function getExternalAssets(config){
     scripts: config.scripts,
     other: config.other
   };
+}
+
+function watch(filesToWatch){
+  watchService.init(filesToWatch, () => _public.init({ isWatching: true }));
 }
 
 module.exports = _public;

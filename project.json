@@ -41,7 +41,7 @@
       "files": "src/webapp/images/**/*.*"
     },
     "dist": {
-      "root": "images/[name].[ext]"
+      "root": "images/[name][ext]"
     }
   },
   "favicon": {
@@ -55,7 +55,7 @@
       "files": "src/webapp/data/**/*.*"
     },
     "dist": {
-      "root": "data/[name].[ext]"
+      "root": "data/[name][ext]"
     }
   },
   "external": {
