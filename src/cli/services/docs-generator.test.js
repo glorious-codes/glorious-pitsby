@@ -87,9 +87,8 @@ describe('Docs Generator Service', () => {
       hot: false,
       host: '0.0.0.0',
       port: 7000,
-      static: {
-        directory: '/client/pitsby'
-      }
+      static: { directory: '/client/pitsby' },
+      client: { overlay: false }
     }, compilerObjectMock);
   });
 
