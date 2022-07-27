@@ -65,6 +65,7 @@ function serve(server, onSuccess){
 function buildServerConfig(directory){
   return {
     static: { directory },
+    client: { overlay: false },
     host: '0.0.0.0',
     compress: true,
     port: getServerPort(),
