@@ -191,6 +191,7 @@ describe('Webapp HTML Index Generator', () => {
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script crossorigin src="https://unpkg.com/react@16.13.0/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.development.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone@7.8.6/babel.min.js"></script>
   </body>
 </html>
 `);
@@ -218,6 +219,7 @@ describe('Webapp HTML Index Generator', () => {
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/${getAngularVersion()}/angular.js"></script>
     <script crossorigin src="https://unpkg.com/react@16.8.0/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16.8.0/umd/react-dom.development.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone@7.8.6/babel.min.js"></script>
   </body>
 </html>
 `);

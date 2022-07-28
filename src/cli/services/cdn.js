@@ -10,7 +10,8 @@ _public.buildAngularScriptTag = () => {
 _public.buildReactScriptTag = (version = '16.13.0') => {
   return [
     buildReactScriptTag(version, 'react'),
-    buildReactScriptTag(version, 'react-dom')
+    buildReactScriptTag(version, 'react-dom'),
+    buildUnpkgCdnScriptTag('@babel/standalone', '7.8.6', 'babel.min.js')
   ].join('\n');
 };
 
@@ -41,14 +42,17 @@ function buildEngineFileName(engine){
 }
 
 function buildReactScriptTag(version, lib){
-  const filename = buildReactLibFilename(lib);
-  const cdnUrl = `https://unpkg.com/${lib}@${version}/umd/${filename}`;
-  return `<script crossorigin src="${cdnUrl}"></script>`;
+  return buildUnpkgCdnScriptTag(lib, version, buildReactLibFilepath(lib));
 }
 
-function buildReactLibFilename(lib){
+function buildReactLibFilepath(lib){
   const suffix = processService.getNodeEnv() == 'production' ? 'production.min' : 'development';
-  return `${lib}.${suffix}.js`;
+  return `umd/${lib}.${suffix}.js`;
+}
+
+function buildUnpkgCdnScriptTag(lib, version, filepath){
+  const cdnUrl = `https://unpkg.com/${lib}@${version}/${filepath}`;
+  return `<script crossorigin src="${cdnUrl}"></script>`;
 }
 
 module.exports = _public;

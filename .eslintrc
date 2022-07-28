@@ -15,6 +15,7 @@
     "module": true,
     "spyOn": true,
     "angular": true,
+    "Babel": true,
     "React": true,
     "ReactDOM": true,
     "Vue": true,

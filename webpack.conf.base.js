@@ -8,6 +8,7 @@ module.exports = {
   entry: [`${__dirname}/${project.scripts.webapp.source.index}`],
   externals: {
     'angular': 'angular',
+    '@babel/standalone': 'Babel',
     'react': 'React',
     'react-dom': 'ReactDOM',
     'vue': 'Vue'
