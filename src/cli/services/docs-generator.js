@@ -26,14 +26,21 @@ function buildOutputDirectoryPath(clientDirectory, outputDirectory = './pitsby')
 }
 
 function generateDocs(directory, { config, onComplete }){
-  const fullConfig = getCompilationFullConfig(directory, config);
+  const fullConfig = getCompilationConfig(directory, config);
   const shouldWatch = argsService.getCliArgs('--watch');
   const baseOptions = { onComplete };
-  const customOptions = shouldWatch ? { shouldWatch, directory } : {};
+  const customOptions = shouldWatch && { shouldWatch, directory };
   return compile(fullConfig, { ...baseOptions, ...customOptions });
 }
 
-function getCompilationFullConfig(directory, config){
+function getCompilationConfig(directory, config){
+  let defaultConfig = getCompilationDefaultConfig(directory, config);
+  if(argsService.getCliArgs('--watch'))
+    defaultConfig = appendWebsocketConfig(defaultConfig, directory);
+  return defaultConfig;
+}
+
+function getCompilationDefaultConfig(directory, config){
   const vueProject = findVueProject(config);
   const baseConfig = fileService.require('../../../webpack.config');
   baseConfig.output.path = directory;
@@ -48,6 +55,11 @@ function findVueProject(config){
 
 function buildExternalVueComponentsPath(importFrom){
   return webappIndexGenerator.buildVueExternalModuleImportPath(importFrom);
+}
+
+function appendWebsocketConfig(defaultConfig){
+  defaultConfig.entry.unshift(`webpack-dev-server/client?http://localhost:${getServerPort()}/`);
+  return defaultConfig;
 }
 
 function compile(config, { shouldWatch, directory, onComplete }){

@@ -20,7 +20,7 @@ describe('Docs Generator Service', () => {
   beforeEach(() => {
     console.log = jest.fn();
     fileService.require = jest.fn(() => {
-      return { output: {}, externals: {} };
+      return { entry: [], output: {}, externals: {} };
     });
     fileService.remove = jest.fn();
     argsService.getCliArgs = jest.fn();
@@ -49,6 +49,7 @@ describe('Docs Generator Service', () => {
     config.outputDirectory = './docs';
     docsGeneratorService.init('/client', config);
     expect(webpack.mock.calls[0][0]).toEqual({
+      entry: [],
       output: {
         path: '/client/docs'
       },
@@ -59,6 +60,7 @@ describe('Docs Generator Service', () => {
   it('should output compiled files to pitsby directory if no output directory has been given', () => {
     docsGeneratorService.init('/client', mockConfig());
     expect(webpack.mock.calls[0][0]).toEqual({
+      entry: [],
       output: {
         path: '/client/pitsby'
       },
@@ -77,6 +79,7 @@ describe('Docs Generator Service', () => {
     argsService.getCliArgs = jest.fn(param => param == '--watch');
     docsGeneratorService.init('/client', mockConfig());
     expect(webpack).toHaveBeenCalledWith({
+      entry: ['webpack-dev-server/client?http://localhost:7000/'],
       output: {
         path: '/client/pitsby'
       },
@@ -121,6 +124,7 @@ describe('Docs Generator Service', () => {
     }];
     docsGeneratorService.init('/client', config);
     expect(webpack.mock.calls[0][0]).toEqual({
+      entry: [],
       output: {
         path: '/client/pitsby'
       },
