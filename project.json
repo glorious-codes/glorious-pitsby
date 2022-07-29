@@ -13,7 +13,7 @@
       },
       "dist": {
         "filename": {
-          "prod": "[name]-[hash].js",
+          "prod": "[name]-[contenthash].js",
           "dev": "[name].js"
         }
       }
@@ -30,7 +30,7 @@
     },
     "dist": {
       "filename": {
-        "prod": "[name]-[hash].css",
+        "prod": "[name]-[contenthash].css",
         "dev": "[name].css"
       }
     }

@@ -2,10 +2,7 @@
   ng-if="$ctrl.shouldShowMenu"
   data-engine-menu-container>
   <ul class="p-engine-menu">
-    <li
-      ng-repeat="project in $ctrl.projects"
-      style="width: {{ $ctrl.itemsWidth }};"
-      class="p-engine-menu-item">
+    <li ng-repeat="project in $ctrl.projects" class="p-engine-menu-item">
       <a
         ng-bind="project.engine"
         class="p-engine-menu-link"

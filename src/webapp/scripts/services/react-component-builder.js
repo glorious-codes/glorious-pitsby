@@ -1,5 +1,3 @@
-import { transform } from '@babel/standalone';
-
 const _public = {};
 
 _public.build = controller => {
@@ -12,7 +10,7 @@ _public.unbuild = container => {
 };
 
 function transpileController(controller){
-  const transpiledCode = transform(wrapControllerInModuleExports(controller), {
+  const transpiledCode = Babel.transform(wrapControllerInModuleExports(controller), {
     presets: ['env', 'react']
   }).code;
   return convertExportedModuleToIIFE(transpiledCode);
