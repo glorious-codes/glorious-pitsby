@@ -64,7 +64,7 @@ function serve(server, onSuccess){
 
 function buildServerConfig(directory){
   return {
-    static: { directory },
+    static: { directory, watch: true },
     client: { overlay: false },
     host: '0.0.0.0',
     compress: true,
