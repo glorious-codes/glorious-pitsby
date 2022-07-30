@@ -1,3 +1,4 @@
+const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const argsService = require('./args');
 const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
@@ -12,22 +13,6 @@ const watchService = require('./watch');
 const buildService = require('./build');
 
 describe('Build Service', () => {
-  function mockPitsbyConfig({ custom } = {}){
-    return {
-      projects: [
-        { engine: 'angular', collectFrom: './src/angular', moduleName: 'external' }
-      ],
-      styles: ['./dist/styles.css'],
-      scripts: ['./dist/bundle.js'],
-      other: ['./images/'],
-      outputDirectory: './docs',
-      metrics: {
-        googleAnalyticsId: '123'
-      },
-      custom
-    };
-  }
-
   function stubFileChange(){
     argsService.getCliArgs = jest.fn(param => param == '--watch');
     watchService.init = jest.fn((files, changeCallback) => {
@@ -44,19 +29,19 @@ describe('Build Service', () => {
     webappIndexGenerator.init = jest.fn(() => Promise.resolve());
     webappLogoGenerator.init = jest.fn(() => Promise.resolve());
     docsGenerator.init = jest.fn(() => Promise.resolve());
-    configService.get = jest.fn(() => mockPitsbyConfig());
+    configService.get = jest.fn(() => buildPitsbyConfigMock());
     argsService.getCliArgs = jest.fn();
     watchService.init = jest.fn();
   });
 
   it('should generate data for external projects', () => {
-    const config = mockPitsbyConfig();
+    const config = buildPitsbyConfigMock();
     buildService.init().then(() => {}, () => {});
     expect(externalProjectsDataGenerator.init).toHaveBeenCalledWith(config.projects);
   });
 
   it('should generate data for external components', () => {
-    const projectsMock = mockPitsbyConfig().projects;
+    const projectsMock = buildPitsbyConfigMock().projects;
     buildService.init().then(() => {}, () => {});
     expect(externalComponentsDataGenerator.init).toHaveBeenCalledWith(
       process.cwd(), projectsMock
@@ -81,7 +66,7 @@ describe('Build Service', () => {
   });
 
   it('should generate webapp html index', done => {
-    const config = mockPitsbyConfig();
+    const config = buildPitsbyConfigMock();
     buildService.init().then(() => {
       expect(webappHtmlIndexGenerator.init).toHaveBeenCalledWith(config);
       done();
@@ -90,7 +75,7 @@ describe('Build Service', () => {
 
   it('should generate webapp logo', done => {
     const customAttributes = {};
-    configService.get = jest.fn(() => mockPitsbyConfig({ custom: customAttributes }));
+    configService.get = jest.fn(() => buildPitsbyConfigMock({ custom: customAttributes }));
     buildService.init().then(() => {
       expect(webappLogoGenerator.init).toHaveBeenCalledWith(customAttributes);
       done();
@@ -98,7 +83,7 @@ describe('Build Service', () => {
   });
 
   it('should generate webapp javascript index', () => {
-    const projectsMock = mockPitsbyConfig().projects;
+    const projectsMock = buildPitsbyConfigMock().projects;
     buildService.init().then(() => {
       expect(webappIndexGenerator.init).toHaveBeenCalledWith(projectsMock);
     });
@@ -116,7 +101,7 @@ describe('Build Service', () => {
     buildService.init().then(() => {
       expect(docsGenerator.init).toHaveBeenCalledWith(
         process.cwd(),
-        mockPitsbyConfig()
+        buildPitsbyConfigMock()
       );
       done();
     });
@@ -142,7 +127,7 @@ describe('Build Service', () => {
   });
 
   it('should not pass undefined external assets attributes to watch service', () => {
-    const config = mockPitsbyConfig();
+    const config = buildPitsbyConfigMock();
     config.other = undefined;
     configService.get = jest.fn(() => config);
     argsService.getCliArgs = jest.fn(param => param == '--watch');
