@@ -1,6 +1,10 @@
 export const buildPitsbyConfigMock = ({ custom } = {}) => ({
   projects: [
     {
+      engine: 'vue',
+      collectDocsFrom: './src/vue'
+    },
+    {
       engine: 'angular',
       collectFrom: './src/angular',
       moduleName: 'external'

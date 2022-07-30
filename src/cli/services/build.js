@@ -15,7 +15,7 @@ const _public = {};
 _public.init = ({ isWatching } = {}) => {
   if(isWatching) console.log('Updating docs...');
   const clientDirectory = process.cwd();
-  const config = configService.get(clientDirectory);
+  const config = configService.get();
   return generateExternalFiles(clientDirectory, config).then(() => {
     return generateWebappFiles(config).then(() => {
       return generateDocs(clientDirectory, config, isWatching);
