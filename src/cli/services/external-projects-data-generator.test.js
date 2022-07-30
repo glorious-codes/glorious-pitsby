@@ -3,7 +3,7 @@ const externalProjectsDataGenerator = require('./external-projects-data-generato
 
 describe('External Projects Data Generator', () => {
   beforeEach(() => {
-    webappDataService.save = jest.fn((filename, data, onSuccess, onError) => onSuccess());
+    webappDataService.save = jest.fn((filename, data, onSuccess) => onSuccess());
   });
 
   it('should save data containing projects engines', done => {
@@ -16,7 +16,7 @@ describe('External Projects Data Generator', () => {
         [{ engine: 'angular' }, { engine: 'vue' }],
         expect.any(Function),
         expect.any(Function)
-      )
+      );
       done();
     });
   });
