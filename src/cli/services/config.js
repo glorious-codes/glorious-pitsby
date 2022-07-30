@@ -5,11 +5,23 @@ const _public = {};
 
 const DEFAULT_CONFIG = { outputDirectory: './pitsby' };
 
+let cache;
+
 _public.get = () => {
+  if(cache) return cache;
   const config = getPitsbyConfig(process.cwd());
   if(!config) return console.error('No pitsby.config.js has been found.');
-  return { ...DEFAULT_CONFIG, ...normalizeEngineCase(normalizeConfig(config)) };
+  return handleCache({ ...DEFAULT_CONFIG, ...normalizeEngineCase(normalizeConfig(config)) });
 };
+
+_public.flushCache = () => {
+  cache = null;
+};
+
+function handleCache(config){
+  cache = config;
+  return config;
+}
 
 function getPitsbyConfig(){
   const config = lookupForConfig();

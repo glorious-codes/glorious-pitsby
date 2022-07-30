@@ -1,7 +1,7 @@
 const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const { fileService } = require('./file');
-const configService = require('./config');
 const processService = require('./process');
+const configService = require('./config');
 
 describe('Config Service', () => {
 
@@ -16,6 +16,10 @@ describe('Config Service', () => {
     processService.getCwd = () => '/client';
     console.warn = jest.fn();
     console.error = jest.fn();
+  });
+
+  afterEach(() => {
+    configService.flushCache();
   });
 
   it('should be able to get config from pitsby.config.js file', () => {
@@ -101,8 +105,19 @@ describe('Config Service', () => {
 
   it('should return default output directory if no output directory has been set by the client', () => {
     const config = buildPitsbyConfigMock();
-    delete config.outputDirectory
+    delete config.outputDirectory;
     stubFileRequire('pitsby.config.js', config);
     expect(configService.get().outputDirectory).toEqual('./pitsby');
-  })
+  });
+
+  it('should cache config', () => {
+    const config = buildPitsbyConfigMock();
+    const filename = 'pitsby.config.js';
+    stubFileRequire(filename, config);
+    configService.get();
+    configService.get();
+    configService.get();
+    expect(fileService.require).toHaveBeenCalledTimes(1);
+    expect(configService.get()).toEqual({ ...config, filename });
+  });
 });
