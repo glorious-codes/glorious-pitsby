@@ -98,4 +98,11 @@ describe('Config Service', () => {
     stubFileRequire('pitsby.config.js', config);
     expect(configService.get().projects[0].engine).toEqual('vue');
   });
+
+  it('should return default output directory if no output directory has been set by the client', () => {
+    const config = buildPitsbyConfigMock();
+    delete config.outputDirectory
+    stubFileRequire('pitsby.config.js', config);
+    expect(configService.get().outputDirectory).toEqual('./pitsby');
+  })
 });

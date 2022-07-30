@@ -3,10 +3,12 @@ const processService = require('./process');
 
 const _public = {};
 
+const DEFAULT_CONFIG = { outputDirectory: './pitsby' };
+
 _public.get = () => {
   const config = getPitsbyConfig(process.cwd());
   if(!config) return console.error('No pitsby.config.js has been found.');
-  return normalizeEngineCase(normalizeConfig(config));
+  return { ...DEFAULT_CONFIG, ...normalizeEngineCase(normalizeConfig(config)) };
 };
 
 function getPitsbyConfig(){
