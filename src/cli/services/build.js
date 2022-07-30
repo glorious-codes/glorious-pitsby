@@ -26,7 +26,7 @@ _public.init = ({ isWatching } = {}) => {
 function generateExternalFiles(clientDirectory, config){
   return Promise.all([
     externalProjectsDataGenerator.init(config.projects),
-    externalComponentsDataGenerator.init(clientDirectory, config.projects),
+    externalComponentsDataGenerator.init(config.projects),
     externalAssetsGenerator.init(clientDirectory, getExternalAssets(config)),
     externalMetricsIdsModuleGenerator.init(config.metrics)
   ]);

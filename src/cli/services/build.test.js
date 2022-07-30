@@ -35,17 +35,15 @@ describe('Build Service', () => {
   });
 
   it('should generate data for external projects', () => {
-    const config = buildPitsbyConfigMock();
+    const { projects } = buildPitsbyConfigMock();
     buildService.init().then(() => {}, () => {});
-    expect(externalProjectsDataGenerator.init).toHaveBeenCalledWith(config.projects);
+    expect(externalProjectsDataGenerator.init).toHaveBeenCalledWith(projects);
   });
 
   it('should generate data for external components', () => {
-    const projectsMock = buildPitsbyConfigMock().projects;
+    const { projects } = buildPitsbyConfigMock();
     buildService.init().then(() => {}, () => {});
-    expect(externalComponentsDataGenerator.init).toHaveBeenCalledWith(
-      process.cwd(), projectsMock
-    );
+    expect(externalComponentsDataGenerator.init).toHaveBeenCalledWith(projects);
   });
 
   it('should generate external assets', () => {
