@@ -25,27 +25,11 @@ _public.init = ({ isWatching } = {}) => {
 
 function generateExternalFiles(clientDirectory, config){
   return Promise.all([
-    generateExternalProjectsData(config.projects),
-    generateExternalComponentsData(clientDirectory, config.projects),
-    generateExternalAssets(clientDirectory, getExternalAssets(config)),
-    generateMetricsIdsModule(config.metrics)
+    externalProjectsDataGenerator.init(config.projects),
+    externalComponentsDataGenerator.init(clientDirectory, config.projects),
+    externalAssetsGenerator.init(clientDirectory, getExternalAssets(config)),
+    externalMetricsIdsModuleGenerator.init(config.metrics)
   ]);
-}
-
-function generateExternalProjectsData(projects){
-  return externalProjectsDataGenerator.init(projects);
-}
-
-function generateExternalComponentsData(clientDirectory, collectFrom){
-  return externalComponentsDataGenerator.init(clientDirectory, collectFrom);
-}
-
-function generateExternalAssets(clientDirectory, externalAssets){
-  return externalAssetsGenerator.init(clientDirectory, externalAssets);
-}
-
-function generateMetricsIdsModule(metrics){
-  return externalMetricsIdsModuleGenerator.init(metrics);
 }
 
 function generateWebappFiles(config){
