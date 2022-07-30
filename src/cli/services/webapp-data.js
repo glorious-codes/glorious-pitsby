@@ -7,7 +7,7 @@ const _public = {};
 
 _public.save = (filename, data, onSuccess, onError) => {
   const filepath = buildFullFilepath(filename);
-  const fileData = buildFileContent(data)
+  const fileData = buildFileContent(data);
   fileService.write(filepath, fileData, onSuccess, onError);
 };
 
