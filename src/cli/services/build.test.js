@@ -47,13 +47,9 @@ describe('Build Service', () => {
   });
 
   it('should generate external assets', () => {
+    const config = buildPitsbyConfigMock();
     buildService.init().then(() => {}, () => {});
-    expect(externalAssetsGenerator.init).toHaveBeenCalledWith(
-      process.cwd(), {
-        styles: ['./dist/styles.css'],
-        scripts: ['./dist/bundle.js'],
-        other: ['./images/']
-      });
+    expect(externalAssetsGenerator.init).toHaveBeenCalledWith(config);
   });
 
   it('should generate external metrics ids module', () => {

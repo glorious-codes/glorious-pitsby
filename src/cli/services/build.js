@@ -16,18 +16,18 @@ _public.init = ({ isWatching } = {}) => {
   if(isWatching) console.log('Updating docs...');
   const clientDirectory = process.cwd();
   const config = configService.get();
-  return generateExternalFiles(clientDirectory, config).then(() => {
+  return generateExternalFiles(config).then(() => {
     return generateWebappFiles(config).then(() => {
       return generateDocs(clientDirectory, config, isWatching);
     });
   });
 };
 
-function generateExternalFiles(clientDirectory, config){
+function generateExternalFiles(config){
   return Promise.all([
     externalProjectsDataGenerator.init(config.projects),
     externalComponentsDataGenerator.init(config.projects),
-    externalAssetsGenerator.init(clientDirectory, getExternalAssets(config)),
+    externalAssetsGenerator.init(config),
     externalMetricsIdsModuleGenerator.init(config.metrics)
   ]);
 }
