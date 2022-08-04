@@ -93,8 +93,7 @@ export default _public;
       libraryName: 'myVueComponents'
     }]);
     expect(fileService.write.mock.calls[0][1]).toEqual(`import Vue from 'vue';
-import myVueComponents from '../external/dist/my-vue-components';
-Vue.use(myVueComponents);
+Vue.use(window['myVueComponents']);
 import '@styles/_native.styl';
 import angular from 'angular';
 import uirouter from '@uirouter/angularjs/release/angular-ui-router';

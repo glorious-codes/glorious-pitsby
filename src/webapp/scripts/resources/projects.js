@@ -1,19 +1,17 @@
-import dataResource from '@scripts/resources/data';
+import externalGlobalDataService from '@scripts/services/external-global-data';
 
 const _public = {};
-const BASE_URI = '/projects';
 
 _public.get = () => {
-  if(_public.projects)
-    return Promise.resolve(_public.projects);
-  return dataResource.get(BASE_URI).then(projects => {
-    setProjects(projects);
-    return projects;
+  return new Promise((resolve, reject) => {
+    const projects = getProjects();
+    return projects ? resolve(projects) : reject('Projects have not been found');
   });
 };
 
-function setProjects(projects){
-  _public.projects = projects;
+function getProjects(){
+  const data = externalGlobalDataService.get();
+  return data && data.projects;
 }
 
 export default _public;

@@ -6,7 +6,6 @@ const project = require('./project.json');
 
 module.exports = {
   mode: 'production',
-  devtool: 'source-map',
   output: {
     filename: project.scripts.webapp.dist.filename.prod
   },
@@ -18,14 +17,12 @@ module.exports = {
           mangle: true,
           compress: {
             warnings: false,
-          },
-          sourceMap: true
+          }
         }
       })
     ]
   },
   plugins: [
-    new webpack.SourceMapDevToolPlugin(),
     new MiniCssExtractPlugin({
       filename: project.styles.dist.filename.prod
     })

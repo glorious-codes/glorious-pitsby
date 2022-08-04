@@ -71,13 +71,12 @@ describe('Config Service', () => {
   it('should normalize config attributes when angular config is outside projects', () => {
     const config = {
       ...buildPitsbyConfigMock(),
-      projects: buildPitsbyConfigMock().projects.filter(project => project.engine != 'angular'),
+      projects: [],
       collectFrom: './src/angular',
       moduleName: 'my-components',
     };
     stubFileRequire('pitsby.config.js', config);
     expect(configService.get().projects).toEqual([
-      { engine: 'vue', collectDocsFrom: './src/vue' },
       { engine: 'angular', collectDocsFrom: './src/angular', moduleName: 'my-components' }
     ]);
   });

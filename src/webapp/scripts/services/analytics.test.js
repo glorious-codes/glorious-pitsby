@@ -1,72 +1,51 @@
-import metricsIdsService from '@data/metrics-ids';
-import dateService from '@scripts/services/date';
+import GAnalytics from '@glorious/analytics';
+import googleAnalyticsAdapter from '@glorious/analytics/dist/adapters/google-analytics';
+import testingService from '@scripts/services/testing';
+import { GAnalyticsMock, ganalyticsInstanceMock } from '@mocks/glorious-analytics';
+import windowService from '@scripts/services/window';
 import analyticsService from './analytics';
 
+GAnalytics.mockImplementation(GAnalyticsMock);
+
 describe('Analytics Service', () => {
-  const GOOGLE_ANALYTICS_ID_MOCK = '123';
-  let createElementMock;
-
-  function mockCreateElement(){
-    return {
-      setAttribute: jest.fn()
-    };
-  }
-
-  function mockDate(){
-    return new Date(2019, 3, 7);
+  function mockGoogleAnalyticsId(googleAnalyticsId){
+    const data = { metrics: { googleAnalyticsId } };
+    testingService.mockExternalGlobalData(data);
   }
 
   beforeEach(() => {
-    createElementMock = mockCreateElement();
-    document.createElement = jest.fn(() => createElementMock);
-    document.head.appendChild = jest.fn();
-    dateService.getNow = jest.fn(() => mockDate());
-    metricsIdsService.get = jest.fn(() => {
-      return {
-        googleAnalyticsId: GOOGLE_ANALYTICS_ID_MOCK
-      };
-    });
+    ganalyticsInstanceMock.init = jest.fn();
+    ganalyticsInstanceMock.trackPageview = jest.fn();
   });
 
   afterEach(() => {
-    delete window.dataLayer;
-    window.location.hash = '';
+    testingService.clearExternalGlobalData();
   });
 
-  it('should get analytics thirdy party code asynchronously', () => {
+  it('should not initialize glorious analytics by default', () => {
     analyticsService.init();
-    expect(createElementMock.setAttribute).toHaveBeenCalledWith('async', 'true');
+    expect(ganalyticsInstanceMock.init).not.toHaveBeenCalled();
   });
 
-  it('should get analytics thirdy party code passing analytics id', () => {
+  it('should initialize glorious analytics passing Google Analytics as adapter', () => {
+    const googleAnalyticsId = '123';
+    mockGoogleAnalyticsId(googleAnalyticsId);
     analyticsService.init();
-    expect(createElementMock.setAttribute).toHaveBeenCalledWith(
-      'src',
-      `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID_MOCK}`
+    expect(ganalyticsInstanceMock.init).toHaveBeenCalledWith(
+      googleAnalyticsId,
+      { adapter: googleAnalyticsAdapter }
     );
   });
 
-  it('should append script tag to get analytics thirdy party code on head', () => {
-    analyticsService.init();
-    expect(typeof document.head.appendChild.mock.calls[0][0]).toEqual('object');
-  });
-
-  it('should configure analytics settings after append script tag on head', () => {
-    window.location.hash = '#!/home';
-    analyticsService.init();
-    expect(window.dataLayer[0][0]).toEqual('js');
-    expect(window.dataLayer[0][1]).toEqual(mockDate());
-    expect(window.dataLayer[1][0]).toEqual('config');
-    expect(window.dataLayer[1][1]).toEqual(GOOGLE_ANALYTICS_ID_MOCK);
-    expect(window.dataLayer[1][2]).toEqual({page_path: '/home'});
-  });
-
   it('should track page view', () => {
-    const path = '/author';
-    window.location.hash = `#!${path}`;
+    windowService.getPathname = jest.fn(() => '/#!/components/vue/alert?some=param');
+    const googleAnalyticsId = '123';
+    mockGoogleAnalyticsId(googleAnalyticsId);
+    analyticsService.init();
     analyticsService.trackPageView();
-    expect(window.dataLayer[0][0]).toEqual('config');
-    expect(window.dataLayer[0][1]).toEqual(GOOGLE_ANALYTICS_ID_MOCK);
-    expect(window.dataLayer[0][2]).toEqual({page_path: path});
+    expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledTimes(1);
+    expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledWith({
+      path: '/components/vue/alert'
+    });
   });
 });

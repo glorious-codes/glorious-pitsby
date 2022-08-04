@@ -59,14 +59,6 @@ module.exports = {
         {
           from: project.images.source.files,
           to: project.images.dist.root
-        },
-        {
-          from: project.data.source.files,
-          to: project.data.dist.root
-        },
-        {
-          from: project.external.source.root,
-          to: project.external.dist.root
         }
       ]
     })

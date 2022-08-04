@@ -16,4 +16,8 @@ _public.getPageYOffset = () => {
   return window.pageYOffset;
 };
 
+_public.getPathname = () => {
+  return window.location.pathname;
+};
+
 export default _public;

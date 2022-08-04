@@ -1,17 +1,10 @@
-import { PromiseMock } from '@mocks/promise';
-import projectsResource from '@scripts/resources/projects';
+import testingService from '@scripts/services/testing';
 
 describe('Engine Menu', () => {
   let compile;
 
-  function mockProjects(){
-    return [{engine: 'angular'}, {engine: 'vue'}];
-  }
-
-  function stubGetProjects(responseType, response){
-    projectsResource.get = jest.fn(() => {
-      return new PromiseMock(responseType, response);
-    });
+  function mockGlobalData(){
+    return { projects: [{engine: 'angular'}, {engine: 'vue'}] };
   }
 
   beforeEach(() => {
@@ -24,41 +17,48 @@ describe('Engine Menu', () => {
     });
   });
 
-  it('should fetch projects on initialize', () => {
-    const controller = compile();
-    stubGetProjects('success', mockProjects());
-    controller.$onInit();
-    expect(projectsResource.get).toHaveBeenCalled();
+  afterEach(() => {
+    testingService.clearExternalGlobalData();
   });
 
-  it('should set projects on get projects success', () => {
-    const projectsMock = mockProjects();
-    const controller = compile();
-    stubGetProjects('success', projectsMock);
-    controller.$onInit();
-    expect(controller.projects).toEqual(projectsMock);
-  });
-
-  it('should show engine menu if more than one project is found', () => {
-    const controller = compile();
-    stubGetProjects('success', mockProjects());
-    controller.$onInit();
-    expect(controller.shouldShowMenu).toEqual(true);
-  });
-
-  it('should not show engine menu if only one project is found', () => {
-    const controller = compile();
-    stubGetProjects('success', [{engine: 'angular'}]);
-    controller.$onInit();
-    expect(controller.shouldShowMenu).toEqual(false);
-  });
-
-  it('should log error on get projects error', () => {
-    const errorMock = {some: 'error'};
-    const controller = compile();
+  it('should set projects on get projects success', done => {
     console.log = jest.fn();
-    stubGetProjects('error', errorMock);
+    const data = mockGlobalData();
+    const controller = compile();
+    testingService.mockExternalGlobalData(data);
     controller.$onInit();
-    expect(console.log).toHaveBeenCalledWith('Failed to get projects', errorMock);
+    setTimeout(() => {
+      expect(controller.projects).toEqual(data.projects);
+      done();
+    });
+  });
+
+  it('should show engine menu if more than one project is found', done => {
+    const controller = compile();
+    testingService.mockExternalGlobalData(mockGlobalData());
+    controller.$onInit();
+    setTimeout(() => {
+      expect(controller.shouldShowMenu).toEqual(true);
+      done();
+    });
+  });
+
+  it('should not show engine menu if only one project is found', done => {
+    const controller = compile();
+    testingService.mockExternalGlobalData({ projects: [{ engine: 'vue' }] });
+    controller.$onInit();
+    setTimeout(() => {
+      expect(controller.shouldShowMenu).toEqual(false);
+      done();
+    });
+  });
+
+  it('should log error on get projects error', done => {
+    const controller = compile();
+    controller.$onInit();
+    setTimeout(() => {
+      expect(console.log).toHaveBeenCalledWith('Failed to get projects: Projects have not been found');
+      done();
+    });
   });
 });

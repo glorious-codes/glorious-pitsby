@@ -8,7 +8,7 @@ function engineRedirectionService(routeService){
   };
 
   function onGetProjectsError(err){
-    console.log('Failed to redirect to the appropriate engine', err);
+    console.log(`Failed to redirect to the appropriate engine: ${err}`);
   }
 
   function onGetProjectsSuccess(projects){
