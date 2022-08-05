@@ -1,4 +1,3 @@
-import '@styles/logo.styl';
 import externalGlobalDataService from '@scripts/services/external-global-data';
 import template from './logo.html';
 
