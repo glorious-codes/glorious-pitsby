@@ -38,14 +38,14 @@ describe('Analytics Service', () => {
   });
 
   it('should track page view', () => {
-    windowService.getPathname = jest.fn(() => '/#!/components/vue/alert?some=param');
+    windowService.getHash = jest.fn(() => '#!/components/vue/column');
     const googleAnalyticsId = '123';
     mockGoogleAnalyticsId(googleAnalyticsId);
     analyticsService.init();
     analyticsService.trackPageView();
     expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledTimes(1);
     expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledWith({
-      path: '/components/vue/alert'
+      path: '/components/vue/column'
     });
   });
 });

@@ -36,7 +36,7 @@ describe('Window Service', () => {
     expect(windowService.getPageYOffset()).toEqual(window.pageYOffset);
   });
 
-  it('should get pathname', () => {
-    expect(windowService.getPathname()).toEqual(window.location.pathname);
+  it('should get hash', () => {
+    expect(windowService.getHash()).toEqual(window.location.hash);
   });
 });
