@@ -31,11 +31,11 @@
     "pitsby": "src/cli/index.js"
   },
   "scripts": {
-    "build:prepare": "node ./build-prepare",
-    "build": "rm -rf ./dist && npm run build:prepare && webpack --output-path=./dist",
+    "build": "rm -rf ./dist && node ./pre-build && webpack --output-path=./dist",
     "start": "webpack-dev-server",
     "format": "eslint './src/**/*.js'",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "node ./pre-publish"
   },
   "dependencies": {
     "@babel/core": "^7.18.9",
