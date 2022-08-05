@@ -19,7 +19,7 @@ describe('Webapp HTML Index Customisation', () => {
 
   it('should set Pitsby favicon href on template by default', () => {
     const template = webappHtmlIndexCustomisation.init(buildTemplateMock());
-    expect(template.includes('<link href="images/favicon-pitsby.png?t=123" rel="shortcut icon">')).toEqual(true);
+    expect(template.includes('<link href="/images/favicon-pitsby.png?t=123" rel="shortcut icon">')).toEqual(true);
   });
 
   it('should set custom favicon href on template if custom favicon href has been given', () => {

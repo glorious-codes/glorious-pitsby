@@ -1,8 +1,9 @@
-const externalComponentsDataGenerator = require('./external-components-data-generator');
+const { fileService } = require('./file');
 const jsxJsonService = require('./jsx-json');
 const moduleService = require('./module');
+const processService = require('./process');
 const webappDataService = require('./webapp-data');
-const { fileService } = require('./file');
+const externalComponentsDataGenerator = require('./external-components-data-generator');
 
 describe('External Components Data Generator', () => {
   function mockProjects(){
@@ -53,8 +54,7 @@ describe('External Components Data Generator', () => {
 
   beforeEach(() => {
     fileService.collect = jest.fn((pattern, onSuccess) => {
-      const data = mockFilesData();
-      onSuccess(Object.keys(data[pattern]));
+      onSuccess(Object.keys(mockFilesData()[pattern]));
     });
     fileService.require = jest.fn(filepath => {
       const data = mockFilesData();
@@ -66,33 +66,10 @@ describe('External Components Data Generator', () => {
     });
     moduleService.compileInMemoryModule = jest.fn(data => data);
     webappDataService.save = jest.fn((filename, data, onSuccess) => onSuccess());
+    processService.getCwd = jest.fn(() => '/client');
   });
 
-  it('should return a promise', () => {
-    const promise = externalComponentsDataGenerator.init('/client', mockProjects());
-    expect(promise.then).toBeDefined();
-  });
-
-  it('should resolve its promise', done => {
-    let count = 0;
-    externalComponentsDataGenerator.init('/client', mockProjects()).then(() => {
-      count++;
-      expect(count).toEqual(1);
-      done();
-    });
-  });
-
-  it('should collect all *.doc.js in the specified collect from directory', () => {
-    externalComponentsDataGenerator.init('/client', mockProjects());
-    expect(fileService.collect.mock.calls[0][0]).toEqual('/client/src/angular/**/*.doc.js');
-    expect(typeof fileService.collect.mock.calls[0][1]).toEqual('function');
-    expect(typeof fileService.collect.mock.calls[0][2]).toEqual('function');
-    expect(fileService.collect.mock.calls[1][0]).toEqual('/client/src/vue/**/*.doc.js');
-    expect(typeof fileService.collect.mock.calls[1][1]).toEqual('function');
-    expect(typeof fileService.collect.mock.calls[1][2]).toEqual('function');
-  });
-
-  it('should write a JSON containing Angular external components data', () => {
+  it('should write a JSON containing Angular external components data', done => {
     const data = [
       {name: 'Button', examples: [{
         controller: `function controller() {
@@ -108,35 +85,52 @@ describe('External Components Data Generator', () => {
       {name: 'Email Input', id: 'email-input'},
       {name: 'Async Content Wrapper', id: 'async-content-wrapper'}
     ];
-    externalComponentsDataGenerator.init('/client', mockProjects());
-    expect(webappDataService.save.mock.calls[0][0]).toEqual('components-angular.json');
-    expect(webappDataService.save.mock.calls[0][1]).toEqual(data);
-    expect(typeof webappDataService.save.mock.calls[0][2]).toEqual('function');
-    expect(typeof webappDataService.save.mock.calls[0][3]).toEqual('function');
+    externalComponentsDataGenerator.init(mockProjects()).then(() => {
+      expect(webappDataService.save).toHaveBeenCalledWith(
+        'components-angular.json',
+        data,
+        expect.any(Function),
+        expect.any(Function),
+      );
+      done();
+    });
   });
 
-  it('should write a JSON containing Vue external components data', () => {
-    const data = [ {name: 'Badge', id: 'badge'} ];
-    externalComponentsDataGenerator.init('/client', mockProjects());
-    expect(webappDataService.save.mock.calls[1][1]).toEqual(data);
+  it('should write a JSON containing Vue external components data', done => {
+    externalComponentsDataGenerator.init(mockProjects()).then(() => {
+      expect(webappDataService.save).toHaveBeenCalledWith(
+        'components-vue.json',
+        [ {name: 'Badge', id: 'badge'} ],
+        expect.any(Function),
+        expect.any(Function),
+      );
+      done();
+    });
   });
 
-  it('should write a JSON containing React external components data', () => {
-    externalComponentsDataGenerator.init('/client', mockProjects());
-    expect(webappDataService.save.mock.calls[2][1]).toEqual([
-      { id: 'tag', name: 'Tag' }
-    ]);
+  it('should write a JSON containing React external components data', done => {
+    externalComponentsDataGenerator.init(mockProjects()).then(() => {
+      expect(webappDataService.save).toHaveBeenCalledWith(
+        'components-react.json',
+        [{ id: 'tag', name: 'Tag' }],
+        expect.any(Function),
+        expect.any(Function),
+      );
+      done();
+    });
   });
 
-  it('should not write any JSON if no projects have been given', () => {
-    externalComponentsDataGenerator.init('/client');
-    expect(webappDataService.save).not.toHaveBeenCalled();
+  it('should not write any JSON if no projects have been given', done => {
+    externalComponentsDataGenerator.init().then(() => {
+      expect(webappDataService.save).not.toHaveBeenCalled();
+      done();
+    });
   });
 
   it('should reject promise on collect error', () => {
     const errorMock = 'some error';
     fileService.collect = jest.fn((pattern, onSuccess, onError) => onError(errorMock));
-    externalComponentsDataGenerator.init('/client').then(() => {}, err => {
+    externalComponentsDataGenerator.init().then(() => {}, err => {
       expect(err).toEqual(errorMock);
     });
   });
@@ -144,7 +138,7 @@ describe('External Components Data Generator', () => {
   it('should reject promise on write JSON error', () => {
     const errorMock = 'some error';
     webappDataService.save = jest.fn((filename, data, onSuccess, onError) => onError(errorMock));
-    externalComponentsDataGenerator.init('/client').then(() => {}, err => {
+    externalComponentsDataGenerator.init(mockProjects()).then(() => {}, err => {
       expect(err).toEqual(errorMock);
     });
   });

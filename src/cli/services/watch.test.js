@@ -1,95 +1,127 @@
 const chokidar = require('chokidar');
-const watchService = require('./watch');
+const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const argsService = require('./args');
-
-jest.useFakeTimers();
+const externalAssetsGenerator = require('./external-assets-generator');
+const externalComponentsDataGenerator = require('./external-components-data-generator');
+const processService = require('./process');
+const watchService = require('./watch');
 
 describe('Watch Service', () => {
-  function buildWatcherInstanceMock(){
-    return { on: jest.fn(), close: jest.fn() };
-  }
-
-  function stubWatch(watcherInstance){
-    chokidar.watch = jest.fn(() => watcherInstance);
-  }
-
-  function simulateChangingFileOnce(watcher){
-    let changeExecutions = 0;
-    stubWatch(watcher);
-    watcher.on = jest.fn((evt, callback) => {
-      if(changeExecutions === 0) {
-        ++changeExecutions;
-        callback();
-      }
-    });
+  function stubWatcher(){
+    const evtHandler = {};
+    const chokidarInstance = {
+      on: jest.fn((evtType, cb) => evtHandler[evtType] = cb)
+    };
+    chokidar.watch = jest.fn(() => chokidarInstance);
+    return { simulateEvent: (evtType, params) => evtHandler[evtType](params) };
   }
 
   beforeEach(() => {
-    stubWatch(buildWatcherInstanceMock());
     argsService.getCliArgs = jest.fn();
+    externalComponentsDataGenerator.buildComponentsDataByProject = jest.fn(
+      (project, onSuccess) => onSuccess()
+    );
+    externalAssetsGenerator.copySingleFile = jest.fn(
+      (filepath, config, onSuccess) => onSuccess()
+    );
+    processService.getCwd = () => '/client';
     console.log = jest.fn();
+    stubWatcher();
   });
 
-  it('should watch files', () => {
-    const watcher = buildWatcherInstanceMock();
-    const files = ['some/path/to/file', 'some/path/to/dir'];
-    const onChange = jest.fn();
-    stubWatch(watcher);
-    watchService.init(files, onChange);
-    expect(chokidar.watch).toHaveBeenCalledWith(files);
-    expect(watcher.on.mock.calls[0][0]).toEqual('change');
-    expect(typeof watcher.on.mock.calls[0][1]).toEqual('function');
+  it('should watch files according to config file', () => {
+    const config = buildPitsbyConfigMock();
+    watchService.init(config);
+    expect(chokidar.watch).toHaveBeenCalledWith(
+      [
+        './src/vue/**/*.doc.js',
+        './src/angular/**/*.doc.js',
+        './dist/styles.css',
+        'dist/bundle.js',
+        './images/',
+      ],
+      {
+        cwd: '/client'
+      }
+    );
   });
 
-  it('should log files watch', () => {
-    watchService.init('some/file.js', jest.fn());
+  it('should not watch files if no projects/assets have been found on config file', () => {
+    watchService.init();
+    expect(chokidar.watch).not.toHaveBeenCalled();
+  });
+
+  it('should log file watching', () => {
+    watchService.init(buildPitsbyConfigMock());
     expect(console.log).toHaveBeenCalledWith('Watching for changes...');
   });
 
-  it('should log changed file on file change', () => {
-    const watcher = buildWatcherInstanceMock();
-    const fileChanged = 'file.js';
-    const onChange = jest.fn(() => {
-      return { then: jest.fn() };
-    });
-    watcher.on = jest.fn((evt, callback) => callback(fileChanged));
-    stubWatch(watcher);
-    watchService.init('some/path/to/file', onChange);
-    jest.runOnlyPendingTimers();
-    expect(console.log).toHaveBeenCalledWith(`${fileChanged} changed!`);
+  it('should regenerate external components data if any doc.js file change', () => {
+    const watcherStub = stubWatcher();
+    const config = buildPitsbyConfigMock();
+    watchService.init(config);
+    watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
+    expect(console.log).toHaveBeenCalledWith('alert.doc.js changed');
+    expect(externalComponentsDataGenerator.buildComponentsDataByProject).toHaveBeenCalledWith(
+      config.projects.find(project => project.engine == 'vue'),
+      expect.any(Function),
+      expect.any(Function)
+    );
   });
 
-  it('should re-watch files on file change', () => {
-    const watcher = buildWatcherInstanceMock();
-    simulateChangingFileOnce(watcher);
-    watchService.init('some/path/to/file', jest.fn());
-    jest.runOnlyPendingTimers();
-    expect(watcher.on.mock.calls.length).toEqual(2);
-    expect(watcher.close.mock.calls.length).toEqual(1);
+  it('should log success on documentation update success', () => {
+    const watcherStub = stubWatcher();
+    watchService.init(buildPitsbyConfigMock());
+    watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
+    expect(console.log).toHaveBeenCalledWith('Docs updated!');
   });
 
-  it('should re-watch files on file change when change callback returns a promise', () => {
-    const onChange = jest.fn(() => {
-      return { then: jest.fn(successCallback => successCallback()) };
-    });
-    const watcher = buildWatcherInstanceMock();
-    simulateChangingFileOnce(watcher);
-    watchService.init('some/path/to/file', onChange);
-    jest.runOnlyPendingTimers();
-    expect(watcher.on.mock.calls.length).toEqual(2);
-    expect(watcher.close.mock.calls.length).toEqual(1);
+  it('should log error on documentation update error', () => {
+    const errMock = 'Some error';
+    const watcherStub = stubWatcher();
+    externalComponentsDataGenerator.buildComponentsDataByProject = jest.fn(
+      (project, onSuccess, onError) => onError(errMock)
+    );
+    watchService.init(buildPitsbyConfigMock());
+    watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
+    expect(console.log).toHaveBeenCalledWith(errMock);
   });
 
-  it('should optionally set a custom delay before re-watching files', () => {
-    const delay = 500;
-    const watcher = buildWatcherInstanceMock();
-    argsService.getCliArgs = jest.fn((arg) => (arg == '--aggregateTimeout' ? delay : null));
-    watcher.on = jest.fn((evt, callback) => callback());
-    stubWatch(watcher);
-    watchService.init('some/path/to/file', jest.fn);
-    jest.advanceTimersByTime(499);
-    expect(watcher.on.mock.calls.length).toEqual(1);
-    jest.advanceTimersByTime(1);
-    expect(watcher.on.mock.calls.length).toEqual(2);
+  it('should not regenerate external components data if doc.js file does not relates to any project', () => {
+    const watcherStub = stubWatcher();
+    watchService.init(buildPitsbyConfigMock());
+    watcherStub.simulateEvent('change', 'src/whatever/alert/alert.doc.js');
+    expect(externalComponentsDataGenerator.buildComponentsDataByProject).not.toHaveBeenCalled();
+  });
+
+  it('should regenerate external asset if any asset file change', () => {
+    const watcherStub = stubWatcher();
+    const config = buildPitsbyConfigMock();
+    watchService.init(config);
+    watcherStub.simulateEvent('change', 'dist/styles.css');
+    expect(externalAssetsGenerator.copySingleFile).toHaveBeenCalledWith(
+      'dist/styles.css',
+      config,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('should log success on asset update success', () => {
+    const watcherStub = stubWatcher();
+    watchService.init(buildPitsbyConfigMock());
+    watcherStub.simulateEvent('change', 'dist/styles.css');
+    expect(console.log).toHaveBeenCalledWith('Asset updated!');
+  });
+
+  it('should log success on asset update success', () => {
+    const errMock = 'Some error';
+    const watcherStub = stubWatcher();
+    externalAssetsGenerator.copySingleFile = jest.fn(
+      (filepath, config, onSuccess, onError) => onError(errMock)
+    );
+    watchService.init(buildPitsbyConfigMock());
+    watcherStub.simulateEvent('change', 'dist/styles.css');
+    expect(console.log).toHaveBeenCalledWith(errMock);
   });
 });

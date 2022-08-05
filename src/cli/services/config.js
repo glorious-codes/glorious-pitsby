@@ -1,32 +1,49 @@
 const { fileService } = require('./file');
+const processService = require('./process');
 
 const _public = {};
 
-_public.get = clientDirectory => {
-  const config = getPitsbyConfig(clientDirectory);
-  if(!config)
-    return console.error('No pitsby.config.js has been found.');
-  return normalizeEngineCase(normalizeConfig(config));
+const DEFAULT_CONFIG = { outputDirectory: './pitsby' };
+
+let cache;
+
+_public.get = () => {
+  if(cache) return cache;
+  const config = getPitsbyConfig(process.cwd());
+  if(!config) return console.error('No pitsby.config.js has been found.');
+  return handleCache({ ...DEFAULT_CONFIG, ...normalizeEngineCase(normalizeConfig(config)) });
 };
 
-function getPitsbyConfig(clientDirectory){
-  const config =  getConfig(clientDirectory, 'pitsby.config.js') ||
-                  getConfig(clientDirectory, 'pitsby.js') ||
-                  getConfig(clientDirectory, 'pitsby.json');
+_public.flushCache = () => {
+  cache = null;
+};
+
+function handleCache(config){
+  cache = config;
+  return config;
+}
+
+function getPitsbyConfig(){
+  const config = lookupForConfig();
   handleDeprecatedConfigFilenames(config);
   return config;
 }
 
-function getConfig(clientDirectory, filename){
+function lookupForConfig(){
+  const config = ['pitsby.config.js','pitsby.js', 'pitsby.json'].reduce((result, filename) => {
+    return result || getConfigByFilename(filename);
+  }, '');
+  if(config) return config;
+}
+
+function getConfigByFilename(filename){
   let config;
   try {
-    config = fileService.require(`${clientDirectory}/${filename}`);
+    config = fileService.require(`${processService.getCwd()}/${filename}`);
   }
   /* eslint-disable no-empty */
   catch(err) {}
-  if(config)
-    config.filename = filename;
-  return config;
+  if(config) return { ...config, filename };
 }
 
 function handleDeprecatedConfigFilenames({ filename } = {}){
@@ -47,21 +64,28 @@ function normalizeConfig(config){
 }
 
 function normalizeEngineCase(config){
-  if(config.projects)
-    config.projects.forEach(project => {
-      project.engine = project.engine.toLowerCase();
-    });
-  return config;
+  return {
+    ...config,
+    projects: getProjetsFromConfig(config).map(project => ({ ...project, engine: project.engine.toLowerCase() }))
+  };
 }
 
 function pushAngularConfigToProjects(config){
-  config.projects = config.projects || [];
-  config.projects.push({
-    engine: 'angular',
-    collectDocsFrom: config.collectFrom,
-    moduleName: config.moduleName
-  });
-  return config;
+  return {
+    ...config,
+    projects: [
+      ...getProjetsFromConfig(config),
+      {
+        engine: 'angular',
+        collectDocsFrom: config.collectFrom,
+        moduleName: config.moduleName
+      }
+    ]
+  };
+}
+
+function getProjetsFromConfig(config){
+  return config.projects || [];
 }
 
 module.exports = _public;

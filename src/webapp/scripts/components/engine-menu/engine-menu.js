@@ -15,7 +15,7 @@ function controller() {
   }
 
   function onFetchProjectsError(err){
-    console.log('Failed to get projects', err);
+    console.log(`Failed to get projects: ${err}`);
   }
 
   function setProjects(projects){

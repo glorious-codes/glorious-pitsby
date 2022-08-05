@@ -13,7 +13,7 @@ function handleFavicon({ filepath } = {}, template){
 }
 
 function buildFaviconHref(filepath){
-  const href = filepath ? buildCustomFaviconHref(filepath) : 'images/favicon-pitsby.png';
+  const href = filepath ? buildCustomFaviconHref(filepath) : '/images/favicon-pitsby.png';
   return `${href}?t=${Date.now()}`;
 }
 
@@ -25,8 +25,10 @@ function handleWindowTitle(title = 'Pitsby', template){
   return template.replace('{{ title }}', title);
 }
 
-function handleStyles(styles, template){
+function handleStyles(styles = '', template){
+  // console.log(template);
   const styleTag = styles ? `<style data-custom-styles>${removeUnwantedChars(styles)}</style>` : '';
+  // console.log(template.replace('<!-- inject:custom-styles -->', styleTag));
   return template.replace('<!-- inject:custom-styles -->', styleTag);
 }
 

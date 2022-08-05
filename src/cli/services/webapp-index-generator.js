@@ -16,10 +16,6 @@ _public.init = projects => {
   });
 };
 
-_public.buildVueExternalModuleImportPath = importFrom => {
-  return path.join('../external', importFrom);
-};
-
 function buildIndex(projects){
   let template = getIndexTemplate();
   return projects && projects.length ?
@@ -75,8 +71,7 @@ function getIndexTemplate(){
 
 function registerVueExternalModule(template, project){
   const lines = template.split('\n');
-  lines.unshift(`Vue.use(${project.libraryName});`);
-  lines.unshift(`import ${project.libraryName} from '${_public.buildVueExternalModuleImportPath(project.importFrom)}';`);
+  lines.unshift(`Vue.use(window['${project.libraryName}']);`);
   lines.unshift('import Vue from \'vue\';');
   return lines.join('\n');
 }

@@ -35,4 +35,8 @@ describe('Window Service', () => {
   it('should get page vertical offset', () => {
     expect(windowService.getPageYOffset()).toEqual(window.pageYOffset);
   });
+
+  it('should get pathname', () => {
+    expect(windowService.getPathname()).toEqual(window.location.pathname);
+  });
 });

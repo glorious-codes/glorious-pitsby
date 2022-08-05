@@ -1,31 +1,41 @@
-const path = require('path');
-const webappDataService = require('./webapp-data');
+const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const { fileService } = require('./file');
+const configService = require('./config');
+const processService = require('./process');
+const webappDataService = require('./webapp-data');
 
 describe('Webapp Data Service', () => {
   beforeEach(() => {
+    configService.get = jest.fn(() => buildPitsbyConfigMock());
     fileService.write = jest.fn();
+    processService.getCwd = jest.fn(() => '/client');
   });
 
   it('should be able to save an object passed as data', () => {
     const filename = 'projects.json';
     const data = [{engine: 'vue'}, {engine: 'angular'}];
     const onSuccess = jest.fn();
-    webappDataService.save(filename, data, onSuccess);
-    expect(fileService.write.mock.calls[0][0]).toEqual(
-      path.join(__dirname, `../../webapp/data/${filename}`)
+    const onError = jest.fn();
+    webappDataService.save(filename, data, onSuccess, onError);
+    expect(fileService.write).toHaveBeenCalledWith(
+      `/client/docs/data/${filename}`,
+      JSON.stringify(data),
+      onSuccess,
+      onError
     );
-    expect(fileService.write.mock.calls[0][1]).toEqual(JSON.stringify(data));
-    expect(fileService.write.mock.calls[0][2]).toEqual(onSuccess);
   });
 
   it('should be able to save a string passed as data', () => {
     const filename = 'metrics-ids.js';
     const data = 'module.exports = {some: "id"}';
-    webappDataService.save(filename, data, jest.fn());
-    expect(fileService.write.mock.calls[0][0]).toEqual(
-      path.join(__dirname, `../../webapp/data/${filename}`)
+    const onSuccess = jest.fn();
+    const onError = jest.fn();
+    webappDataService.save(filename, data, onSuccess, onError);
+    expect(fileService.write).toHaveBeenCalledWith(
+      `/client/docs/data/${filename}`,
+      data,
+      onSuccess,
+      onError
     );
-    expect(fileService.write.mock.calls[0][1]).toEqual(data);
   });
 });

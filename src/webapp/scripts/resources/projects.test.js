@@ -1,28 +1,24 @@
-import { PromiseMock } from '@mocks/promise';
-import dataResource from './data';
+import testingService from '@scripts/services/testing';
 import projectsResource from './projects';
 
 describe('Projects Resource', () => {
+  afterEach(() => {
+    testingService.clearExternalGlobalData();
+  });
 
-  function stubGetData(responseType, response){
-    dataResource.get = jest.fn(() => {
-      return new PromiseMock(responseType, response);
+  it('should get projects', done => {
+    const projects = [{ engine: 'vue' }];
+    testingService.mockExternalGlobalData({ projects });
+    projectsResource.get().then(response => {
+      expect(response).toEqual(projects);
+      done();
     });
-  }
-
-  beforeEach(() => {
-    stubGetData('success');
   });
 
-  it('should get projects', () => {
-    projectsResource.get();
-    expect(dataResource.get).toHaveBeenCalledWith('/projects');
-  });
-
-  it('should not get projects if projects has already been obtained', () => {
-    stubGetData('success', [{engine: 'angular'}]);
-    projectsResource.get();
-    projectsResource.get();
-    expect(dataResource.get.mock.calls.length).toEqual(1);
+  it('should reject a promise if projects have not been found', done => {
+    projectsResource.get().then(() => {}, err => {
+      expect(err).toEqual('Projects have not been found');
+      done();
+    });
   });
 });

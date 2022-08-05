@@ -1,33 +1,77 @@
 const chokidar = require('chokidar');
-const argsService = require('./args');
+const path = require('path');
+const externalAssetsGenerator = require('./external-assets-generator');
+const externalComponentsDataGenerator = require('./external-components-data-generator');
+const processService = require('./process');
 
 const _public = {};
 
-_public.init = (files, onFileChange) => {
-  console.log('Watching for changes...');
-  const watcher = chokidar.watch(files);
-  watcher.on('change', path => {
-    watcher.close();
-    setTimeout(() => {
-      handleChange(path, files, onFileChange);
-    }, getAggregateTime());
-  });
+_public.init = (config = {}) => {
+  const files = buildFilepathsToWatch(config);
+  const cwd = processService.getCwd();
+  if(files.length) {
+    chokidar.watch(files, { cwd }).on('change', filepath => handleChange(filepath, config));
+    console.log('Watching for changes...');
+  }
 };
 
-function getAggregateTime(){
-  return argsService.getCliArgs('--aggregateTimeout') || 0;
+function buildFilepathsToWatch({ projects = [], styles = [], scripts = [], other = [] }){
+  return [
+    ...buildDocumentationFilepathGlobs(projects),
+    ...styles,
+    ...scripts,
+    ...other,
+  ];
 }
 
-function handleChange(changedFile, files, onFileChange){
-  console.log(`${changedFile} changed!`);
-  handleChangeCallbak(files, onFileChange);
+function buildDocumentationFilepathGlobs(projects){
+  return projects.map(({ collectDocsFrom }) => `${collectDocsFrom}/**/*.doc.js`);
 }
 
-function handleChangeCallbak(files, onFileChange){
-  const promise = onFileChange();
-  return promise && promise.then ? promise.then(() => {
-    _public.init(files, onFileChange);
-  }) : _public.init(files, onFileChange);
+function handleChange(filepath, config){
+  console.log(`${path.basename(filepath)} changed`);
+  const update = getUpdateActionAccordingToChangedFile(filepath, config);
+  update && update();
+}
+
+function getUpdateActionAccordingToChangedFile(filepath, config){
+  if(isDocumentationFile(filepath)) return buildUpdateDocumentationAction(filepath, config);
+  return buildUpdateAssetAction(filepath, config);
+}
+
+function isDocumentationFile(filepath){
+  const regex = new RegExp(/\.doc\.js$/);
+  return regex.test(filepath);
+}
+
+function buildUpdateDocumentationAction(filepath, config){
+  const project = identifyChangeProjectByDocumentationFilepath(filepath, config);
+  if(project) {
+    return () => {
+      externalComponentsDataGenerator.buildComponentsDataByProject(
+        project,
+        () => console.log('Docs updated!'),
+        err => console.log(err)
+      );
+    };
+  }
+}
+
+function identifyChangeProjectByDocumentationFilepath(filepath, config){
+  return config.projects.find(({ collectDocsFrom }) => {
+    return filepath.includes(collectDocsFrom.replace(/^\.\//, ''));
+  });
+}
+
+function buildUpdateAssetAction(filepath, config){
+  return () => {
+    externalAssetsGenerator.copySingleFile(
+      filepath,
+      config,
+      () => console.log('Asset updated!'),
+      err => console.log(err)
+    );
+  };
 }
 
 module.exports = _public;

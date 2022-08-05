@@ -1,3 +1,4 @@
+import testingService from '@scripts/services/testing';
 import pubsubService from '@scripts/services/pubsub';
 
 describe('Sidebar', () => {
@@ -20,6 +21,11 @@ describe('Sidebar', () => {
     });
     pubsubService.subscribe = jest.fn((topic, callback) => callback());
     pubsubService.unsubscribe = jest.fn();
+    testingService.mockExternalGlobalData({ projects: [{ engine: 'vue' }] });
+  });
+
+  afterEach(() => {
+    testingService.clearExternalGlobalData();
   });
 
   it('should have appropriate css class', () => {

@@ -1,32 +1,41 @@
 const path = require('path');
 const assetsFilepathFilter = require('./assets-filepath-filter');
 const { fileService } = require('./file');
+const processService = require('./process');
 
 const _public = {};
 
-_public.init = (clientDirectory, assets) => {
+_public.init = config => {
   return Promise.all([
-    copyAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.styles)),
-    copyAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.scripts)),
-    copyAssets(clientDirectory, assetsFilepathFilter.getRelative(assets.other))
+    copyAssets(config, assetsFilepathFilter.getRelative(config.styles)),
+    copyAssets(config, assetsFilepathFilter.getRelative(config.scripts)),
+    copyAssets(config, assetsFilepathFilter.getRelative(config.other))
   ]);
 };
 
-function copyAssets(clientDirectory, filepaths){
-  return filepaths && filepaths.length ?
-    copyClientFilepathsContents(clientDirectory, filepaths) :
-    Promise.resolve();
+_public.copySingleFile = (filepath, config, onSuccess, onError) => {
+  const clientDirectory = processService.getCwd();
+  const targetDirectory = getExternalAssetsDirectory(clientDirectory, config);
+  fileService.copy(
+    path.join(clientDirectory, filepath),
+    path.join(targetDirectory, filepath),
+    onSuccess,
+    onError
+  );
+};
+
+function copyAssets(config, files){
+  if(files.length) return copyMultipleFiles(config, files);
+  return Promise.resolve();
 }
 
-function copyClientFilepathsContents(clientDirectory, filepaths){
+function copyMultipleFiles(config, filepaths){
   return new Promise((resolve, reject) => {
-    let successfulCopies = 0;
+    const resolutions = [];
     filepaths.forEach(filepath => {
-      const target = path.join(getExternalAssetsDirectory(), filepath);
-      fileService.copy(path.join(clientDirectory, filepath), target, () => {
-        successfulCopies++;
-        if(successfulCopies === filepaths.length)
-          resolve();
+      _public.copySingleFile(filepath, config, () => {
+        resolutions.push(filepath);
+        if(resolutions.length === filepaths.length) resolve();
       }, err => {
         console.log(err);
         reject(err);
@@ -35,8 +44,8 @@ function copyClientFilepathsContents(clientDirectory, filepaths){
   });
 }
 
-function getExternalAssetsDirectory(){
-  return path.join(__dirname, '../../webapp/external');
+function getExternalAssetsDirectory(clientDirectory, { outputDirectory }){
+  return path.join(clientDirectory, outputDirectory, 'external');
 }
 
 module.exports = _public;

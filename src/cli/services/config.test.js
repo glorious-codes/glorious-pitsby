@@ -1,113 +1,122 @@
+const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const { fileService } = require('./file');
+const processService = require('./process');
 const configService = require('./config');
 
 describe('Config Service', () => {
-  function buildConfigMock(){
-    return {
-      projects: [ { engine: 'vue', collectDocsFrom: './src/vue' } ],
-      styles: [ './dist/ca-components.css' ],
-      scripts: [ './dist/ca-components-vue.js' ],
-      other: [ './dist/assets/images/' ]
-    };
-  }
 
-  function stubFileRequire(filepath, config){
+  function stubFileRequire(filename, data){
     fileService.require = jest.fn(param => {
-      if(param == filepath)
-        return config;
+      if(param === `${processService.getCwd()}/${filename}`) return data;
       throw 'File not found';
     });
   }
 
   beforeEach(() => {
+    processService.getCwd = () => '/client';
     console.warn = jest.fn();
     console.error = jest.fn();
   });
 
+  afterEach(() => {
+    configService.flushCache();
+  });
+
   it('should be able to get config from pitsby.config.js file', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    stubFileRequire(`${clientDirectory}/pitsby.config.js`, config);
-    expect(configService.get('/client')).toEqual(config);
+    const filename = 'pitsby.config.js';
+    const config = buildPitsbyConfigMock();
+    stubFileRequire(filename, config);
+    expect(configService.get()).toEqual({ ...config, filename });
   });
 
   it('should be able to get config from pitsby.js file', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    stubFileRequire(`${clientDirectory}/pitsby.js`, config);
-    expect(configService.get('/client')).toEqual(config);
+    const filename = 'pitsby.js';
+    const config = buildPitsbyConfigMock();
+    stubFileRequire(filename, config);
+    expect(configService.get()).toEqual({ ...config, filename });
   });
 
   it('should log a deprecation warning if config file has been named as pitsby.js', () => {
-    const warn = 'pitsby.js is deprecated. Prefer to use pitsby.config.js as config filename.';
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    stubFileRequire(`${clientDirectory}/pitsby.js`, config);
-    configService.get(clientDirectory);
-    expect(console.warn).toHaveBeenCalledWith(warn);
+    const filename = 'pitsby.js';
+    const warning = `${filename} is deprecated. Prefer to use pitsby.config.js as config filename.`;
+    const config = buildPitsbyConfigMock();
+    stubFileRequire(filename, config);
+    configService.get();
+    expect(console.warn).toHaveBeenCalledWith(warning);
   });
 
   it('should be able to get config from pitsby.json file', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    stubFileRequire(`${clientDirectory}/pitsby.json`, config);
-    expect(configService.get('/client')).toEqual(config);
+    const filename = 'pitsby.json';
+    const config = buildPitsbyConfigMock();
+    stubFileRequire(filename, config);
+    expect(configService.get()).toEqual({ ...config, filename });
   });
 
   it('should log a deprecation warning if config file has been named as pitsby.json', () => {
-    const warn = 'pitsby.json is deprecated. Prefer to use pitsby.config.js as config filename.';
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    stubFileRequire(`${clientDirectory}/pitsby.json`, config);
-    configService.get(clientDirectory);
-    expect(console.warn).toHaveBeenCalledWith(warn);
+    const filename = 'pitsby.json';
+    const warning = `${filename} is deprecated. Prefer to use pitsby.config.js as config filename.`;
+    const config = buildPitsbyConfigMock();
+    stubFileRequire(filename, config);
+    configService.get();
+    expect(console.warn).toHaveBeenCalledWith(warning);
   });
 
   it('should log error if no config file has been found', () => {
     const err = 'No pitsby.config.js has been found.';
-    const clientDirectory = '/client/';
-    stubFileRequire(clientDirectory);
-    configService.get(clientDirectory);
+    stubFileRequire();
+    configService.get();
     expect(console.error).toHaveBeenCalledWith(err);
   });
 
   it('should normalize config attributes when angular config is outside projects', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    config.collectFrom = './src/angular';
-    config.moduleName = 'my-components';
-    stubFileRequire(`${clientDirectory}/pitsby.config.js`, config);
-    expect(configService.get('/client').projects).toEqual([
-      { engine: 'vue', collectDocsFrom: './src/vue' },
+    const config = {
+      ...buildPitsbyConfigMock(),
+      projects: [],
+      collectFrom: './src/angular',
+      moduleName: 'my-components',
+    };
+    stubFileRequire('pitsby.config.js', config);
+    expect(configService.get().projects).toEqual([
       { engine: 'angular', collectDocsFrom: './src/angular', moduleName: 'my-components' }
     ]);
   });
 
   it('should create projects attribute when config has no projects attribute', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    config.collectFrom = './src/angular';
-    config.moduleName = 'my-components';
+    const config = {
+      ...buildPitsbyConfigMock(),
+      projects: buildPitsbyConfigMock().projects.filter(project => project.engine != 'angular'),
+      collectFrom: './src/angular',
+      moduleName: 'my-components',
+    };
     delete config.projects;
-    stubFileRequire(`${clientDirectory}/pitsby.config.js`, config);
-    expect(configService.get('/client').projects).toEqual([
+    stubFileRequire('pitsby.config.js', config);
+    expect(configService.get().projects).toEqual([
       { engine: 'angular', collectDocsFrom: './src/angular', moduleName: 'my-components' }
     ]);
   });
 
   it('should normalize project engine case', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
+    const config = buildPitsbyConfigMock();
     config.projects[0].engine = 'Vue';
-    stubFileRequire(`${clientDirectory}/pitsby.config.js`, config);
-    expect(configService.get('/client').projects[0].engine).toEqual('vue');
+    stubFileRequire('pitsby.config.js', config);
+    expect(configService.get().projects[0].engine).toEqual('vue');
   });
 
-  it('should not normalize anything if config has no projects at all', () => {
-    const config = buildConfigMock();
-    const clientDirectory = '/client';
-    delete config.projects;
-    stubFileRequire(`${clientDirectory}/pitsby.config.js`, config);
-    expect(configService.get('/client')).toEqual(config);
+  it('should return default output directory if no output directory has been set by the client', () => {
+    const config = buildPitsbyConfigMock();
+    delete config.outputDirectory;
+    stubFileRequire('pitsby.config.js', config);
+    expect(configService.get().outputDirectory).toEqual('./pitsby');
+  });
+
+  it('should cache config', () => {
+    const config = buildPitsbyConfigMock();
+    const filename = 'pitsby.config.js';
+    stubFileRequire(filename, config);
+    configService.get();
+    configService.get();
+    configService.get();
+    expect(fileService.require).toHaveBeenCalledTimes(1);
+    expect(configService.get()).toEqual({ ...config, filename });
   });
 });

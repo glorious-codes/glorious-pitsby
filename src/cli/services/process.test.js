@@ -15,4 +15,8 @@ describe('Process Service', () => {
     process.env.NODE_ENV = '';
     expect(processService.getNodeEnv()).toEqual('development');
   });
+
+  it('should return the current working directory', () => {
+    expect(processService.getCwd()).toEqual(process.cwd());
+  });
 });

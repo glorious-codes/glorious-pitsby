@@ -1,4 +1,5 @@
 const path = require('path');
+const processService = require('./process');
 const jsonService = require('./json');
 const jsxJsonService = require('./jsx-json');
 const moduleService = require('./module');
@@ -7,24 +8,26 @@ const { fileService } = require('./file');
 
 const _public = {};
 
-_public.init = (clientDirectory, projects = []) => {
+_public.init = (projects = []) => {
+  if(!projects.length) return Promise.resolve();
   return new Promise((resolve, reject) => {
-    const fulfillments = [];
-    projects.forEach(project => {
-      const pattern = buildCollectFromGlob(clientDirectory, project.collectDocsFrom);
-      collectComponents(pattern, project, components => {
-        writeComponentsFile(project.engine, components, () => {
-          fulfillments.push(project);
-          if(fulfillments.length === projects.length)
-            resolve();
-        }, reject);
-      }, reject);
-    });
+    const resolutions = [];
+    projects.forEach(project => _public.buildComponentsDataByProject(project, () => {
+      resolutions.push(project);
+      if(resolutions.length === projects.length) resolve();
+    }, reject));
   });
 };
 
-function buildCollectFromGlob(clientDirectory, collectDocsFrom){
-  return `${path.join(clientDirectory, collectDocsFrom, './**/*.doc.js')}`;
+_public.buildComponentsDataByProject = (project, onSuccess, onError) => {
+  const glob = buildCollectFromGlob(project.collectDocsFrom);
+  collectComponents(glob, project, componentsData => {
+    writeComponentsFile(project.engine, componentsData, onSuccess, onError);
+  }, onError);
+};
+
+function buildCollectFromGlob(collectDocsFrom){
+  return path.join(processService.getCwd(), collectDocsFrom, './**/*.doc.js');
 }
 
 function collectComponents(collectDocsFromPattern, project, onSuccess, onError){
