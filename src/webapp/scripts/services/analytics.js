@@ -25,8 +25,8 @@ function getGoogleAnalyticsId(){
 }
 
 function buildPath(){
-  const pathname = windowService.getPathname();
-  return pathname.replace('/#!/','/').split('?')[0];
+  const pathname = windowService.getHash();
+  return pathname.replace('#!/','/').split('?')[0];
 }
 
 export default _public;
