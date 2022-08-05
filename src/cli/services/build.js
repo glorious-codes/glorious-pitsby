@@ -6,6 +6,7 @@ const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
 const docsGenerator = require('./docs-generator');
 const processService = require('./process');
+const watchService = require('./watch');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 const webappIndexGenerator = require('./webapp-index-generator');
 
@@ -36,18 +37,19 @@ function generateWebappFiles(config){
   ]);
 }
 
-function serve({ outputDirectory }){
+function serve(config){
   const port = getServerPort();
   liveServer.start({
     host: '0.0.0.0',
-    root: path.join(processService.getCwd(), outputDirectory),
+    root: path.join(processService.getCwd(), config.outputDirectory),
     open: false,
     file: 'index.html',
     noCssInject: true,
     logLevel: 0,
     port,
   });
-  console.log(`Docs served on http://localhost:${getServerPort()}`);
+  console.log(`Docs served on http://localhost:${port}`);
+  watchService.init(config);
 }
 
 function getServerPort(){

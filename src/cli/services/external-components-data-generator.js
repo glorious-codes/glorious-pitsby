@@ -9,19 +9,21 @@ const { fileService } = require('./file');
 const _public = {};
 
 _public.init = (projects = []) => {
+  if(!projects.length) return Promise.resolve();
   return new Promise((resolve, reject) => {
     const resolutions = [];
-    if(!projects.length) return resolve();
-    projects.forEach(project => {
-      const glob = buildCollectFromGlob(project.collectDocsFrom);
-      collectComponents(glob, project, components => {
-        writeComponentsFile(project.engine, components, () => {
-          resolutions.push(project);
-          if(resolutions.length === projects.length) resolve();
-        }, reject);
-      }, reject);
-    });
+    projects.forEach(project => _public.buildComponentsDataByProject(project, () => {
+      resolutions.push(project);
+      if(resolutions.length === projects.length) resolve();
+    }, reject));
   });
+};
+
+_public.buildComponentsDataByProject = (project, onSuccess, onError) => {
+  const glob = buildCollectFromGlob(project.collectDocsFrom);
+  collectComponents(glob, project, componentsData => {
+    writeComponentsFile(project.engine, componentsData, onSuccess, onError);
+  }, onError);
 };
 
 function buildCollectFromGlob(collectDocsFrom){

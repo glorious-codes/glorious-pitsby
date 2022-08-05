@@ -13,18 +13,27 @@ _public.init = config => {
   ]);
 };
 
-function copyAssets(config, filepaths){
-  if(filepaths.length) return copyClientFilepathsContents(config, filepaths);
+_public.copySingleFile = (filepath, config, onSuccess, onError) => {
+  const clientDirectory = processService.getCwd();
+  const targetDirectory = getExternalAssetsDirectory(clientDirectory, config);
+  fileService.copy(
+    path.join(clientDirectory, filepath),
+    path.join(targetDirectory, filepath),
+    onSuccess,
+    onError
+  );
+};
+
+function copyAssets(config, files){
+  if(files.length) return copyMultipleFiles(config, files);
   return Promise.resolve();
 }
 
-function copyClientFilepathsContents(config, filepaths){
+function copyMultipleFiles(config, filepaths){
   return new Promise((resolve, reject) => {
     const resolutions = [];
-    const clientDirectory = processService.getCwd();
     filepaths.forEach(filepath => {
-      const target = path.join(getExternalAssetsDirectory(config, clientDirectory), filepath);
-      fileService.copy(path.join(clientDirectory, filepath), target, () => {
+      _public.copySingleFile(filepath, config, () => {
         resolutions.push(filepath);
         if(resolutions.length === filepaths.length) resolve();
       }, err => {
@@ -35,7 +44,7 @@ function copyClientFilepathsContents(config, filepaths){
   });
 }
 
-function getExternalAssetsDirectory({ outputDirectory }, clientDirectory){
+function getExternalAssetsDirectory(clientDirectory, { outputDirectory }){
   return path.join(clientDirectory, outputDirectory, 'external');
 }
 

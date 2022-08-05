@@ -26,6 +26,7 @@ describe('Build Service', () => {
     watchService.init = jest.fn();
     webappHtmlIndexGenerator.init = jest.fn(() => Promise.resolve());
     webappIndexGenerator.init = jest.fn(() => Promise.resolve());
+    watchService.init = jest.fn();
   });
 
   it('should generate external assets', () => {
@@ -90,6 +91,14 @@ describe('Build Service', () => {
         logLevel: 0
       });
       expect(console.log).toHaveBeenCalledWith('Docs served on http://localhost:7000');
+      done();
+    });
+  });
+
+  it('should watch file changes if "watch" flag has been given', done => {
+    argsService.getCliArgs = jest.fn(param => param == '--watch');
+    buildService.init().then(() => {
+      expect(watchService.init).toHaveBeenCalledWith(buildPitsbyConfigMock());
       done();
     });
   });

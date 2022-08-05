@@ -7,7 +7,7 @@ export const buildPitsbyConfigMock = ({ custom, ...rest } = {}) => ({
     },
     {
       engine: 'angular',
-      collectFrom: './src/angular',
+      collectDocsFrom: './src/angular',
       moduleName: 'external'
     }
   ],
