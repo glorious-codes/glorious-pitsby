@@ -1,5 +1,6 @@
 const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const { fileService } = require('./file');
+const logger = require('./logger');
 const processService = require('./process');
 const externalAssetsGenerator = require('./external-assets-generator');
 
@@ -9,8 +10,8 @@ describe('External Assets Generator', () => {
   }
 
   beforeEach(() => {
-    console.log = jest.fn();
     fileService.copy = jest.fn((source, dest, onSuccess) => onSuccess());
+    logger.msg = jest.fn();
     processService.getCwd = jest.fn(() => '/client');
   });
 
@@ -89,7 +90,7 @@ describe('External Assets Generator', () => {
     fileService.copy = jest.fn((source, dest, onSuccess, onError) => onError(errMock));
     externalAssetsGenerator.init(config).then(() => {}, err => {
       expect(err).toEqual(errMock);
-      expect(console.log).toHaveBeenCalledWith(errMock);
+      expect(logger.msg).toHaveBeenCalledWith(errMock, { theme: 'error' });
     });
   });
 });

@@ -2,6 +2,7 @@ const chokidar = require('chokidar');
 const path = require('path');
 const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
+const logger = require('./logger');
 const processService = require('./process');
 
 const _public = {};
@@ -11,7 +12,7 @@ _public.init = (config = {}) => {
   const cwd = processService.getCwd();
   if(files.length) {
     chokidar.watch(files, { cwd }).on('change', filepath => handleChange(filepath, config));
-    console.log('Watching for changes...');
+    logger.msg('Watching for changes...');
   }
 };
 
@@ -29,7 +30,7 @@ function buildDocumentationFilepathGlobs(projects){
 }
 
 function handleChange(filepath, config){
-  console.log(`${path.basename(filepath)} changed`);
+  logger.msg(`${path.basename(filepath)} changed...`);
   const update = getUpdateActionAccordingToChangedFile(filepath, config);
   update && update();
 }
@@ -50,8 +51,8 @@ function buildUpdateDocumentationAction(filepath, config){
     return () => {
       externalComponentsDataGenerator.buildComponentsDataByProject(
         project,
-        () => console.log('Docs updated!'),
-        err => console.log(err)
+        () => logger.msg('Docs updated!', { theme: 'success' }),
+        err => logger.msg(err, { theme: 'error' })
       );
     };
   }
@@ -68,8 +69,8 @@ function buildUpdateAssetAction(filepath, config){
     externalAssetsGenerator.copySingleFile(
       filepath,
       config,
-      () => console.log('Asset updated!'),
-      err => console.log(err)
+      () => logger.msg('Asset updated!', { theme: 'success' }),
+      err => logger.msg(err, { theme: 'error' })
     );
   };
 }

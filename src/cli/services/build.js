@@ -2,9 +2,10 @@ const path = require('path');
 const liveServer = require('live-server');
 const argsService = require('./args');
 const configService = require('./config');
+const docsGenerator = require('./docs-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
-const docsGenerator = require('./docs-generator');
+const logger = require('./logger');
 const processService = require('./process');
 const watchService = require('./watch');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
@@ -48,7 +49,7 @@ function serve(config){
     logLevel: 0,
     port,
   });
-  console.log(`Docs served on http://localhost:${port}`);
+  logger.msg(`Docs served on http://localhost:${port}`);
   watchService.init(config);
 }
 
