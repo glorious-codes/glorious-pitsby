@@ -26,9 +26,7 @@ function handleWindowTitle(title = 'Pitsby', template){
 }
 
 function handleStyles(styles = '', template){
-  // console.log(template);
   const styleTag = styles ? `<style data-custom-styles>${removeUnwantedChars(styles)}</style>` : '';
-  // console.log(template.replace('<!-- inject:custom-styles -->', styleTag));
   return template.replace('<!-- inject:custom-styles -->', styleTag);
 }
 
