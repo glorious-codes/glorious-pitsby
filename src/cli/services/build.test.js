@@ -6,6 +6,7 @@ const docsGenerator = require('./docs-generator');
 const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
 const externalGlobalDataGenerator = require('./external-global-data');
+const logger = require('./logger');
 const processService = require('./process');
 const watchService = require('./watch');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
@@ -14,7 +15,6 @@ const buildService = require('./build');
 
 describe('Build Service', () => {
   beforeEach(() => {
-    console.log = jest.fn();
     liveServer.start = jest.fn();
     argsService.getCliArgs = jest.fn();
     configService.get = jest.fn(() => buildPitsbyConfigMock());
@@ -22,6 +22,7 @@ describe('Build Service', () => {
     externalAssetsGenerator.init = jest.fn(() => Promise.resolve());
     externalComponentsDataGenerator.init = jest.fn(() => Promise.resolve());
     externalGlobalDataGenerator.init = jest.fn(() => Promise.resolve());
+    logger.msg = jest.fn();
     processService.getCwd = jest.fn(() => '/client');
     watchService.init = jest.fn();
     webappHtmlIndexGenerator.init = jest.fn(() => Promise.resolve());
@@ -90,7 +91,7 @@ describe('Build Service', () => {
         noCssInject: true,
         logLevel: 0
       });
-      expect(console.log).toHaveBeenCalledWith('Docs served on http://localhost:7000');
+      expect(logger.msg).toHaveBeenCalledWith('Docs served on http://localhost:7000');
       done();
     });
   });

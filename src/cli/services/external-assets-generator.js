@@ -1,6 +1,7 @@
 const path = require('path');
 const assetsFilepathFilter = require('./assets-filepath-filter');
 const { fileService } = require('./file');
+const logger = require('./logger');
 const processService = require('./process');
 
 const _public = {};
@@ -37,7 +38,7 @@ function copyMultipleFiles(config, filepaths){
         resolutions.push(filepath);
         if(resolutions.length === filepaths.length) resolve();
       }, err => {
-        console.log(err);
+        logger.msg(err, { theme: 'error' });
         reject(err);
       });
     });

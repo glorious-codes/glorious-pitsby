@@ -1,13 +1,13 @@
 const fs = require('fs');
 const fsextra = require('fs-extra');
 const glob = require('glob');
-// const writefile = require('writefile');
 const fileSystem = require('file-system');
 const { FileService, fileService } = require('./file');
+const logger = require('./logger');
 
 describe('File Service', () => {
   beforeEach(() => {
-    console.log = jest.fn();
+    logger.msg = jest.fn();
   });
 
   it('should use raw fs if no fs has been given', () => {
@@ -60,13 +60,16 @@ describe('File Service', () => {
 
   it('should log error when read file async fails', () => {
     const filepath = './test.js';
-    const errorMock = {some: 'error'};
+    const errorMock = 'error';
     const fsMock = { readFile: jest.fn((filepath, callback) => callback(errorMock)) };
     const fileService = new FileService({
       fs: fsMock
     });
     fileService.read(filepath);
-    expect(console.log).toHaveBeenCalledWith('Failed to read ./test.js', errorMock);
+    expect(logger.msg).toHaveBeenCalledWith(
+      `Failed to read ./test.js: ${errorMock}`,
+      { theme: 'error' }
+    );
   });
 
   it('should read file sync', () => {
@@ -131,7 +134,10 @@ describe('File Service', () => {
       glob: globMock
     });
     fileService.collect(pattern);
-    expect(console.log).toHaveBeenCalledWith('Failed to collect **/*.js files', errorMock);
+    expect(logger.msg).toHaveBeenCalledWith(
+      `Failed to collect **/*.js files: ${errorMock}`,
+      { theme: 'error' }
+    );
   });
 
   it('should copy files', () => {
@@ -158,12 +164,16 @@ describe('File Service', () => {
   });
 
   it('should log error on copy error if no error callback has been provided', () => {
-    const fsextraMock = {copy: jest.fn((source, destination, callback) => callback('error'))};
+    const errMock = 'error';
+    const fsextraMock = {copy: jest.fn((source, destination, callback) => callback(errMock))};
     const fileService = new FileService({
       fsextra: fsextraMock
     });
     fileService.copy('source/file.js', 'dest/file.js', jest.fn());
-    expect(console.log).toHaveBeenCalledWith('Failed to copy source/file.js', 'error');
+    expect(logger.msg).toHaveBeenCalledWith(
+      `Failed to copy source/file.js: ${errMock}`,
+      { theme: 'error' }
+    );
   });
 
   it('should write some file', () => {
@@ -212,9 +222,11 @@ describe('File Service', () => {
     const fileService = new FileService({
       fileSystem: fileSystemMock
     });
-    console.log = jest.fn();
     fileService.write('./path/to/file.js', 'some data');
-    expect(console.log).toHaveBeenCalledWith('Failed to write ./path/to/file.js', errorMock);
+    expect(logger.msg).toHaveBeenCalledWith(
+      `Failed to write ./path/to/file.js: ${errorMock}`,
+      { theme: 'error' }
+    );
   });
 
   it('should export a singleton', () => {

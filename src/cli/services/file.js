@@ -2,6 +2,7 @@ const fs = require('fs');
 const fsextra = require('fs-extra');
 const glob = require('glob');
 const fileSystem = require('file-system');
+const logger = require('./logger');
 
 class FileService {
   constructor(dependencies = {}){
@@ -18,10 +19,8 @@ class FileService {
 
   read(filepath, onSuccess){
     this.fs.readFile(filepath, (err, data) => {
-      if(err)
-        console.log(`Failed to read ${filepath}`, err);
-      else
-        onSuccess(data);
+      if(err) logError(`Failed to read ${filepath}`, err);
+      else onSuccess(data);
     });
   }
 
@@ -39,8 +38,9 @@ class FileService {
 
   collect(pattern, onSuccess, onError){
     this.glob(pattern, (err, files) => {
-      if(err)
-        return onError ? onError(err) : console.log(`Failed to collect ${pattern} files`, err);
+      if(err) {
+        return onError ? onError(err) : logError(`Failed to collect ${pattern} files`, err);
+      }
       onSuccess(files);
     });
   }
@@ -48,7 +48,7 @@ class FileService {
   copy(source, destination, onSuccess, onError){
     this.fsextra.copy(source, destination, err => {
       if(err)
-        return onError ? onError(err) : console.log(`Failed to copy ${source}`, err);
+        return onError ? onError(err) : logError(`Failed to copy ${source}`, err);
       onSuccess();
     });
   }
@@ -56,7 +56,7 @@ class FileService {
   write(filepath, data, onSuccess, onError){
     this.fileSystem.writeFile(filepath, data, err => {
       if(err)
-        return onError ? onError(err) : console.log(`Failed to write ${filepath}`, err);
+        return onError ? onError(err) : logError(`Failed to write ${filepath}`, err);
       onSuccess();
     });
   }
@@ -64,6 +64,10 @@ class FileService {
 
 function getDependency(dependencies, dependencyName, rawDependency){
   return dependencies[dependencyName] || rawDependency;
+}
+
+function logError(msg, err){
+  logger.msg(`${msg}: ${err}`, { theme: 'error' });
 }
 
 let fileService = new FileService();

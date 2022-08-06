@@ -3,6 +3,7 @@ const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const argsService = require('./args');
 const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
+const logger = require('./logger');
 const processService = require('./process');
 const watchService = require('./watch');
 
@@ -24,8 +25,8 @@ describe('Watch Service', () => {
     externalAssetsGenerator.copySingleFile = jest.fn(
       (filepath, config, onSuccess) => onSuccess()
     );
+    logger.msg = jest.fn();
     processService.getCwd = () => '/client';
-    console.log = jest.fn();
     stubWatcher();
   });
 
@@ -53,7 +54,7 @@ describe('Watch Service', () => {
 
   it('should log file watching', () => {
     watchService.init(buildPitsbyConfigMock());
-    expect(console.log).toHaveBeenCalledWith('Watching for changes...');
+    expect(logger.msg).toHaveBeenCalledWith('Watching for changes...');
   });
 
   it('should regenerate external components data if any doc.js file change', () => {
@@ -61,7 +62,7 @@ describe('Watch Service', () => {
     const config = buildPitsbyConfigMock();
     watchService.init(config);
     watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
-    expect(console.log).toHaveBeenCalledWith('alert.doc.js changed');
+    expect(logger.msg).toHaveBeenCalledWith('alert.doc.js changed...');
     expect(externalComponentsDataGenerator.buildComponentsDataByProject).toHaveBeenCalledWith(
       config.projects.find(project => project.engine == 'vue'),
       expect.any(Function),
@@ -73,7 +74,7 @@ describe('Watch Service', () => {
     const watcherStub = stubWatcher();
     watchService.init(buildPitsbyConfigMock());
     watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
-    expect(console.log).toHaveBeenCalledWith('Docs updated!');
+    expect(logger.msg).toHaveBeenCalledWith('Docs updated!', { theme: 'success' });
   });
 
   it('should log error on documentation update error', () => {
@@ -84,7 +85,7 @@ describe('Watch Service', () => {
     );
     watchService.init(buildPitsbyConfigMock());
     watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
-    expect(console.log).toHaveBeenCalledWith(errMock);
+    expect(logger.msg).toHaveBeenCalledWith(errMock, { theme: 'error' });
   });
 
   it('should not regenerate external components data if doc.js file does not relates to any project', () => {
@@ -111,7 +112,7 @@ describe('Watch Service', () => {
     const watcherStub = stubWatcher();
     watchService.init(buildPitsbyConfigMock());
     watcherStub.simulateEvent('change', 'dist/styles.css');
-    expect(console.log).toHaveBeenCalledWith('Asset updated!');
+    expect(logger.msg).toHaveBeenCalledWith('Asset updated!', { theme: 'success' });
   });
 
   it('should log success on asset update success', () => {
@@ -122,6 +123,6 @@ describe('Watch Service', () => {
     );
     watchService.init(buildPitsbyConfigMock());
     watcherStub.simulateEvent('change', 'dist/styles.css');
-    expect(console.log).toHaveBeenCalledWith(errMock);
+    expect(logger.msg).toHaveBeenCalledWith(errMock, { theme: 'error' });
   });
 });

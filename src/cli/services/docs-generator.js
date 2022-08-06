@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const logger = require('./logger');
 const processService = require('./process');
 const { fileService } = require('./file');
 
@@ -7,10 +8,10 @@ const _public = {};
 
 _public.init = config => {
   return new Promise((resolve, reject) => {
-    console.log('Generating docs...');
+    logger.msg('Generating docs...');
     webpack(buildWebpackConfig(config), err => {
       if(err) return reject(err);
-      console.log('Docs successfully generated!');
+      logger.msg('Docs successfully generated!', { theme: 'success' });
       resolve();
     });
   });
