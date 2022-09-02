@@ -9,8 +9,8 @@ const _public = {};
 
 _public.init = (config = {}) => {
   return new Promise((resolve, reject) => {
-    const linkTags = buildAssetTags(config.styles, buildLinkTag);
-    const scriptTags = buildAssetTags(config.scripts, buildScriptTag);
+    const linkTags = buildAssetTags(config.styles, 'stylesheet');
+    const scriptTags = buildAssetTags(config.scripts, 'script');
     const indexHtml = webappHtmlIndexCustomisation.init(buildIndexHtml(
       config,
       linkTags,
@@ -26,29 +26,55 @@ _public.init = (config = {}) => {
   });
 };
 
-function buildAssetTags(paths = [], tagBuilderAction){
+function buildAssetTags(items = [], type){
   const tags = [];
-  paths.forEach(path => {
-    tags.push(tagBuilderAction(path));
+  items.forEach(item => {
+    tags.push(buildAssetTag(item, type));
   });
   return tags;
 }
 
-function buildLinkTag(path){
-  return `<link href="${buildExternalAssetPath(path)}?t=${Date.now()}" rel="stylesheet">`;
+function buildAssetTag(item, type){
+  const attrs = stringifyAssetTagAttrs(buildAssetTagAttrs(item, type));
+  return shouldUseScriptTag(item, type) ? `<script ${attrs}></script>` : `<link ${attrs}>`;
 }
 
-function buildScriptTag(path){
-  return `<script src="${buildExternalAssetPath(path)}?t=${Date.now()}"></script>`;
+function shouldUseScriptTag(item, type){
+  return type == 'script' && !isPreloadedAsset(item);
+}
+
+function buildAssetTagAttrs(item, type){
+  const attrs = typeof item == 'string' ? { [buildAssetPathAttrName(item, type)]: item } : item;
+  return shouldAppendStylesheetRelAttr(attrs, type) ? { ...attrs, rel: 'stylesheet' } : attrs;
+}
+
+function buildAssetPathAttrName(item, type){
+  return type == 'script' && !isPreloadedAsset(item) ? 'src' : 'href';
+}
+
+function isPreloadedAsset(item){
+  return ['preload', 'prefetch'].includes(item.rel);
+}
+
+function shouldAppendStylesheetRelAttr(attrs, type){
+  return !attrs.rel && type == 'stylesheet';
+}
+
+function stringifyAssetTagAttrs(attrs){
+  return Object.entries(attrs).map(([key, value]) => {
+    return value ? `${key}="${formatExternalAssetAttrValue(key, value)}"` : key;
+  }).join(' ');
+}
+
+function formatExternalAssetAttrValue(attrName, attrValue){
+  return ['href', 'src'].includes(attrName) ? formatExternalAssetPath(attrValue) : attrValue;
 }
 
 function handleExternalScriptTags(scriptTags, projects){
   const vueConfig = getProjectEngineConfig(projects, 'vue');
   const reactConfig = getProjectEngineConfig(projects, 'react');
-  if(vueConfig)
-    scriptTags.unshift(cdnService.buildVueScriptTag(vueConfig.version));
-  if(reactConfig)
-    scriptTags.unshift(cdnService.buildReactScriptTag(reactConfig.version));
+  if(vueConfig) scriptTags.unshift(cdnService.buildVueScriptTag(vueConfig.version));
+  if(reactConfig) scriptTags.unshift(cdnService.buildReactScriptTag(reactConfig.version));
   return scriptTags;
 }
 
@@ -56,10 +82,9 @@ function getProjectEngineConfig(projects = [], engine){
   return projects.find(project => project.engine == engine);
 }
 
-function buildExternalAssetPath(path){
-  return assetsFilepathFilter.isRelativePath(path) ?
-    `/external/${parseRelativePath(path)}` :
-    path;
+function formatExternalAssetPath(rawPath){
+  const path = assetsFilepathFilter.isRelativePath(rawPath) ? `/external/${parseRelativePath(rawPath)}` : rawPath;
+  return `${path}?t=${Date.now()}`;
 }
 
 function parseRelativePath(path){
