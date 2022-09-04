@@ -98,6 +98,39 @@ describe('Webapp HTML Index Generator', () => {
     });
   });
 
+  it('should optionally accept tag attributes for external assets', done => {
+    const config = buildPitsbyConfigMock({ projects: [{ engine: 'angular' }] });
+    const styles = [
+      { rel: 'preload', href: './style.css', as: 'style' }
+    ];
+    const scripts = [
+      { crossorigin: '', src: './script.js' },
+      { crossorigin: 'use-credentials', src: 'https://some.lib.com/from/cdn.min.js' },
+      { rel: 'prefetch', href: './prefetch-script.js', as: 'script' },
+      { rel: 'preload', href: './preload-script.js', as: 'script' },
+      { type: 'module', src: './es6-script.js' }
+    ];
+    webappHtmlIndexGenerator.init({ ...config, styles, scripts }).then(() => {
+      const expectedHTMLTags = [
+        '<link rel="preload" href="/external/style.css?t=123" as="style">',
+        '<link rel="prefetch" href="/external/prefetch-script.js?t=123" as="script">',
+        '<link rel="preload" href="/external/preload-script.js?t=123" as="script">',
+        '<script crossorigin src="/external/script.js?t=123"></script>',
+        '<script crossorigin="use-credentials" src="https://some.lib.com/from/cdn.min.js?t=123"></script>',
+        '<script type="module" src="/external/es6-script.js?t=123"></script>'
+      ];
+      expectedHTMLTags.forEach(htmlTag => {
+        expect(fileService.write).toHaveBeenCalledWith(
+          buildHtmlIndexFilename(),
+          expect.stringContaining(htmlTag),
+          expect.any(Function),
+          expect.any(Function)
+        );
+      });
+      done();
+    });
+  });
+
   it('should not include any external assets if no assets have been given', done => {
     webappHtmlIndexGenerator.init().then(() => {
       expect(fileService.write).toHaveBeenCalledWith(

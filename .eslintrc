@@ -28,7 +28,7 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "complexity": ["error", { "max": 3 }],
-    "max-lines": ["error", { "max": 115 }],
+    "max-lines": ["error", { "max": 150 }],
     "max-statements": ["error", { "max": 5 },
       { "ignoreTopLevelFunctions": true }
     ]
@@ -37,7 +37,7 @@
     {
       "files": [ "src/**/*.test.js" ],
       "rules": {
-        "max-lines": ["error", { "max": 250 }],
+        "max-lines": ["error", { "max": 275 }],
         "max-statements": ["error", { "max": 15 },
           { "ignoreTopLevelFunctions": true }
         ]
