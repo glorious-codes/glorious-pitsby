@@ -40,11 +40,6 @@ $ pitsby build --watch
 
 *Go to `http://localhost:7000` and see the documentation that has been just created.*
 
-If your library generates more than one file, you might want to set an *Aggregate Timeout* to allow Pitsby to aggregate any other changes made during this time period (milliseconds) into one rebuild:
-```
-$ pitsby build --watch --aggregateTimeout=250
-```
-
 ## Contributions
 
 If you are interested in contributing to this project, refer to the [Contributing Steps](https://github.com/glorious-codes/glorious-pitsby/blob/master/docs/contributing.md).
