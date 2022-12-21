@@ -41,10 +41,20 @@ describe('External Assets Generator', () => {
   it('should copy external scripts to webapp external directory if external scripts has been given', done => {
     const config = mockConfig({
       styles: [],
-      scripts: ['./dist/scripts/base.js', 'dist/scripts/components.js', 'http://some.cdn/script.js'],
+      scripts: [
+        { src: './dist/es6/components.js', type: 'module' },
+        './dist/scripts/base.js',
+        'dist/scripts/components.js',
+        'http://some.cdn/script.js'],
       other: [],
     });
     externalAssetsGenerator.init(config).then(() => {
+      expect(fileService.copy).toHaveBeenCalledWith(
+        '/client/dist/es6/components.js',
+        '/client/docs/external/dist/es6/components.js',
+        expect.any(Function),
+        expect.any(Function)
+      );
       expect(fileService.copy).toHaveBeenCalledWith(
         '/client/dist/scripts/base.js',
         '/client/docs/external/dist/scripts/base.js',

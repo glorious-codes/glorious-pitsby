@@ -1,8 +1,10 @@
+const assetsFilepathParser = require('./assets-filepath-parser');
+
 const _public = {};
 
 _public.getRelative = (filepaths = []) => {
   return filepaths.filter(filepath => {
-    return !startsWithHttp(filepath);
+    return !startsWithHttp(assetsFilepathParser.parse(filepath));
   });
 };
 
