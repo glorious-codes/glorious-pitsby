@@ -30,7 +30,7 @@ function getPitsbyConfig(){
 }
 
 function lookupForConfig(){
-  const config = ['pitsby.config.js','pitsby.js', 'pitsby.json'].reduce((result, filename) => {
+  const config = ['pitsby.config.js', 'pitsby.config.cjs', 'pitsby.js', 'pitsby.json'].reduce((result, filename) => {
     return result || getConfigByFilename(filename);
   }, '');
   if(config) return config;
