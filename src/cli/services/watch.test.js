@@ -32,14 +32,18 @@ describe('Watch Service', () => {
 
   it('should watch files according to config file', () => {
     const config = buildPitsbyConfigMock();
+    config.styles.push({ href: './dist/any-other.css', rel: 'prefetch', as: 'style' });
+    config.scripts.push({ src: './dist/es6/components.js', type: 'module' });
     watchService.init(config);
     expect(chokidar.watch).toHaveBeenCalledWith(
       [
         './src/vue/**/*.doc.js',
         './src/angular/**/*.doc.js',
         './dist/styles.css',
+        './dist/any-other.css',
         'dist/bundle.js',
-        './images/',
+        './dist/es6/components.js',
+        './images/'
       ],
       {
         cwd: '/client'

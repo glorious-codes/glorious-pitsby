@@ -1,5 +1,6 @@
 const chokidar = require('chokidar');
 const path = require('path');
+const assetsFilepathParser = require('./assets-filepath-parser');
 const externalAssetsGenerator = require('./external-assets-generator');
 const externalComponentsDataGenerator = require('./external-components-data-generator');
 const logger = require('./logger');
@@ -19,10 +20,14 @@ _public.init = (config = {}) => {
 function buildFilepathsToWatch({ projects = [], styles = [], scripts = [], other = [] }){
   return [
     ...buildDocumentationFilepathGlobs(projects),
-    ...styles,
-    ...scripts,
+    ...parseAssetFilepaths(styles),
+    ...parseAssetFilepaths(scripts),
     ...other,
   ];
+}
+
+function parseAssetFilepaths(filepaths){
+  return filepaths.map(path => assetsFilepathParser.parse(path));
 }
 
 function buildDocumentationFilepathGlobs(projects){
