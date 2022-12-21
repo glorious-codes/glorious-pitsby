@@ -1,5 +1,6 @@
 const path = require('path');
 const assetsFilepathFilter = require('./assets-filepath-filter');
+const assetsFilepathParser = require('./assets-filepath-parser');
 const { fileService } = require('./file');
 const logger = require('./logger');
 const processService = require('./process');
@@ -15,11 +16,12 @@ _public.init = config => {
 };
 
 _public.copySingleFile = (filepath, config, onSuccess, onError) => {
+  const finalFilepath = assetsFilepathParser.parse(filepath);
   const clientDirectory = processService.getCwd();
   const targetDirectory = getExternalAssetsDirectory(clientDirectory, config);
   fileService.copy(
-    path.join(clientDirectory, filepath),
-    path.join(targetDirectory, filepath),
+    path.join(clientDirectory, finalFilepath),
+    path.join(targetDirectory, finalFilepath),
     onSuccess,
     onError
   );
