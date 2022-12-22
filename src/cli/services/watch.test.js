@@ -37,8 +37,8 @@ describe('Watch Service', () => {
     watchService.init(config);
     expect(chokidar.watch).toHaveBeenCalledWith(
       [
-        './src/vue/**/*.doc.js',
-        './src/angular/**/*.doc.js',
+        './src/vue/**/*.doc.+(cjs|js)',
+        './src/angular/**/*.doc.+(cjs|js)',
         './dist/styles.css',
         './dist/any-other.css',
         'dist/bundle.js',
@@ -67,6 +67,19 @@ describe('Watch Service', () => {
     watchService.init(config);
     watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.js');
     expect(logger.msg).toHaveBeenCalledWith('alert.doc.js changed...');
+    expect(externalComponentsDataGenerator.buildComponentsDataByProject).toHaveBeenCalledWith(
+      config.projects.find(project => project.engine == 'vue'),
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('should regenerate external components data if any doc.cjs file change', () => {
+    const watcherStub = stubWatcher();
+    const config = buildPitsbyConfigMock();
+    watchService.init(config);
+    watcherStub.simulateEvent('change', 'src/vue/alert/alert.doc.cjs');
+    expect(logger.msg).toHaveBeenCalledWith('alert.doc.cjs changed...');
     expect(externalComponentsDataGenerator.buildComponentsDataByProject).toHaveBeenCalledWith(
       config.projects.find(project => project.engine == 'vue'),
       expect.any(Function),

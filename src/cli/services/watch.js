@@ -31,7 +31,7 @@ function parseAssetFilepaths(filepaths){
 }
 
 function buildDocumentationFilepathGlobs(projects){
-  return projects.map(({ collectDocsFrom }) => `${collectDocsFrom}/**/*.doc.js`);
+  return projects.map(({ collectDocsFrom }) => `${collectDocsFrom}/**/*.doc.+(cjs|js)`);
 }
 
 function handleChange(filepath, config){
@@ -46,12 +46,12 @@ function getUpdateActionAccordingToChangedFile(filepath, config){
 }
 
 function isDocumentationFile(filepath){
-  const regex = new RegExp(/\.doc\.js$/);
+  const regex = new RegExp(/\.doc\.(cjs|js)$/);
   return regex.test(filepath);
 }
 
 function buildUpdateDocumentationAction(filepath, config){
-  const project = identifyChangeProjectByDocumentationFilepath(filepath, config);
+  const project = identifyChangedProjectByDocumentationFilepath(filepath, config);
   if(project) {
     return () => {
       externalComponentsDataGenerator.buildComponentsDataByProject(
@@ -63,7 +63,7 @@ function buildUpdateDocumentationAction(filepath, config){
   }
 }
 
-function identifyChangeProjectByDocumentationFilepath(filepath, config){
+function identifyChangedProjectByDocumentationFilepath(filepath, config){
   return config.projects.find(({ collectDocsFrom }) => {
     return filepath.includes(collectDocsFrom.replace(/^\.\//, ''));
   });
