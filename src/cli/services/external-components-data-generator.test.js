@@ -13,9 +13,10 @@ describe('External Components Data Generator', () => {
       {engine: 'react', collectDocsFrom: './src/react'},
     ];
   }
+
   function mockFilesData(){
     return {
-      '/client/src/angular/**/*.doc.js': {
+      '/client/src/angular/**/*.doc.+(cjs|js)': {
         'button.doc.js': {
           name: 'Button',
           examples: [{
@@ -26,7 +27,7 @@ describe('External Components Data Generator', () => {
             }
           }]
         },
-        'card.doc.js': {
+        'card.doc.cjs': {
           name: 'Card',
           examples: [{
             template: '<card></card>'
@@ -39,12 +40,12 @@ describe('External Components Data Generator', () => {
           name: 'Async Content Wrapper'
         }
       },
-      '/client/src/vue/**/*.doc.js': {
+      '/client/src/vue/**/*.doc.+(cjs|js)': {
         'badge.doc.js': {
           name: 'Badge'
         }
       },
-      '/client/src/react/**/*.doc.js': {
+      '/client/src/react/**/*.doc.+(cjs|js)': {
         'tag.doc.js': {
           name: 'Tag'
         }
@@ -58,11 +59,11 @@ describe('External Components Data Generator', () => {
     });
     fileService.require = jest.fn(filepath => {
       const data = mockFilesData();
-      return  data['/client/src/angular/**/*.doc.js'][filepath] ||
-              data['/client/src/vue/**/*.doc.js'][filepath];
+      return  data['/client/src/angular/**/*.doc.+(cjs|js)'][filepath] ||
+              data['/client/src/vue/**/*.doc.+(cjs|js)'][filepath];
     });
     jsxJsonService.stringifyFunctions = jest.fn(filepath => {
-      return mockFilesData()['/client/src/react/**/*.doc.js'][filepath];
+      return mockFilesData()['/client/src/react/**/*.doc.+(cjs|js)'][filepath];
     });
     moduleService.compileInMemoryModule = jest.fn(data => data);
     webappDataService.save = jest.fn((filename, data, onSuccess) => onSuccess());

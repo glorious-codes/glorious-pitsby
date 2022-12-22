@@ -27,7 +27,7 @@ _public.buildComponentsDataByProject = (project, onSuccess, onError) => {
 };
 
 function buildCollectFromGlob(collectDocsFrom){
-  return path.join(processService.getCwd(), collectDocsFrom, './**/*.doc.js');
+  return path.join(processService.getCwd(), collectDocsFrom, './**/*.doc.+(cjs|js)');
 }
 
 function collectComponents(collectDocsFromPattern, project, onSuccess, onError){
