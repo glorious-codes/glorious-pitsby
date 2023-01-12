@@ -1,6 +1,8 @@
+const fs = require('fs');
 const path = require('path');
 const { buildPitsbyConfigMock } = require('../mocks/pitsby-config');
 const { fileService } = require('./file');
+const processService = require('./process');
 const pkg = require('../../../package.json');
 const webappHtmlIndexGenerator = require('./webapp-html-index-generator');
 
@@ -25,6 +27,7 @@ describe('Webapp HTML Index Generator', () => {
 
   beforeEach(() => {
     fileService.write = jest.fn((filename, data, onSuccess) => onSuccess());
+    processService.getCwd = jest.fn(() => '/');
     Date.now = jest.fn(() => 123);
   });
 
@@ -128,6 +131,25 @@ describe('Webapp HTML Index Generator', () => {
         );
       });
       done();
+    });
+  });
+
+  it('should optionally inline external script asset', done => {
+    processService.getCwd = jest.fn(() => __dirname);
+    const inlineScriptContent = '{\'imports\': {\'lib\': \'/some/path/to/lib.js\'}}';
+    const filepath = path.join(__dirname, './importmap.js');
+    fs.writeFileSync(filepath, inlineScriptContent, 'UTF-8');
+    const config = buildPitsbyConfigMock({ projects: [{ engine: 'vanilla' }] });
+    const scripts = [{ type: 'importmap', src: './importmap.js', inline: true }];
+    webappHtmlIndexGenerator.init({ ...config, scripts }).then(() => {
+      const expectedHTMLTag = `<script type="importmap">${inlineScriptContent}</script>`;
+      expect(fileService.write).toHaveBeenCalledWith(
+        buildHtmlIndexFilename(),
+        expect.stringContaining(expectedHTMLTag),
+        expect.any(Function),
+        expect.any(Function)
+      );
+      fs.rm(filepath, done);
     });
   });
 

@@ -1,6 +1,7 @@
 const path = require('path');
 const cdnService = require('./cdn');
 const { fileService } = require('./file');
+const processService = require('./process');
 const assetsFilepathFilter = require('./assets-filepath-filter');
 const externalGlobalDataService = require('./external-global-data');
 const webappHtmlIndexCustomisation = require('./webapp-html-index-customisation');
@@ -35,12 +36,30 @@ function buildAssetTags(items = [], type){
 }
 
 function buildAssetTag(item, type){
-  const attrs = stringifyAssetTagAttrs(buildAssetTagAttrs(item, type));
-  return shouldUseScriptTag(item, type) ? `<script ${attrs}></script>` : `<link ${attrs}>`;
+  const attrs = buildAssetTagAttrs(item, type);
+  if(shouldUseScriptTag(item, type)) return buildScriptTag(attrs);
+  return `<link ${stringifyAssetTagAttrs(attrs)}>`;
 }
 
 function shouldUseScriptTag(item, type){
   return type == 'script' && !isPreloadedAsset(item);
+}
+
+function buildScriptTag(attrs){
+  const { inline, ...rest } = attrs;
+  if(inline) return buildInlineScriptTag(rest);
+  return buildScriptTagMarkup(rest);
+}
+
+function buildInlineScriptTag(attrs){
+  const { src, ...rest } = attrs;
+  const assetPath = path.join(processService.getCwd(), src);
+  const innerHTML = fileService.readSync(assetPath);
+  return buildScriptTagMarkup(rest, innerHTML);
+}
+
+function buildScriptTagMarkup(attrs, innerHTML = ''){
+  return `<script ${stringifyAssetTagAttrs(attrs)}>${innerHTML}</script>`;
 }
 
 function buildAssetTagAttrs(item, type){
