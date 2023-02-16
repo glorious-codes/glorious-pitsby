@@ -59,7 +59,20 @@ module.exports = {
     './dist/etc/'
   ],
   metrics: {
-    googleAnalyticsId: 'UA-XXXXXXXXX-X'
+    // You can choose one, and only one, of the following
+    // alternatives to track pageviews:
+    // A) Google Analytics
+    // Supports Universal Analytics and Google Analytics 4 properties
+    googleAnalyticsId: 'UA-XXXXXXXXX-X',
+    // B) Plausible
+    plausibleId: 'mysite.com',
+    plausibleOptions: {
+      // By default, Plausible does not track events on localhost.
+      // You can enable localhost tracking by passing the following option:
+      trackLocalhost: true
+      // To see all available options, visit:
+      // https://github.com/plausible/plausible-tracker#usage
+    }
   },
   custom: {
     favicon: {
