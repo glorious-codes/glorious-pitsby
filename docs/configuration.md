@@ -8,73 +8,81 @@ This is Pitsby's configuration file. This file should be created in the root dir
 module.exports = {
   projects: [
     {
-      engine: "angular",
-      collectDocsFrom: "./src/angular",
-      moduleName: "my-angular-components"
+      engine: 'angular',
+      collectDocsFrom: './src/angular',
+      moduleName: 'my-angular-components'
     },
     {
-      engine: "react",
-      collectDocsFrom: "./src/react",
+      engine: 'react',
+      collectDocsFrom: './src/react',
       // You may optionally declare some specific React version (Default: 16.13.0)
-      version: "16.8.0"
+      // NOTE: For now, Pitsby has no support for React 18.
+      version: '16.8.0'
     },
     {
-      engine: "vue",
-      collectDocsFrom: "./src/vue",
-      importFrom: "./dist/my-vue-components",
+      engine: 'vue',
+      collectDocsFrom: './src/vue',
       // The name of your library according UMD (Universal Module Definition).
       // Pitsby will look for this name as a global variable.
-      libraryName: "myVueComponents"
+      libraryName: 'myVueComponents'
       // You may optionally declare some specific Vue version (Default: 2.5.13)
-      version: "2.6.0"
+      // NOTE: For now, Pitsby has no support for Vue 3.
+      version: '2.6.0'
     },
     {
-      engine: "vanilla",
-      collectDocsFrom: "./src",
+      engine: 'vanilla',
+      collectDocsFrom: './src/vanilla',
     }
   ],
   styles: [
-    "./dist/my-angular-components.css",
-    "./dist/my-react-components.css",
-    "./dist/my-vue-components.css",
-    "./dist/my-vanilla-components.css"
+    './dist/my-styles.css',
+    // You can optionally declare an object representing
+    // the link tag attributes:
+    { href: './dist/other.css', rel: 'stylesheet' },
+    { href: './dist/any-other.css', rel: 'prefetch', as: 'style' }
   ],
   scripts: [
-    "./dist/my-angular-components.js",
-    "./dist/my-react-components.js",
-    "./dist/my-vue-components.js",
-    "./dist/my-vanilla-components.js"
+    './dist/my-components.js',
+    // You can optionally declare an object representing
+    // the script tag attributes:
+    { src: './dist/es6/components.js', type: 'module' },
+    { src: 'https://some.cdn.com/lib.js', crossorigin: '' },
+    // In addition to the native HTML attributes for a script tag,
+    // you can use the Boolean "inline" property to indicate whether
+    // a script must be presented inline. This is the case of "importmaps",
+    // since browsers still don't support importmap coming from external sources.
+    { src: './src/doc.importmap.js', type: 'importmap', inline: true }
   ],
   other: [
-    "./dist/images/",
-    "./dist/fonts/",
-    "./dist/etc/"
+    './dist/images/',
+    './dist/fonts/',
+    './dist/etc/'
   ],
   metrics: {
-    googleAnalyticsId: "UA-XXXXXXXXX-X"
+    googleAnalyticsId: 'UA-XXXXXXXXX-X'
   },
   custom: {
     favicon: {
-      // This image should be included in the "other" attribute above
-      filepath: "./some/path/to/favicon.png"
+      // This image should be included in the 'other' attribute above
+      filepath: './some/path/to/favicon.png'
     },
     logo: {
-      // This image should be included in the "other" attribute above
-      filepath: "./some/path/to/image.svg",
-      width: "100px",
-      height: "100px"
+      // This image should be included in the 'other' attribute above
+      filepath: './some/path/to/image.svg',
+      width: '100px',
+      height: '100px'
     },
     // Styles to be applied globally.
     // This is perfect when you need to do just a few overrides, otherwise,
     // prefer to create a dedicated stylesheet for documentation and include it
-    // in the "styles" attribute above.
+    // in the 'styles' attribute above.
     styles: `
       p-main { color: red; }
     `,
-    windowTitle: "My project"
+    windowTitle: 'My Custom Window Title'
   },
-  outputDirectory: "./docs"
-}
+  outputDirectory: './docs'
+};
 
 ```
 
