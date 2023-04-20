@@ -49,8 +49,7 @@ function buildVanillaDefaultCode(){
   return {
     controller: `function controller(element) {
   const messageContainer = element.querySelector('[data-playground-preview-message]');
-  if(messageContainer)
-    messageContainer.innerHTML = 'Hello world!';
+  if(messageContainer) messageContainer.innerHTML = 'Hello world!';
 }
 
 return controller;`,
