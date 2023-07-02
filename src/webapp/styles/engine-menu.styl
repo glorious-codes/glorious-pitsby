@@ -3,7 +3,7 @@
 
 .p-engine-menu-container
   padding 0 30px
-  border-bottom 1px solid alpha($color-grey, .5)
+  border-bottom 1px solid $color-grey
   clearfix()
 
 .p-engine-menu
@@ -34,8 +34,7 @@
   box-sizing(border-box)
   &:focus
     outline 0
-    background-color alpha($color-lightest, .25)
     border-radius(6px 6px 0 0)
   &.p-engine-menu-link-active
-    color $color-blue
-    border-bottom-color $color-blue
+    color $color-primary
+    border-bottom-color $color-primary

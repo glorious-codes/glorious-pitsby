@@ -6,9 +6,14 @@
   &.ace_editor
     font $code-editor-font
     font-weight 300
+    .ace_indent-guide
+      background none
+      border-right 1px dotted var(--pitsby-c-editor-indent-guide)
   &.ace-tm
     background-color transparent
     color $code-editor-text
+    .ace_cursor
+      color $color-darkest
     .ace_gutter
       background transparent
       color $color-grey
@@ -64,7 +69,7 @@
       border-left 2px solid $color-yellow
   .ace_tooltip
     padding 10px
-    background alpha($color-lightest, .8)
+    background var(--pitsby-c-editor-tooltip-bg)
     color $color-grey-dark
     font-family $font-family-primary
     border 0
