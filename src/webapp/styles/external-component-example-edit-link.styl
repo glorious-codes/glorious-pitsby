@@ -3,15 +3,11 @@
 
 .p-external-component-example-edit-link
   button
-    padding-right 20px
+    background-color transparent
     color $color-primary
     font-size $font-size-xxs
     font-weight 600
     text-decoration none
-    background-color transparent
-    background-position right center
-    background-repeat no-repeat
-    background-image('open.svg')
     border 0
     cursor pointer
     webkit-appearance(none)
@@ -19,3 +15,9 @@
     &:active,
     &:focus
       text-decoration underline
+  .p-icon
+    position relative
+    width 16px
+    height 16px
+    top 1px
+    background-color $color-primary

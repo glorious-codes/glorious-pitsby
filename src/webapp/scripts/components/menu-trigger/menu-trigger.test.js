@@ -24,7 +24,7 @@ describe('Menu Trigger', () => {
 
   it('should publish appropriate event on menu click', () => {
     const element = compile();
-    element.find('p-trigger').find('div').triggerHandler('click');
+    element.find('p-trigger').find('button').triggerHandler('click');
     expect(pubsubService.publish).toHaveBeenCalledWith('menuTriggerClicked');
   });
 });

@@ -19,6 +19,7 @@ import externalComponentPropsListItem from '@scripts/components/external-compone
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
 import externalComponentsPlayground from '@scripts/components/external-components-playground/external-components-playground';
 import heading from '@scripts/components/heading/heading';
+import icon from '@scripts/components/icon/icon';
 import input from '@scripts/components/input/input';
 import link from '@scripts/components/link/link';
 import listItem from '@scripts/components/list-item/list-item';
@@ -65,6 +66,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentPreview', externalComponentPreview)
   .component('pExternalComponentsPlayground', externalComponentsPlayground)
   .component('pHeading', heading)
+  .component('pIcon', icon)
   .component('pInput', input)
   .component('pLink', link)
   .component('pList', list)

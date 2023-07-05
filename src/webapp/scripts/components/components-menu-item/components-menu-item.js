@@ -12,8 +12,7 @@ function controller($timeout, $element, routeService){
   $ctrl.handleItemClick = () => {
     const item = $ctrl.item;
     handleNavigation(item.route);
-    if($ctrl.onItemClick)
-      $ctrl.onItemClick(item);
+    if($ctrl.onItemClick) $ctrl.onItemClick(item);
   };
 
   function handleNavigation(route){
