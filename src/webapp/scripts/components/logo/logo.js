@@ -1,13 +1,14 @@
 import PUBSUB_EVENT_NAMES from '@scripts/constants/pubsub-event-names';
-import pubsubService from '@scripts/services/pubsub';
+import { getStoredColorScheme } from '@scripts/services/color-scheme';
 import externalGlobalDataService from '@scripts/services/external-global-data';
+import pubsubService from '@scripts/services/pubsub';
 import template from './logo.html';
 
 function controller(){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    setImageAttrs(buildImageAttributes());
+    setImageAttrs(buildImageAttributes(getStoredColorScheme()));
     listenColorSchemeChange();
   };
 
@@ -15,7 +16,7 @@ function controller(){
     pubsubService.unsubscribe($ctrl.colorSchemeListenerId);
   };
 
-  function buildImageAttributes({ scheme } = {}){
+  function buildImageAttributes(scheme){
     return getCustomImageAttrs(scheme) || getDefaultImageAttrs(scheme);
   }
 
@@ -72,7 +73,7 @@ function controller(){
   }
 
   function handleColorSchemeChange({ scheme }){
-    setImageAttrs(buildImageAttributes({ scheme }));
+    setImageAttrs(buildImageAttributes(scheme));
   }
 
   function setColorSchemeListenerId(id){

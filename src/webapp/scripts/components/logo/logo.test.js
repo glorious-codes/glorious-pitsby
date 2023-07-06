@@ -1,3 +1,4 @@
+import { STORED_COLOR_SCHEME_KEY } from '@scripts/constants/storage';
 import PUBSUB_EVENT_NAMES from '@scripts/constants/pubsub-event-names';
 import pubsubService from '@scripts/services/pubsub';
 import testingService from '@scripts/services/testing';
@@ -29,6 +30,7 @@ describe('Logo', () => {
 
   afterEach(() => {
     testingService.clearExternalGlobalData();
+    localStorage.removeItem(STORED_COLOR_SCHEME_KEY);
   });
 
   it('should have appropriate css class', () => {
@@ -75,6 +77,17 @@ describe('Logo', () => {
     expect(getLogoSrc(element)).toEqual('/external/dist/logo.svg?t=123');
     expect(element.find('img').attr('width')).toEqual('90px');
     expect(element.find('img').attr('height')).toEqual('30px');
+  });
+
+  it('should initialize pitsby’s logo mode as light by default', () => {
+    const element = compile();
+    expect(getLogoSrc(element)).toEqual('/images/logo.svg');
+  });
+
+  it('should optionally initialize pitsby’s logo mode as dark', () => {
+    localStorage.setItem(STORED_COLOR_SCHEME_KEY, 'dark');
+    const element = compile();
+    expect(getLogoSrc(element)).toEqual('/images/logo-dark.svg');
   });
 
   it('should update pitsby’s logo mode on color scheme change', () => {
