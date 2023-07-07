@@ -1,7 +1,10 @@
 <div class="p-sidebar {{ $ctrl.sidebarVisibilityCssClass }}">
   <div class="p-sidebar-content">
     <p-back-trigger data-on-click="$ctrl.hideSidebar"></p-back-trigger>
-    <p-logo></p-logo>
+    <div class="p-sidebar-header">
+      <p-logo></p-logo>
+      <p-color-scheme-toggler></p-color-scheme-toggler>
+    </div>
     <p-engine-menu></p-engine-menu>
     <p-components-menu
       data-on-item-click="$ctrl.onComponentsMenuItemClick">

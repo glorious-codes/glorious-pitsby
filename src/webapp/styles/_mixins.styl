@@ -38,6 +38,12 @@ highlight()
   &:active
     {block}
 
+mask($repeat, $size)
+  -webkit-mask-repeat $repeat
+  -webkit-mask-size   $size
+  mask-repeat         $repeat
+  mask-size           $size
+
 placeholder()
   ::-webkit-input-placeholder {
     {block}

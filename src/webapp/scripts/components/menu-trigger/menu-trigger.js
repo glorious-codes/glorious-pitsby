@@ -1,4 +1,3 @@
-import '@styles/menu-trigger.styl';
 import PUBSUB_EVENT_NAMES from '@scripts/constants/pubsub-event-names';
 import pubsubService from '@scripts/services/pubsub';
 import template from './menu-trigger.html';

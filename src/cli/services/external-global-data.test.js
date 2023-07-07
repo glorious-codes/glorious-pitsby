@@ -19,12 +19,17 @@ describe('External Global Data Service', () => {
   });
 
   it('should build a JavaScript file that adds Pitsby global values to the browser window', () => {
-    const config = buildPitsbyConfigMock({ custom: buildCustomConfig() });
+    const colorScheme = { initial: 'dark', onChange: () => {} };
+    const config = buildPitsbyConfigMock({
+      custom: buildCustomConfig(),
+      colorScheme
+    });
     expect(externalGlobalDataService.build(config)).toEqual({
       metrics: config.metrics,
       projects: config.projects.map(({ engine }) => ({ engine })),
       custom: { logo: { filepath: '/external/dist/images/logo.svg', width: '200px', height: '100px' } },
-      fingerprint: 123
+      fingerprint: 123,
+      colorScheme
     });
   });
 

@@ -2,12 +2,13 @@ const path = require('path');
 
 const _public = {};
 
-_public.build = ({ metrics = {}, projects = [], custom }) => {
+_public.build = ({ metrics = {}, projects = [], colorScheme, custom }) => {
   return {
     metrics,
     projects: projects.map(({ engine }) => ({ engine })),
     custom: parseCustomData(custom),
-    fingerprint: Date.now()
+    colorScheme,
+    fingerprint: Date.now(),
   };
 };
 

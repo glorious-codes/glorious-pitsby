@@ -9,20 +9,20 @@ function controller(){
   let menuTriggerSubscriberId;
 
   $ctrl.$onInit = () => {
-    menuTriggerSubscriberId = pubsubService.subscribe(PUBSUB_EVENT_NAMES.MENU_TRIGGER_CLICKED, onMenuTriggerClick);
+    menuTriggerSubscriberId = pubsubService.subscribe(
+      PUBSUB_EVENT_NAMES.MENU_TRIGGER_CLICKED,
+      onMenuTriggerClick
+    );
   };
 
   $ctrl.$onDestroy = () => {
     pubsubService.unsubscribe(menuTriggerSubscriberId);
   };
 
-  $ctrl.hideSidebar = () => {
-    setSidebarVisibilityCssClass('');
-  };
+  $ctrl.hideSidebar = () => setSidebarVisibilityCssClass('');
 
   $ctrl.onComponentsMenuItemClick = item => {
-    if(!item.children)
-      $ctrl.hideSidebar();
+    if(!item.children) $ctrl.hideSidebar();
   };
 
   function onMenuTriggerClick(){

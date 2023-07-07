@@ -1,22 +1,19 @@
 @require '_variables'
 @require '_mixins'
 
-tag-color($color)
-  color $color
-  border-color alpha($color, .7)
-
 .p-tag
   display inline-block
   padding 1px 4px
+  background-color $color-grey-semi-light
+  color $color-grey-dark
   font-size $font-size-xxxxs
+  font-weight bold
   text-transform uppercase
   border-width 1px
   border-style solid
+  border-color $color-grey-dark
   border-radius(3px)
-  tag-color($color-grey)
-  &.p-tag-info
-    tag-color($color-blue)
-  &.p-tag-success
-    tag-color($color-green)
   &.p-tag-danger
-    tag-color($color-red)
+    background-color $color-red-semi-light
+    color $color-red-semi-dark
+    border-color $color-red-semi-light

@@ -28,4 +28,9 @@ describe('Topbar', () => {
     const element = compile();
     expect(element.find('p-logo').length).toEqual(1);
   });
+
+  it('should contain a color scheme toggler', () => {
+    const element = compile();
+    expect(element.find('p-color-scheme-toggler').length).toEqual(1);
+  });
 });

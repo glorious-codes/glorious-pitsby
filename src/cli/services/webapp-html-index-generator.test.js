@@ -12,13 +12,30 @@ describe('Webapp HTML Index Generator', () => {
   }
 
   function buildGlobalDataInlineScriptTag(customData = {}){
+    const { metrics, projects, colorScheme } = customData;
     const data = {
-      metrics: customData.metrics,
-      projects: customData.projects,
+      metrics,
+      projects,
       custom: { logo: {} },
+      colorScheme: colorScheme && parseGlobalColorSchemeCustomData(colorScheme),
       fingerprint: 123,
     };
-    return `<script type="text/javascript">window.pitsbyGlobals=${JSON.stringify(data)}</script>`;
+    return `<script type="text/javascript">window.pitsbyGlobals=${stringifyGlobalData(data, colorScheme)}</script>`;
+  }
+
+  function stringifyGlobalData(data, colorScheme){
+    const stringifiedData = JSON.stringify(data);
+    if(colorScheme && colorScheme.onChange) {
+      const strFunc = colorScheme.onChange.toString().replace(/"/g, '');
+      return stringifiedData.replace('"{{onChange}}"', strFunc);
+    }
+    return stringifiedData;
+  }
+
+  function parseGlobalColorSchemeCustomData({ initial, onChange }){
+    const data = { initial };
+    if(onChange) data.onChange = '{{onChange}}';
+    return data;
   }
 
   function buildHtmlIndexFilename(){
@@ -32,7 +49,10 @@ describe('Webapp HTML Index Generator', () => {
   });
 
   it('should save a file named index.html', done => {
-    const config = buildPitsbyConfigMock({ projects: [{ engine: 'angular' }] });
+    const config = buildPitsbyConfigMock({
+      projects: [{ engine: 'angular' }],
+      colorScheme: { onChange: () => {} }
+    });
     webappHtmlIndexGenerator.init(config).then(() => {
       expect(fileService.write).toHaveBeenCalledWith(
         buildHtmlIndexFilename(),

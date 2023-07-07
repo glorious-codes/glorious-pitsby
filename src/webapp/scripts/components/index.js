@@ -3,6 +3,7 @@ import alert from '@scripts/components/alert/alert';
 import backTrigger from '@scripts/components/back-trigger/back-trigger';
 import btn from '@scripts/components/btn/btn';
 import codeEditor from '@scripts/components/code-editor/code-editor';
+import colorSchemeToggler from '@scripts/components/color-scheme-toggler/color-scheme-toggler';
 import componentsMenu from '@scripts/components/components-menu/components-menu';
 import componentsMenuItem from '@scripts/components/components-menu-item/components-menu-item';
 import credits from '@scripts/components/credits/credits';
@@ -19,6 +20,7 @@ import externalComponentPropsListItem from '@scripts/components/external-compone
 import externalComponentPreview from '@scripts/components/external-component-preview/external-component-preview';
 import externalComponentsPlayground from '@scripts/components/external-components-playground/external-components-playground';
 import heading from '@scripts/components/heading/heading';
+import icon from '@scripts/components/icon/icon';
 import input from '@scripts/components/input/input';
 import link from '@scripts/components/link/link';
 import listItem from '@scripts/components/list-item/list-item';
@@ -49,6 +51,7 @@ export default angular.module('pitsby-components', [])
   .component('pBackTrigger', backTrigger)
   .component('pBtn', btn)
   .component('pCodeEditor', codeEditor)
+  .component('pColorSchemeToggler', colorSchemeToggler)
   .component('pComponentsMenu', componentsMenu)
   .component('pComponentsMenuItem', componentsMenuItem)
   .component('pCredits', credits)
@@ -65,6 +68,7 @@ export default angular.module('pitsby-components', [])
   .component('pExternalComponentPreview', externalComponentPreview)
   .component('pExternalComponentsPlayground', externalComponentsPlayground)
   .component('pHeading', heading)
+  .component('pIcon', icon)
   .component('pInput', input)
   .component('pLink', link)
   .component('pList', list)
