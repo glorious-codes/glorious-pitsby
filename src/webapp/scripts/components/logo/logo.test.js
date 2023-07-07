@@ -84,8 +84,14 @@ describe('Logo', () => {
     expect(getLogoSrc(element)).toEqual('/images/logo.svg');
   });
 
-  it('should optionally initialize pitsby’s logo mode as dark', () => {
+  it('should optionally initialize pitsby’s logo mode as dark if scheme has been stored as dark', () => {
     localStorage.setItem(STORED_COLOR_SCHEME_KEY, 'dark');
+    const element = compile();
+    expect(getLogoSrc(element)).toEqual('/images/logo-dark.svg');
+  });
+
+  it('should optionally initialize pitsby’s logo mode according to the configured initial scheme', () => {
+    testingService.mockExternalGlobalData({ colorScheme: { initial: 'dark' } });
     const element = compile();
     expect(getLogoSrc(element)).toEqual('/images/logo-dark.svg');
   });

@@ -127,11 +127,34 @@ function getIndexHtmlTemplate(config){
   const template = fileService.readSync(
     path.join(__dirname, '../../webapp/index-template.html')
   );
-  const data = externalGlobalDataService.build(config);
+  const data = parseExternalGlobalData(externalGlobalDataService.build(config));
   return template.replace(
     '<!-- inject:external-global-data -->',
-    `<script type="text/javascript">window.pitsbyGlobals=${JSON.stringify(data)}</script>`
+    [
+      '<script type="text/javascript">',
+      `window.pitsbyGlobals=${stringifyExternalGlobalData(data, config)}`,
+      '</script>'
+    ].join('')
   );
+}
+
+function parseExternalGlobalData(data){
+  if(data.colorScheme && data.colorScheme.onChange) {
+    return {
+      ...data,
+      colorScheme: { ...data.colorScheme, onChange: '{{onChange}}' }
+    };
+  }
+  return data;
+}
+
+function stringifyExternalGlobalData(data, config){
+  const stringifiedData = JSON.stringify(data);
+  if(config.colorScheme && config.colorScheme.onChange) {
+    const strFunc = config.colorScheme.onChange.toString().replace(/"/g, '');
+    return stringifiedData.replace('"{{onChange}}"', strFunc);
+  }
+  return stringifiedData;
 }
 
 function clearBlankLines(markup){

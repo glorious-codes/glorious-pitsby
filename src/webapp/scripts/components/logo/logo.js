@@ -8,13 +8,22 @@ function controller(){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    setImageAttrs(buildImageAttributes(getStoredColorScheme()));
+    setImageAttrs(buildImageAttributes(getInitialColorScheme()));
     listenColorSchemeChange();
   };
 
   $ctrl.$onDestroy = () => {
     pubsubService.unsubscribe($ctrl.colorSchemeListenerId);
   };
+
+  function getInitialColorScheme(){
+    return getStoredColorScheme() || getConfiguredInitialColorScheme() || 'light';
+  }
+
+  function getConfiguredInitialColorScheme(){
+    const { colorScheme } = getCustomGlobalData();
+    return colorScheme && colorScheme.initial;
+  }
 
   function buildImageAttributes(scheme){
     return getCustomImageAttrs(scheme) || getDefaultImageAttrs(scheme);
@@ -43,8 +52,8 @@ function controller(){
   }
 
   function getCustomGlobalData(){
-    const data = externalGlobalDataService.get();
-    return data && { custom: data.custom, fingerprint: data.fingerprint };
+    const { colorScheme, custom, fingerprint } = externalGlobalDataService.get();
+    return { colorScheme, custom, fingerprint };
   }
 
   function getDefaultImageAttrs(scheme){
