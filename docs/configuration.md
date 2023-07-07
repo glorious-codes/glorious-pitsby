@@ -76,11 +76,11 @@ module.exports = {
   },
   custom: {
     favicon: {
-      // This image should be included in the 'other' attribute above
+      // The following image must be included in the 'other' attribute above.
       filepath: './some/path/to/favicon.png'
     },
     logo: {
-      // This image should be included in the 'other' attribute above
+      // The following image must be included in the 'other' attribute above.
       filepath: './some/path/to/image.svg',
       width: '100px',
       height: '100px'
