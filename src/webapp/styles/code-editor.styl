@@ -7,8 +7,16 @@
     font $code-editor-font
     font-weight 300
     .ace_indent-guide
+      position relative
       background none
-      border-right 1px dotted var(--pitsby-c-editor-indent-guide)
+      &:after
+        content ' '
+        position absolute
+        top 0
+        right 0
+        bottom 0
+        border-right 1px dotted var(--pitsby-c-editor-indent-guide)
+
   &.ace-tm
     background-color transparent
     color $code-editor-text
