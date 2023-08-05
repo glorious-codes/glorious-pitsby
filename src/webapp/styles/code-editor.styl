@@ -1,11 +1,16 @@
 @require '_variables'
 @require '_mixins'
-@require 'code-editor-variables'
 
 .p-code-editor
+  border-width 5px 0 10px 0
+  border-style solid
+  border-color var(--pitsby-c-grey-light)
+  box-sizing border-box
   &.ace_editor
-    font $code-editor-font
+    padding-top 5px
+    font var(--pitsby-c-editor-font)
     font-weight 300
+    box-sizing border-box
     .ace_indent-guide
       position relative
       background none
@@ -19,48 +24,75 @@
 
   &.ace-tm
     background-color transparent
-    color $code-editor-text
+    color var(--pitsby-c-editor-text)
     .ace_cursor
-      color $color-darkest
+      color var(--pitsby-c-editor-cursor)
     .ace_gutter
       background transparent
-      color $color-grey
-      border-right 1px solid $color-grey-semi-light
+      color var(--pitsby-c-editor-gutter-text)
+      border-right 1px solid var(--pitsby-c-editor-gutter-border)
     .ace_gutter-active-line,
     .ace_fold-widget,
     .ace_print-margin,
     .ace_active-line
       display none
-    .ace_storage,
-    .ace_keyword
-      color $code-editor-keyword
-    .ace_entity.ace_name.ace_function
-      color $code-editor-function
-    .ace_string
-      color $code-editor-string
-    .ace_constant.ace_numeric
-      color $code-editor-number
-    .ace_variable
-      color $code-editor-text
-    .ace_identifier ~ .ace_identifier
-      color $code-editor-function
-    .ace_attribute-name
-      color $code-editor-function
-    .ace_meta.ace_tag
-      color $code-editor-keyword
-      &.ace_end-tag-open,
-      &.ace_tag-open,
-      &.ace_tag-close
-        color $code-editor-text
+    .ace_text-layer
+      .ace_lparen,
+      .ace_rparen
+        color var(--pitsby-c-editor-parenthesis)
+      .ace_operator:not(.ace_punctuation)
+        color var(--pitsby-c-editor-operator)
+      .ace_keyword.ace_operator
+        color var(--pitsby-c-editor-operator)
+      .ace_class
+        color var(--pitsby-c-editor-class)
+      .ace_comment
+        color var(--pitsby-c-editor-comment)
+      .ace_storage,
+      .ace_keyword
+        color var(--pitsby-c-editor-keyword)
+      .ace_keyword + .ace_identifier
+        color var(--pitsby-c-editor-variable)
+      .ace_indent-guide + .ace_identifier
+        color var(--pitsby-c-editor-variable)
+      .ace_indent-guide + .ace_operator ~ .ace_identifier
+        color var(--pitsby-c-editor-text)
+      .ace_indent-guide + .ace_type
+        color var(--pitsby-c-editor-keyword)
+      .ace_entity.ace_name.ace_function,
+      .ace_function
+        color var(--pitsby-c-editor-variable)
+      .ace_string
+        color var(--pitsby-c-editor-string)
+      .ace_constant
+        color var(--pitsby-c-editor-keyword)
+      .ace_constant.ace_numeric
+        color var(--pitsby-c-editor-number)
+      .ace_variable
+        color var(--pitsby-c-editor-class)
+      .ace_variable.ace_parameter
+        color var(--pitsby-c-editor-text)
+      .ace_attribute-name
+        color var(--pitsby-c-editor-variable)
+      .ace_identifier ~ .ace_type
+        color var(--pitsby-c-editor-type)
+      .ace_support.ace_type
+        color var(--pitsby-c-editor-text)
+      .ace_meta.ace_tag
+        color var(--pitsby-c-editor-keyword)
+        &.ace_end-tag-open,
+        &.ace_tag-open,
+        &.ace_tag-close
+          color var(--pitsby-c-editor-text)
     .ace_marker-layer
       .ace_selection
-        background $code-editor-line-selection
+        background var(--pitsby-c-editor-line-selection)
       .ace_bracket
         position relative
         bottom -2px
         margin 0
         border 0
-        border-bottom 1px solid $color-blue
+        border-bottom 1px solid var(--pitsby-c-editor-bracket-underline)
         border-radius(0)
   .ace_gutter-cell
     &.ace_info,
@@ -68,19 +100,19 @@
     &.ace_error
       background-image('none')
     &.ace_error
-      background-color $color-red-light
-      color $color-red
-      border-left 2px solid $color-red
+      background-color var(--pitsby-c-editor-error-bg)
+      color var(--pitsby-c-editor-error-text)
+      border-left 2px solid var(--pitsby-c-editor-error-border)
     &.ace_warning
-      background-color $color-yellow-light
-      color $color-yellow
-      border-left 2px solid $color-yellow
+      background-color var(--pitsby-c-editor-warning-bg)
+      color var(--pitsby-c-editor-warning-text)
+      border-left 2px solid var(--pitsby-c-editor-warning-border)
   .ace_tooltip
     padding 10px
     background var(--pitsby-c-editor-tooltip-bg)
-    color $color-grey-dark
+    color var(--pitsby-c-editor-tooltip-text)
     font-family $font-family-primary
     border 0
-    box-shadow(0 0 30px 0 $color-grey)
+    box-shadow(0 0 30px 0 var(--pitsby-c-editor-tooltip-shadow))
     border-radius(6px)
     box-sizing(border-box)

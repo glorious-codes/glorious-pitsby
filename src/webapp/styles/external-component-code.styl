@@ -1,26 +1,28 @@
-@require '_variables'
-@require 'code-editor-variables'
-
 .p-external-component-code
-  color $code-editor-text
+  color var(--pitsby-c-editor-text)
   line-height 1.5
+
   .token
     &.keyword
-      color $code-editor-keyword
+      color var(--pitsby-c-editor-keyword)
     &.string,
     &.attr-value
-      color $code-editor-string
+      color var(--pitsby-c-editor-string)
     &.function,
     &.attr-name
-      color $code-editor-function
+      color var(--pitsby-c-editor-variable)
     &.class-name
-      color $code-editor-class-name
+      color var(--pitsby-c-editor-class)
     &.tag
-      color $code-editor-keyword
+      color var(--pitsby-c-editor-keyword)
     &.number
-      color $code-editor-number
+      color var(--pitsby-c-editor-number)
     &.operator
       background transparent
-      color $code-editor-keyword
+      color var(--pitsby-c-editor-operator)
     &.punctuation
-      color $code-editor-text
+      color var(--pitsby-c-editor-text)
+    &.property
+      color var(--pitsby-c-editor-text)
+    &.comment
+      color var(--pitsby-c-editor-comment)
