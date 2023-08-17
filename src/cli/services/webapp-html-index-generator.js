@@ -151,8 +151,7 @@ function parseExternalGlobalData(data){
 function stringifyExternalGlobalData(data, config){
   const stringifiedData = JSON.stringify(data);
   if(config.colorScheme && config.colorScheme.onChange) {
-    const strFunc = config.colorScheme.onChange.toString().replace(/"/g, '');
-    return stringifiedData.replace('"{{onChange}}"', strFunc);
+    return stringifiedData.replace('"{{onChange}}"', config.colorScheme.onChange.toString());
   }
   return stringifiedData;
 }

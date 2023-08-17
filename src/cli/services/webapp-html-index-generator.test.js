@@ -84,6 +84,28 @@ describe('Webapp HTML Index Generator', () => {
     });
   });
 
+  it('should not remove quotes inside color scheme change listener', done => {
+    const config = buildPitsbyConfigMock({
+      projects: [{ engine: 'angular' }],
+      colorScheme: { onChange: () => { console.log('double quotes'); } }
+    });
+    webappHtmlIndexGenerator.init(config).then(() => {
+      expect(fileService.write).toHaveBeenCalledWith(
+        buildHtmlIndexFilename(),
+        expect.stringContaining('{"onChange":function onChange() {'),
+        expect.any(Function),
+        expect.any(Function)
+      );
+      expect(fileService.write).toHaveBeenCalledWith(
+        buildHtmlIndexFilename(),
+        expect.stringContaining('console.log(\'double quotes\')'),
+        expect.any(Function),
+        expect.any(Function)
+      );
+      done();
+    });
+  });
+
   it('should include external assets on template', done => {
     const config = buildPitsbyConfigMock({ projects: [{ engine: 'angular' }] });
     const styles = ['https://some.lib.com/from/cdn.min.css', ...config.styles];
