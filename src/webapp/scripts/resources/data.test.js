@@ -1,7 +1,6 @@
 import dateService from '@scripts/services/date';
 import baseResource from './base';
 import dataResource from './data';
-import { PromiseMock } from '@mocks/promise';
 
 describe('Data Resource', () => {
   const responseMock = [{some: 'response'}];
@@ -10,9 +9,11 @@ describe('Data Resource', () => {
     dateService.getNow = jest.fn(() => {
       return {getTime: function(){ return 123; }};
     });
-    baseResource.get = jest.fn(() => new PromiseMock('success', {
-      data: responseMock
-    }));
+    baseResource.get = jest.fn(() => Promise.resolve({ data: responseMock }));
+  });
+
+  afterEach(() => {
+    dataResource.flushCache();
   });
 
   it('should be able to get data', () => {
@@ -39,8 +40,16 @@ describe('Data Resource', () => {
     });
   });
 
-  it('should respond with data attribute found in response', () => {
-    const reponse = dataResource.get('/components');
+  it('should respond with data attribute found in response', async () => {
+    const reponse = await dataResource.get('/components');
     expect(reponse).toEqual(responseMock);
+  });
+
+  it('should not make more than one request for the same URI', async () => {
+    const response = await dataResource.get('/components');
+    const response2 = await dataResource.get('/components');
+    expect(baseResource.get).toHaveBeenCalledTimes(1);
+    expect(response).toEqual(responseMock);
+    expect(response2).toEqual(responseMock);
   });
 });
