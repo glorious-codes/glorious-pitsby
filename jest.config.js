@@ -18,7 +18,8 @@ module.exports = {
     '@styles\/(.*)$': `<rootDir>/${project.styles.source.root}$1`,
     '@images\/(.*)$': `<rootDir>/${project.images.source.root}$1`,
     '@mocks\/(.*)$': `<rootDir>/${project.mocks.source.root}$1`,
-    '^.+\\.css$': '<rootDir>/src/webapp/mocks/raw-files.js'
+    '^.+\\.css$': '<rootDir>/src/webapp/mocks/raw-files.js',
+    '^axios$': '<rootDir>/node_modules/axios/dist/browser/axios.cjs'
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jsdom',
