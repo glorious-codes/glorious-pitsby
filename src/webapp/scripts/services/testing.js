@@ -10,4 +10,8 @@ _public.clearExternalGlobalData = () => {
   delete window[GLOBAL_DATA_KEY];
 };
 
+_public.pause = async timeout => {
+  return await new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 export default _public;
