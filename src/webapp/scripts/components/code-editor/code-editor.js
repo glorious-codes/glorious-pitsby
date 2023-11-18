@@ -1,27 +1,27 @@
-import * as ace from 'brace';
-import 'brace/mode/javascript';
-import 'brace/mode/jsx';
-import 'brace/mode/html';
-import 'brace/mode/css';
-import '@styles/code-editor.styl';
+import codeEditorService from '@scripts/services/code-editor';
 import template from './code-editor.html';
 
 function controller($timeout, $element){
   const $ctrl = this;
 
   $ctrl.$onInit = () => {
-    $timeout(() => {
-      setEditor(ace.edit(getEditorHostElement()));
-      setEditorMode(buildModePath($ctrl.mode));
-      setEditorOptions({ tabSize: 2 });
-      setEditorCode($ctrl.code);
-      listenChanges();
+    codeEditorService.load().then(ace => {
+      $timeout(() => {
+        setEditor(ace.edit(getEditorHostElement()));
+        $ctrl.configEditor();
+      });
     });
   };
 
   $ctrl.handleChange = () => {
-    if($ctrl.onChange)
-      $ctrl.onChange(getSession().getValue());
+    $ctrl.onChange && $ctrl.onChange(getSession().getValue());
+  };
+
+  $ctrl.configEditor = () => {
+    setEditorMode(buildModePath($ctrl.mode));
+    setEditorOptions({ tabSize: 2 });
+    setEditorCode($ctrl.code);
+    listenChanges();
   };
 
   $ctrl.$onDestroy = () => {

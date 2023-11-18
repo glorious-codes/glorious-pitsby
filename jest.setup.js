@@ -4,7 +4,7 @@ import 'angular';
 import 'angular-mocks';
 import path from 'path';
 import * as Babel from '@babel/standalone/babel.min'
-import GAnalytics from '@glorious/analytics';
+import Staly from '@compilorama/staly';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Vue from 'vue/dist/vue.min';
@@ -13,7 +13,7 @@ import project from './project.json';
 // Needs to be mocked before importing index template, otherwise
 // Analytics Service will be imported, cached and it won't be
 // "mockable" anymore.
-jest.mock('@glorious/analytics');
+jest.mock('@compilorama/staly');
 
 // Import index template to register pitsby-app angular module
 // and its dependencies
