@@ -1,11 +1,11 @@
-import GAnalytics from '@glorious/analytics';
-import googleAnalyticsAdapter from '@glorious/analytics/dist/adapters/google-analytics';
+import Staly from '@compilorama/staly';
+import googleAnalyticsAdapter from '@compilorama/staly/dist/adapters/google-analytics';
 import testingService from '@scripts/services/testing';
-import { GAnalyticsMock, ganalyticsInstanceMock } from '@mocks/glorious-analytics';
+import { stalyMock, stalyInstanceMock } from '@mocks/staly';
 import windowService from '@scripts/services/window';
 import analyticsService from './analytics';
 
-GAnalytics.mockImplementation(GAnalyticsMock);
+Staly.mockImplementation(stalyMock);
 
 describe('Analytics Service', () => {
   function mockGoogleAnalyticsData(googleAnalyticsId){
@@ -21,25 +21,27 @@ describe('Analytics Service', () => {
   }
 
   beforeEach(() => {
-    ganalyticsInstanceMock.init = jest.fn();
-    ganalyticsInstanceMock.trackPageview = jest.fn();
+    jest.useFakeTimers();
+    stalyInstanceMock.init = jest.fn();
+    stalyInstanceMock.trackPageview = jest.fn();
     windowService.getHash = jest.fn(() => '#!/');
   });
 
   afterEach(() => {
     testingService.clearExternalGlobalData();
+    jest.useRealTimers();
   });
 
   it('should not initialize glorious analytics if no metrics data has been found', () => {
     analyticsService.init();
-    expect(ganalyticsInstanceMock.init).not.toHaveBeenCalled();
+    expect(stalyInstanceMock.init).not.toHaveBeenCalled();
   });
 
   it('should initialize analytics with Google Analytics by default', () => {
     const googleAnalyticsId = '123';
     mockGoogleAnalyticsData(googleAnalyticsId);
     analyticsService.init();
-    expect(ganalyticsInstanceMock.init).toHaveBeenCalledWith(
+    expect(stalyInstanceMock.init).toHaveBeenCalledWith(
       googleAnalyticsId,
       { adapter: googleAnalyticsAdapter }
     );
@@ -50,8 +52,9 @@ describe('Analytics Service', () => {
     mockGoogleAnalyticsData('123');
     analyticsService.init();
     analyticsService.trackPageView();
-    expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledTimes(1);
-    expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledWith({
+    jest.runOnlyPendingTimers();
+    expect(stalyInstanceMock.trackPageview).toHaveBeenCalledTimes(1);
+    expect(stalyInstanceMock.trackPageview).toHaveBeenCalledWith({
       path: '/components/vue/column'
     });
   });
@@ -60,7 +63,7 @@ describe('Analytics Service', () => {
     const plausibleId = 'some.website.com';
     mockPlausibleData({ plausibleId });
     analyticsService.init();
-    expect(ganalyticsInstanceMock.init).toHaveBeenCalledWith(plausibleId, {});
+    expect(stalyInstanceMock.init).toHaveBeenCalledWith(plausibleId, {});
   });
 
   it('should optionally pass options to Plausible initialization', () => {
@@ -68,7 +71,7 @@ describe('Analytics Service', () => {
     const plausibleOptions = { trackLocalhost: true };
     mockPlausibleData({ plausibleId, plausibleOptions });
     analyticsService.init();
-    expect(ganalyticsInstanceMock.init).toHaveBeenCalledWith(plausibleId, plausibleOptions);
+    expect(stalyInstanceMock.init).toHaveBeenCalledWith(plausibleId, plausibleOptions);
   });
 
   it('should optionally track page view using Plausible', () => {
@@ -76,7 +79,8 @@ describe('Analytics Service', () => {
     const plausibleId = 'some.website.com';
     mockPlausibleData({ plausibleId });
     analyticsService.trackPageView();
-    expect(ganalyticsInstanceMock.trackPageview).toHaveBeenCalledWith({
+    jest.runOnlyPendingTimers();
+    expect(stalyInstanceMock.trackPageview).toHaveBeenCalledWith({
       url: '/components/vue/form'
     });
   });

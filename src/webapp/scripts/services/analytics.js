@@ -1,5 +1,5 @@
-import GAnalytics from '@glorious/analytics';
-import googleAnalyticsAdapter from '@glorious/analytics/dist/adapters/google-analytics';
+import Staly from '@compilorama/staly';
+import googleAnalyticsAdapter from '@compilorama/staly/dist/adapters/google-analytics';
 import externalGlobalDataService from '@scripts/services/external-global-data';
 import windowService from '@scripts/services/window';
 
@@ -16,11 +16,13 @@ _public.init = () => {
 };
 
 _public.trackPageView = () => {
-  analytics && analytics.trackPageview(analytics._getPageViewOptions());
+  analytics && setTimeout(() => {
+    analytics.trackPageview(analytics._getPageViewOptions());
+  });
 };
 
 function instantiateAnalytics({ id, type, options, getPageViewOptions }){
-  analytics = new GAnalytics();
+  analytics = new Staly();
   analytics.init(id, options);
   analytics._type = type;
   analytics._getPageViewOptions = getPageViewOptions;
