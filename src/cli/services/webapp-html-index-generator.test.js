@@ -57,7 +57,7 @@ describe('Webapp HTML Index Generator', () => {
       expect(fileService.write).toHaveBeenCalledWith(
         buildHtmlIndexFilename(),
         `<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Pitsby</title>
@@ -114,7 +114,7 @@ describe('Webapp HTML Index Generator', () => {
       expect(fileService.write).toHaveBeenCalledWith(
         buildHtmlIndexFilename(),
         `<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Pitsby</title>
@@ -200,7 +200,7 @@ describe('Webapp HTML Index Generator', () => {
       expect(fileService.write).toHaveBeenCalledWith(
         buildHtmlIndexFilename(),
         `<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Pitsby</title>
@@ -257,7 +257,7 @@ describe('Webapp HTML Index Generator', () => {
       expect(fileService.write).toHaveBeenCalledWith(
         buildHtmlIndexFilename(),
         `<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Pitsby</title>
